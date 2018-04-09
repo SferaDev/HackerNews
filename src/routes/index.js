@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var routes = [
+const postController = require('../controllers/postController');
+
+const routes = [
     {
         route: '/',
         render: 'news'
@@ -38,13 +40,22 @@ var routes = [
 ];
 
 routes.forEach(function (doc) {
-    router.get(doc.route, function (req, res, next) {
+    router.get(doc.route, function (req, res) {
         res.render(doc.render, {
             subtitle: doc.title,
             username: 'Swaggaaa', // TODO: Hard-coded beef
             userScore: 1337
         });
     });
+});
+
+router.post('/submit/', function (req, res) {
+    if (req.body.url !== '' && req.body.text === '')
+        postController.insertUrlPost(req.body.title, req.body.url);
+    else if (req.body.url === '' && req.body.text !== '')
+        postController.insertAskPost(req.body.title, req.body.text);
+    else
+        res.code = 500;
 });
 
 module.exports = router;

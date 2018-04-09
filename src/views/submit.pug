@@ -3,24 +3,23 @@ extends base
 block content
     tr
         td
-            form(method="post" action="/r")
-                input(type="hidden" name="fnid" value="2vG91mWflePBvQWgpQWjHk")
-                input(type="hidden" name="fnop" value="submit-page")
+            form(method="post" action="/submit")
                 script(type="text/javascript").
-                    function tlen(el) {
-                        var n = el.value.length - 80;
-                        el.nextSibling.innerText = n > 0 ? n + ' too long' : '';
+                    function inputLength(element) {
+                        var lines = element.value.length - 80;
+                        element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
                     }
                 table(border="0" cellpadding="5")
                     tr
                         td Title
                         td
-                            input(type="text" name="title" value="" size="50" oninput="tlen(this)" onfocus="tlen(this)")
+                            input(type="text" name="title" value="" size="50" oninput="inputLength(this)" onfocus="inputLength(this)")
                             span(style="margin-left:10px")
                     tr
                         td Url
                         td
                             input(type="text" name="url" value="" size="50")
+                            span(style="margin-left:10px")
                     tr
                         td
                         td
@@ -29,6 +28,7 @@ block content
                         td Text
                         td
                             textarea(name="text" rows="4" cols="49")
+                            span(style="margin-left:10px")
                     tr
                         td
                         td
@@ -43,4 +43,3 @@ block content
                             | Leave url blank to submit a question for discussion. If there
                             | is no url, the text (if any) will appear at the top of the
                             | thread.
-                            br

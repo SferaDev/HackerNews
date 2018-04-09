@@ -6,8 +6,8 @@ var path = require('path');
 var logger = require('morgan');
 
 // Project dependencies
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/api');
+var indexRouter = require('./src/routes/index');
+var apiRouter = require('./src/routes/api');
 
 var app = express();
 

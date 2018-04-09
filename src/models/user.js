@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-const userSchema = new schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -30,5 +29,5 @@ userSchema.methods.comparePassword = function(candidatePassword) {
     return bcrypt.compareSync(candidatePassword, this.password);
 };
 
-// Export Beneficiary model as module
-module.exports = mongoose.model('Users', userSchema);
+// Export User model as module
+module.exports = mongoose.model('User', userSchema);
