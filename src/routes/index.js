@@ -49,8 +49,8 @@ routes.forEach(function (doc) {
     router.get(doc.route, function (req, res) {
         res.render(doc.render, {
             subtitle: doc.title,
-            username: getCurrentUser().username,
-            userScore: getCurrentUser().score
+            username: getCurrentUser(req.cookie('userId')).username,
+            userScore: getCurrentUser(req.cookie('userId')).score
         });
     });
 });
@@ -65,16 +65,18 @@ router.post('/submit/', function (req, res) {
 });
 
 router.post('/login/', function (req, res) {
-    if (req.body.username !== '' && req.body.password !== '' && loginUser(req.body.username, req.body.password))
+    if (req.body.username !== '' && req.body.password !== '') {
+        res.cookie('userId', loginUser(req.body.username, req.body.password));
         res.code = 200;
-    else
+    } else
         res.code = 500;
 });
 
 router.post('/register/', function (req, res) {
-    if (req.body.username !== '' && req.body.password !== '' && registerUser(req.body.username, req.body.password))
+    if (req.body.username !== '' && req.body.password !== '') {
+        res.cookie('userId', registerUser(req.body.username, req.body.password));
         res.code = 200;
-    else
+    } else
         res.code = 500;
 });
 
