@@ -1,18 +1,28 @@
 // Dependencies
-var express = require('express');
-var createError = require('http-errors');
-var cookieParser = require('cookie-parser');
-var path = require('path');
-var logger = require('morgan');
+const express = require('express');
+const mongoose = require('mongoose');
+const createError = require('http-errors');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const logger = require('morgan');
 
 // Project dependencies
-var indexRouter = require('./src/routes/index');
-var apiRouter = require('./src/routes/api');
+const indexRouter = require('./src/routes/index');
+const apiRouter = require('./src/routes/api');
 
-var app = express();
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Connect to the database
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/HackerNews';
+mongoose.Promise = global.Promise;
+mongoose.connect(MONGODB_URI, function (error) {
+    if (error) console.error(error);
+    else console.log('MongoDB connected');
+});
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));

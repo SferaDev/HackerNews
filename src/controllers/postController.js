@@ -1,9 +1,24 @@
-const postModel = require('../models/post');
+import {urlSchema, askSchema} from "../models/post";
+import {getCurrentUser} from "./userController";
 
-function insertUrlPost(title, url) {
-    // TODO
+export function insertUrlPost(title, url) {
+    new urlSchema({
+        title: title,
+        url: url,
+        owner: getCurrentUser()._id
+    }).save(function (error) {
+        if (error) return false;
+    });
+    return true;
 }
 
-function insertAskPost(title, text) {
-    // TODO
+export function insertAskPost(title, text) {
+    new askSchema({
+        title: title,
+        text: text,
+        owner: getCurrentUser()._id
+    }).save(function (error) {
+        if (error) return false;
+    });
+    return true;
 }

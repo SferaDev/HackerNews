@@ -11,8 +11,7 @@ const baseSchema = mongoose.model('Post', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        required: true
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
     },
     createdDate: {
         type: Date,
@@ -20,20 +19,16 @@ const baseSchema = mongoose.model('Post', new mongoose.Schema({
     }
 }, baseOptions));
 
-const urlSchema = baseSchema.discriminator('Url', new mongoose.Schema({
+export const urlSchema = baseSchema.discriminator('Url', new mongoose.Schema({
     url: {
         type: String,
         required: true
     }
 }));
 
-const askSchema = baseSchema.discriminator('Url', new mongoose.Schema({
+export const askSchema = baseSchema.discriminator('Ask', new mongoose.Schema({
     text: {
         type: String,
         required: true
     }
 }));
-
-// Export Post model as module
-module.exports = urlSchema;
-module.exports = askSchema;
