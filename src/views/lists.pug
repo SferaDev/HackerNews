@@ -1,0 +1,37 @@
+extends base
+
+block content
+    tr
+        td
+            table(style="border-spacing: 7px 0px;")
+                tr
+                    td
+                        a(href="leaders") leaders
+                    td Users with most karma
+                tr
+                    td
+                        a(href="front") front
+                    td
+                        | Front page submissions for a given day (e.g.
+                        a(href="front?day=2016-06-20") 2016-06-20
+                        | ), ordered by time spent there
+                tr
+                    td
+                        a(href="best") best
+                    td Highest-voted recent links
+                tr
+                    td
+                        a(href="active") active
+                    td Most active current discussions
+                tr
+                    td
+                        a(href="bestcomments") bestcomments
+                    td Highest-voted recent comments
+                tr
+                    td
+                        a(href="noobstories") noobstories
+                    td Submissions from new accounts
+                tr
+                    td
+                        a(href="noobcomments") noobcomments
+                    td Comments from new accounts

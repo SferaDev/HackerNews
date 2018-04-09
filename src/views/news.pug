@@ -1,0 +1,47 @@
+extends base
+
+block content
+    tr
+        td
+            table.itemlist(border="0" cellpadding="0" cellspacing="0")
+                - var count = 0
+                each element in posts
+                    - count += 1
+                    tr#element.postId.athing
+                        td.title(align="right" valign="top")
+                            span.rank #{count}&nbsp
+                        td.votelinks(valign="top")
+                            center
+                                // TODO: Voting endpoint, token should be embeded to request via POST
+                                a#up_element.postId(onclick='return vote(event, this, "up")' href="vote?id=#{element.postId}")
+                                    .votearrow(title="upvote")
+                        td.title
+                            a.storylink(href="\\#{element.url}") &nbsp#{element.title}&nbsp
+                            span.sitebit.comhead
+                                | (
+                                // TODO: From site
+                                a(href="from?site=tld.me")
+                                    span.sitestr tld.me
+                                | )
+                    tr
+                        td(colspan="2")
+                        td.subtext
+                            span#score_element.postId.score &nbsp#{element.totalLikes} points
+                            |  by&nbsp
+                            a.hnuser(href="user?id=#{element.owner}") #{element.owner.username}&nbsp
+                            span.age
+                                // TODO: Calculate age
+                                a(href="item?id=#{element.postId}") 5 hours ago
+                            span#unv_element.postId
+                            |  |&nbsp
+                            // TODO: Hide
+                            a(href="hide?id=#{element.postId}" onclick="return hidestory(event, this, #{element.postId})") hide
+                            |  |&nbsp
+                            // TODO: Detail page
+                            a(href="item?id=#{element.postId}") #{element.totalComments} comments
+                    tr.spacer(style="height:12px")
+                tr.morespace(style="height:10px")
+                tr
+                    td(colspan="2")
+                    td.title
+                        a.morelink(href="news?p=2" rel="nofollow") More

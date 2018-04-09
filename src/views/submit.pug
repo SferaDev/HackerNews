@@ -1,0 +1,45 @@
+extends base
+
+block content
+    tr
+        td
+            form(method="post" action="/submit")
+                script(type="text/javascript").
+                    function inputLength(element) {
+                        var lines = element.value.length - 80;
+                        element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
+                    }
+                table(border="0" cellpadding="5")
+                    tr
+                        td Title
+                        td
+                            input(type="text" name="title" value="" size="50" oninput="inputLength(this)" onfocus="inputLength(this)")
+                            span(style="margin-left:10px")
+                    tr
+                        td Url
+                        td
+                            input(type="text" name="url" value="" size="50")
+                            span(style="margin-left:10px")
+                    tr
+                        td
+                        td
+                            b or
+                    tr
+                        td Text
+                        td
+                            textarea(name="text" rows="4" cols="49")
+                            span(style="margin-left:10px")
+                    tr
+                        td
+                        td
+                    tr
+                        td
+                        td
+                            input(type="submit" value="Submit")
+                    tr(style="height:20px")
+                    tr
+                        td
+                        td
+                            | Leave url blank to submit a question for discussion. If there
+                            | is no url, the text (if any) will appear at the top of the
+                            | thread.

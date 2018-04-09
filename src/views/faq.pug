@@ -1,0 +1,144 @@
+extends base
+
+block content
+    tr
+        td
+            html
+                b Hacker News FAQ
+                br
+                br
+                b Are there rules about submissions and comments?
+                p
+                    a(href="newsguidelines.html") https://news.ycombinator.com/newsguidelines.html
+                p
+                    b How are stories ranked?
+                p
+                    | The basic algorithm divides points by a power of the time since
+                    | a story was submitted.  Comments in comment threads are ranked
+                    | the same way.
+                p
+                    | Other factors affecting rank include user flags, anti-abuse
+                    | software, software which downweights overheated discussions, and
+                    | moderator intervention.
+                p
+                    b How is a user's karma calculated?
+                p
+                    | Roughly, the number of upvotes on their stories and comments
+                    | minus the number of downvotes.  The numbers don't match
+                    | up exactly, because some votes aren't counted to prevent abuse.
+                p
+                    b Why don't I see down arrows?
+                p
+                    | There are no down arrows on stories. They appear on comments after
+                    | users reach a certain karma threshold, but never on direct replies.
+                p
+                    b What kind of formatting can you use in comments?
+                p
+                    a(href="formatdoc") http://news.ycombinator.com/formatdoc
+                p
+                    b How do I submit a question?
+                p
+                    | Use the submit link in the top bar, and leave the url field blank.
+                p
+                    b How do I make a link in a question?
+                p
+                    | You can't. This is to prevent people from submitting a link
+                    | with their comments in a privileged position at the top of the
+                    | page. If you want to submit a link with comments, just submit it, then
+                    | add a regular comment.
+                p
+                    b#cflag How do I flag a comment?
+                p
+                    | Click on its timestamp to go to its page, then click the 'flag' link
+                    | at the top. There's a small karma threshold before flag links appear.
+                p
+                    b Are reposts ok?
+                p
+                    | If a story has had significant attention in the last year or so, we
+                    | kill reposts as duplicates. If not, a small number of reposts is ok.
+                p
+                    | Please don't delete and repost the same story, though. Accounts that
+                    | do that eventually lose submission privileges.
+                p
+                    b Are paywalls ok?
+                p
+                    | It's ok to post stories from sites with paywalls that have workarounds.
+                p
+                    | In comments, it's ok to ask how to read an article and to help other
+                    | users do so. But please don't post complaints about paywalls. Those
+                    | are off topic.
+                p
+                p
+                    b Can I ask people to upvote my submission?
+                p
+                    | No. Users should vote for a story because they personally find it
+                    | intellectually interesting, not because someone has content to
+                    | promote.
+                p
+                    | HN's software penalizes submissions, accounts, and sites that
+                    | break this rule, so please don't.
+                p
+                    b Can I post a job ad?
+                p
+                    | Please don't post job ads as submissions to HN.
+                p
+                    | A regular "Who Is Hiring?" thread appears on the first weekday of each
+                    | month. Most job ads are welcome there. But only an account called
+                    a(href="submitted?id=whoishiring") whoishiring
+                    |  is allowed to
+                    | submit the thread itself. This prevents a race to post it first.
+                p
+                    | The other kind of job ad is reserved for YC-funded startups. These
+                    | appear on the front page, but are not stories: they have no vote arrows,
+                    | points, or comments. They begin part-way down, then fall steadily, and
+                    | only one should be on the front page at a time.
+                p
+                    b Why can't I post a comment to a thread?
+                p
+                    | Threads are closed to new comments after two weeks, or if the
+                    | submission has been killed by software, moderators, or user flags.
+                p
+                    b In my profile, what does showdead do?
+                p
+                    | If you turn it on, you'll see all the stories and comments that have
+                    | been killed by software, moderators, or user flags.
+                p
+                    b In my profile, what is delay?
+                p
+                    | It gives you time to edit your comments before they appear to others.
+                    | Set it to the number of minutes you'd like. The maximum is 10.
+                p
+                    b In my profile, what is noprocrast?
+                p
+                    | It's a way to help you prevent yourself from spending too much time
+                    | on HN.  If you turn it on you'll only be allowed to visit the site for
+                    | maxvisit minutes at a time, with gaps of minaway minutes in between.
+                    | The defaults are 20 and 180, which would let you view the site for
+                    | 20 minutes at a time, and then not allow you back in for 3 hours.
+                    | You can override noprocrast if you want, in which case your visit
+                    | clock starts over at zero.
+                p
+                    b How do I submit a poll?
+                p
+                    a(href="newpoll") http://news.ycombinator.com/newpoll
+                p
+                    b How do I reset my password?
+                p
+                    | If you have an email address in your profile, you can request a
+                    | password
+                    | reset
+                    a(href="https://news.ycombinator.com/forgot?id=") here
+                    | . If
+                    | you haven't, you can email hn@ycombinator.com for help.
+                p
+                    b My IP address seems to be banned. How can I unban it?
+                p
+                    | If you request many pages too quickly, your IP address might get
+                    | banned.
+                    | The
+                    a(href="https://news.ycombinator.com/item?id=4761102")
+                        | self-serve
+                        | unbanning procedure
+                    |  works most of the time.
+                p
+                    br
