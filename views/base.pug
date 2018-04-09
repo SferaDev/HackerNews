@@ -1,0 +1,72 @@
+html
+    head
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" type="text/css" href="stylesheets/news.css")
+        link(rel="shortcut icon" href="favicon.png")
+        //TODO: link(rel="alternate" type="application/rss+xml" title="RSS" href="rss")
+        title News4Hackers
+    body
+        center
+            table#hnmain(border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef")
+                tr
+                    td(bgcolor="#9CCC65")
+                        table(border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px")
+                            tr
+                                td(style="width:26px;padding-right:4px")
+                                    a(href="welcome.html")
+                                        img(src="favicon.png" width="26" height="26")
+                                td(style="line-height:12pt; height:10px;")
+                                    span.pagetop
+                                        b.hnname
+                                            a(href="news") News4Hackers
+                                        a(href="welcome.html") welcome
+                                        |  |&nbsp
+                                        a(href="newest") new
+                                        |  |&nbsp
+                                        a(href="threads?id=#{username}") threads
+                                        |  |&nbsp
+                                        a(href="newcomments") comments
+                                        |  |&nbsp
+                                        a(href="show") show
+                                        |  |&nbsp
+                                        a(href="ask") ask
+                                        |  |&nbsp
+                                        a(href="jobs") jobs
+                                        |  |&nbsp
+                                        a(href="submit") submit
+                                td(style="text-align:right;padding-right:4px;")
+                                    span.pagetop
+                                        a#me(href="user?id=" + username) #{username}
+                                        |                 (#{userScore}) |&nbsp
+                                        a#logout(href="logout?auth=f4d56caf1cb0a17f37590c1f2f572764bc7f4015&goto=news") logout
+                tr(style="height:10px")
+                block content
+                tr
+                    td
+                        br
+                        table(width="100%" cellspacing="0" cellpadding="1")
+                            tr
+                                td(bgcolor="#9CCC65")
+                        br
+                        center
+                            span.bottomlinks
+                                a(href="newsguidelines.html") Guidelines
+                                |         |&nbsp
+                                a(href="newsfaq.html") FAQ
+                                |         |&nbsp
+                                a(href="mailto:hn@ycombinator.com") Support
+                                |         |&nbsp
+                                a(href="https://github.com/SferaDev/HackerNews") GitHub
+                                |         |&nbsp
+                                a(href="security.html") Security
+                                |         |&nbsp
+                                a(href="lists") Lists
+                                |         |&nbsp
+                                a(href="bookmarklet.html" rel="nofollow") Bookmarklet
+                                |         |&nbsp
+                                a(href="http://www.ycombinator.com/legal/") Legal
+                                |         |&nbsp
+                                a(href="http://www.ycombinator.com/apply/") Apply to YC
+                                |         |&nbsp
+                                a(href="mailto:hn@ycombinator.com") Contact
+                            br

@@ -1,0 +1,66 @@
+html(op="submit")
+    head
+        meta(name="referrer" content="origin")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" type="text/css" href="news.css?IFZqVueF6cITIbFzz1y9")
+        link(rel="shortcut icon" href="favicon.ico")
+        title Submit | Hacker News
+    body
+        center
+            table#hnmain(border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef")
+                tr
+                    td(bgcolor="#ff6600")
+                        table(border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px")
+                            tr
+                                td(style="width:18px;padding-right:4px")
+                                    a(href="https://news.ycombinator.com")
+                                        img(src="y18.gif" width="18" height="18" style="border:1px #ffffff solid;")
+                                td(style="line-height:12pt; height:10px;")
+                                    span.pagetop
+                                        b Submit
+                tr(style="height:10px")
+                tr
+                    td
+                        form(method="post" action="/r")
+                            input(type="hidden" name="fnid" value="2vG91mWflePBvQWgpQWjHk")
+                            input(type="hidden" name="fnop" value="submit-page")
+                            script(type="text/javascript").
+                                function tlen(el) { var n = el.value.length - 80; el.nextSibling.innerText = n > 0 ? n + ' too long' : ''; }
+                            table(border="0")
+                                tr
+                                    td title
+                                    td
+                                        input(type="text" name="title" value="" size="50" oninput="tlen(this)" onfocus="tlen(this)")
+                                        span(style="margin-left:10px")
+                                tr
+                                    td url
+                                    td
+                                        input(type="text" name="url" value="" size="50")
+                                tr
+                                    td
+                                    td
+                                        b or
+                                tr
+                                    td text
+                                    td
+                                        textarea(name="text" rows="4" cols="49")
+                                tr
+                                    td
+                                    td
+                                tr
+                                    td
+                                    td
+                                        input(type="submit" value="submit")
+                                tr(style="height:20px")
+                                tr
+                                    td
+                                    td
+                                        | Leave url blank to submit a question for discussion. If there
+                                        | is no url, the text (if any) will appear at the top of the
+                                        | thread.
+                                        br
+                                        br
+                                        | You can also submit via
+                                        a(href="bookmarklet.html" rel="nofollow")
+                                            u bookmarklet
+                                        | .
