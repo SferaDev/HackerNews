@@ -9,12 +9,12 @@ html
         center
             table#hnmain(border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef")
                 tr
-                    td(bgcolor="#ff6600")
+                    td(bgcolor="#9CCC65")
                         table(border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px")
                             tr
-                                td(style="width:18px;padding-right:4px")
+                                td(style="width:26px;padding-right:4px")
                                     a(href="newswelcome.html")
-                                        img(src="favicon.png" width="18" height="18")
+                                        img(src="favicon.png" width="26" height="26")
                                 td(style="line-height:12pt; height:10px;")
                                     span.pagetop
                                         b.hnname
@@ -36,7 +36,7 @@ html
                                         a(href="submit") submit
                                 td(style="text-align:right;padding-right:4px;")
                                     span.pagetop
-                                        a#me(href="user?id=#{username}") #{username}
+                                        a#me(href="user?id=" + username) #{username}
                                         |                 (#{userScore}) |
                                         a#logout(href="logout?auth=f4d56caf1cb0a17f37590c1f2f572764bc7f4015&goto=news") logout
                 tr(style="height:10px")

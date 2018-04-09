@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
     res.render('template', {
         title: 'News4Hackers',
-        username: 'Swaggaaaa', // TODO: Hard-coded beef
+        username: 'Swaggaaa', // TODO: Hard-coded beef
         userScore: 1337
     });
 });
