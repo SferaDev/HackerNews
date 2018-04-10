@@ -3,12 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
 const logger = require('morgan');
-
-// Project dependencies
-const indexRouter = require('./src/routes/index');
-const apiRouter = require('./src/routes/api');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,12 +25,13 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use('/', indexRouter);
-app.use('/api', apiRouter);
+app.use('/', require('./src/routes/index'));
+app.use('/api', require('./src/routes/api'));
 
 // Detect errors and forward to 404
 app.use(function(req, res, next) {
