@@ -57,7 +57,33 @@ routes.forEach(function (doc) {
             else res.render(doc.render, {
                 subtitle: doc.title,
                 username: user === null ? undefined : user.username,
-                userScore: user === null ? undefined : user.score
+                userScore: user === null ? undefined : user.score,
+                posts: [
+                    {
+                        id: 123,
+                        title: 'Swaggaaa is a fake',
+                        url: 'https://github.com/swaggaaa',
+                        owner: 'alexis',
+                        points: 459,
+                        comments: 76
+                    },
+                    {
+                        id: 124,
+                        title: 'Elena is not found',
+                        url: 'https://github.com/elenika',
+                        owner: 'alexis',
+                        points: 988,
+                        comments: 765
+                    },
+                    {
+                        id: 125,
+                        title: 'Jordi doesn\'t receive any mails',
+                        url: 'https://github.com/jordi987',
+                        owner: 'alexis',
+                        points: 0,
+                        comments: 0
+                    }
+                ]
             });
         });
     });
