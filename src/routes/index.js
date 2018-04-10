@@ -1,4 +1,4 @@
-import {insertAskPost, insertUrlPost} from "../controllers/postController";
+import {getAllPosts, insertAskPost, insertUrlPost} from "../controllers/postController";
 import {getUser, loginUser, registerUser, validateUser} from "../controllers/userController";
 
 const express = require('express');
@@ -53,38 +53,14 @@ const routes = [
 routes.forEach(function (doc) {
     router.get(doc.route, function (req, res) {
         validateUser(req.cookies['userToken'], function (decoded) {
-            getUser(decoded.userId, function (err, user) {
-                if (err) res.code = 500;
-                else res.render(doc.render, {
-                    subtitle: doc.title,
-                    username: user === null ? undefined : user.username,
-                    userScore: user === null ? undefined : user.score,
-                    posts: [
-                        {
-                            id: 123,
-                            title: 'Swaggaaa is a fake',
-                            url: 'https://github.com/swaggaaa',
-                            owner: 'alexis',
-                            points: 459,
-                            comments: 76
-                        },
-                        {
-                            id: 124,
-                            title: 'Elena is not found',
-                            url: 'https://github.com/elenika',
-                            owner: 'alexis',
-                            points: 988,
-                            comments: 765
-                        },
-                        {
-                            id: 125,
-                            title: 'Jordi doesn\'t receive any mails',
-                            url: 'https://github.com/jordi987',
-                            owner: 'alexis',
-                            points: 0,
-                            comments: 0
-                        }
-                    ]
+            getUser(decoded.userId, function (user) {
+                getAllPosts(function (posts) {
+                    res.render(doc.render, {
+                        subtitle: doc.title,
+                        username: user === null ? undefined : user.username,
+                        userScore: user === null ? undefined : user.score,
+                        posts: posts
+                    });
                 });
             });
         });
@@ -107,34 +83,29 @@ router.post('/submit/', function (req, res) {
 });
 
 router.post('/login/', function (req, res) {
-    console.log("DEBUG: " + req.body.username);
     if (req.body.username !== '' && req.body.password !== '') {
-        loginUser(req.body.username, req.body.password, function (err, userToken) {
-            if (err) res.code = 500;
+        loginUser(req.body.username, req.body.password, function (userToken) {
             if (userToken === null) {
                 // TODO: User doesn't exist
             } else {
                 res.cookie('userToken', userToken);
-                res.redirect('back');
             }
         });
-    } else
-        res.code = 500;
+    }
+    res.redirect('back');
 });
 
 router.post('/register/', function (req, res) {
-    if (req.body.username !== undefined && req.body.password !== undefined) {
-        registerUser(req.body.username, req.body.password, function (err, userToken) {
-            if (err) res.code = 500;
-            else if (userToken === null) {
-                // TODO: User already exists
+    if (req.body.username !== '' && req.body.password !== '') {
+        registerUser(req.body.username, req.body.password, function (userToken) {
+            if (userToken === null) {
+                // TODO: User already exist
             } else {
                 res.cookie('userToken', userToken);
-                res.redirect('back');
             }
         });
-    } else
-        res.code = 500;
+    }
+    res.redirect('back');
 });
 
 module.exports = router;

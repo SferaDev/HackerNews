@@ -9,8 +9,8 @@ export function getUser(userId, next) {
     }, function (err, user) {
         if (err) {
             console.error(err);
-            next(err);
-        } else next(null, user);
+            next(null);
+        } else next(user);
     })
 }
 
@@ -18,13 +18,11 @@ export function loginUser(username, password, next) {
     user.findOne({
         username: username
     }, function (err, user) {
-        if (err) {
+        if (err || user == null) {
             console.error(err);
-            next(err);
-        } else if (user == null) {
-            next(null, null);
+            next(null);
         } else if (user.comparePassword(password))
-            next(null, jwt.sign({
+            next(jwt.sign({
                 userId: user._id,
                 username: user.username
             }, TOKEN_SECRET, {expiresIn: 60 * 60 * 24 * 365}));
@@ -38,8 +36,8 @@ export function registerUser(username, password, next) {
     }).save(function (err, user) {
         if (err) {
             console.error(err);
-            next(err);
-        } else next(null, jwt.sign({
+            next(null);
+        } else next(jwt.sign({
             userId: user._id,
             username: user.username
         }, TOKEN_SECRET, {expiresIn: 60 * 60 * 24 * 365}));
@@ -49,8 +47,10 @@ export function registerUser(username, password, next) {
 export function validateUser(token, next) {
     if (token === undefined) return next('{}');
     jwt.verify(token, TOKEN_SECRET, function (err, decoded) {
-        if (err) console.error(err);
-        else {
+        if (err) {
+            console.error(err);
+            next(null);
+        } else {
             next(decoded);
         }
     });

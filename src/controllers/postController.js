@@ -1,4 +1,4 @@
-import {urlSchema, askSchema} from "../models/post";
+import {urlSchema, askSchema, postSchema} from "../models/post";
 
 export function insertUrlPost(userId, title, url) {
     new urlSchema({
@@ -18,4 +18,13 @@ export function insertAskPost(userId, title, text) {
     }).save(function (error) {
         if (error) console.error(error);
     });
+}
+
+export function getAllPosts(next) {
+    postSchema.find({}, function (err, elements) {
+        if (err) {
+            console.error(err);
+            next('[]');
+        } else next(elements);
+    })
 }
