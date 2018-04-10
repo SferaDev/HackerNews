@@ -1,6 +1,7 @@
 // Dependencies
 const express = require('express');
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -16,6 +17,8 @@ mongoose.connect(MONGODB_URI, function (error) {
     if (error) console.error(error);
     else console.log('MongoDB connected');
 });
+
+autoIncrement.initialize(mongoose.connection);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));
