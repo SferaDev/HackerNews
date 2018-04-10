@@ -1,5 +1,5 @@
 import {urlSchema, askSchema} from "../models/post";
-import {getCurrentUser} from "./userController";
+import {getUser} from "./userController";
 
 export function insertUrlPost(userId, title, url) {
     new urlSchema({

@@ -22,8 +22,9 @@ html
                                         b.hnname
                                             a(href="news") News4Hackers&nbsp&nbsp
                                         a(href="newest") New
-                                        |  |&nbsp
-                                        a(href="threads?id=#{username}") Threads
+                                        if (username !== undefined)
+                                            |  |&nbsp
+                                            a(href="threads?id=#{username}") Threads
                                         |  |&nbsp
                                         a(href="newcomments") Comments
                                         |  |&nbsp
@@ -32,13 +33,17 @@ html
                                         a(href="ask") Ask
                                         |  |&nbsp
                                         a(href="jobs") Jobs
-                                        |  |&nbsp
-                                        a(href="submit") Submit
+                                        if (username !== undefined)
+                                            |  |&nbsp
+                                            a(href="submit") Submit
                                 td(style="text-align:right;padding-right:4px;")
                                     span.pagetop
-                                        a#me(href="user?id=" + username) #{username}
-                                        |                 (#{userScore}) |&nbsp
-                                        a#logout(href="logout") logout
+                                        if (username !== undefined)
+                                            a#me(href="user?id=" + username) #{username}
+                                            |                 (#{userScore}) |&nbsp
+                                            a#logout(href="logout") Logout
+                                        else
+                                            a#login(href="login") Login
                 tr(style="height:10px")
                 block content
                 tr
