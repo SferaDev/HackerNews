@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const baseOptions = {
     discriminatorKey: '__type',
-    collection: 'data'
+    collection: 'data',
+    timestamps: true
 };
 
 const baseSchema = mongoose.model('Post', new mongoose.Schema({
@@ -12,10 +13,6 @@ const baseSchema = mongoose.model('Post', new mongoose.Schema({
     },
     owner: {
         type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
     }
 }, baseOptions));
 
