@@ -1,5 +1,4 @@
 import {urlSchema, askSchema} from "../models/post";
-import {getUser} from "./userController";
 
 export function insertUrlPost(userId, title, url) {
     new urlSchema({
@@ -7,9 +6,8 @@ export function insertUrlPost(userId, title, url) {
         url: url,
         owner: userId
     }).save(function (error) {
-        if (error) return false;
+        if (error) console.error(error);
     });
-    return true;
 }
 
 export function insertAskPost(userId, title, text) {
@@ -18,7 +16,6 @@ export function insertAskPost(userId, title, text) {
         text: text,
         owner: userId
     }).save(function (error) {
-        if (error) return false;
+        if (error) console.error(error);
     });
-    return true;
 }
