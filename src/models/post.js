@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const autoIncrement = require("mongoose-auto-increment");
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -6,26 +7,37 @@ const baseOptions = {
     timestamps: true
 };
 
-const baseSchema = mongoose.model('Post', new mongoose.Schema({
+export const postSchema = mongoose.model('Post', new mongoose.Schema({
     title: {
         type: String,
         required: true
     },
     owner: {
         type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    },
+    totalComments: {
+        type: Number,
+        default: 0
+    },
+    totalLikes: {
+        type: Number,
+        default: 0
     }
 }, baseOptions));
 
-export const urlSchema = baseSchema.discriminator('Url', new mongoose.Schema({
+export const urlSchema = postSchema.discriminator('Url', new mongoose.Schema({
     url: {
         type: String,
         required: true
     }
 }));
 
-export const askSchema = baseSchema.discriminator('Ask', new mongoose.Schema({
+export const askSchema = postSchema.discriminator('Ask', new mongoose.Schema({
     text: {
         type: String,
         required: true
     }
 }));
+
+autoIncrement.initialize(mongoose.connection);
+postSchema.schema.plugin(autoIncrement.plugin, 'Post');
