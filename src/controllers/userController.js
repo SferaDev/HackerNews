@@ -27,7 +27,7 @@ export function loginUser(username, password, next) {
             next(null, jwt.sign({
                 userId: user._id,
                 username: user.username
-            }, TOKEN_SECRET, { expiresIn: 60 * 60 * 24 * 365 }));
+            }, TOKEN_SECRET, {expiresIn: 60 * 60 * 24 * 365}));
     })
 }
 
@@ -42,12 +42,13 @@ export function registerUser(username, password, next) {
         } else next(null, jwt.sign({
             userId: user._id,
             username: user.username
-        }, TOKEN_SECRET, { expiresIn: 60 * 60 * 24 * 365 }));
+        }, TOKEN_SECRET, {expiresIn: 60 * 60 * 24 * 365}));
     });
 }
 
 export function validateUser(token, next) {
-    jwt.verify(token, TOKEN_SECRET, function(err, decoded) {
+    if (token === undefined) return next('{}');
+    jwt.verify(token, TOKEN_SECRET, function (err, decoded) {
         if (err) console.error(err);
         else {
             next(decoded);
