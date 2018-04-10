@@ -45,7 +45,7 @@ a:visited { color:#828282; text-decoration:none; }
 .comhead a:link, .subtext a:visited { color:#828282; }
 .comhead a:hover { text-decoration:underline; }
 
-.default p { margin-top: 8px; margin-bottom: 0px; }
+.default p { margin-top: 8px; margin-bottom: 0; }
 
 .pagebreak {page-break-before:always}
 
@@ -55,9 +55,9 @@ pre:hover { overflow:auto }
 .votearrow {
     width:      10px;
     height:     10px;
-    border:     0px;
+    border:     0;
     margin:     3px 2px 6px;
-    background: url("grayarrow.gif")
+    background: url("../images/grayarrow.gif")
     no-repeat;
 }
 
@@ -66,7 +66,7 @@ pre:hover { overflow:auto }
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
-    .votearrow { background-size: 10px; background-image: url("grayarrow2x.gif"); }
+    .votearrow { background-size: 10px; background-image: url("../images/grayarrow2x.gif"); }
 }
 
 .rotate180 {
