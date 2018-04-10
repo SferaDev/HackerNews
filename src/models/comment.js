@@ -12,10 +12,10 @@ export const commentSchema = mongoose.model('Comment', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+        type: {type: Number, ref: 'User'}
     },
     post: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}
+        type: {type: Number, ref: 'Post'}
     }
 }, baseOptions));
 

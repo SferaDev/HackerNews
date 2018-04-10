@@ -1,4 +1,7 @@
+import {postSchema} from "./post";
+
 const mongoose = require('mongoose');
+const autoIncrement = require("mongoose-auto-increment");
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
@@ -35,3 +38,5 @@ userSchema.methods.comparePassword = function(candidatePassword) {
 
 // Export User model as module
 module.exports = mongoose.model('User', userSchema);
+
+postSchema.schema.plugin(autoIncrement.plugin, 'User');

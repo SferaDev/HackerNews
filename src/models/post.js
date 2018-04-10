@@ -13,7 +13,7 @@ export const postSchema = mongoose.model('Post', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+        type: {type: Number, ref: 'User'}
     },
     totalComments: {
         type: Number,
@@ -39,5 +39,4 @@ export const askSchema = postSchema.discriminator('Ask', new mongoose.Schema({
     }
 }));
 
-autoIncrement.initialize(mongoose.connection);
 postSchema.schema.plugin(autoIncrement.plugin, 'Post');
