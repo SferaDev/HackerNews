@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const autoIncrement = require("mongoose-auto-increment");
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -13,7 +12,7 @@ export const postSchema = mongoose.model('Post', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: Number, ref: 'User'}
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
     },
     totalComments: {
         type: Number,
@@ -38,5 +37,3 @@ export const askSchema = postSchema.discriminator('Ask', new mongoose.Schema({
         required: true
     }
 }));
-
-postSchema.schema.plugin(autoIncrement.plugin, 'Post');

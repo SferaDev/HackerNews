@@ -1,8 +1,9 @@
-import {postSchema} from "./post";
-
 const mongoose = require('mongoose');
-const autoIncrement = require("mongoose-auto-increment");
 const bcrypt = require('bcryptjs');
+
+const baseOptions = {
+    timestamps: true
+};
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -17,12 +18,8 @@ const userSchema = new mongoose.Schema({
     score: {
         type: Number,
         default: 1
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
     }
-});
+}, baseOptions);
 
 // Before save, hash the stored password to database
 userSchema.pre('save', function(next) {
@@ -38,5 +35,3 @@ userSchema.methods.comparePassword = function(candidatePassword) {
 
 // Export User model as module
 module.exports = mongoose.model('User', userSchema);
-
-postSchema.schema.plugin(autoIncrement.plugin, 'User');

@@ -12,13 +12,14 @@ export const commentSchema = mongoose.model('Comment', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: Number, ref: 'User'}
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
     },
     post: {
-        type: {type: Number, ref: 'Post'}
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}
     }
 }, baseOptions));
 
+// TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment comment count
 commentSchema.pre('save', function(next) {
     if (!this.isModified('_id')) return next();
@@ -32,6 +33,7 @@ commentSchema.pre('save', function(next) {
     next();
 });
 
+// TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment comment count
 commentSchema.pre('remove', function(next) {
     postSchema.findOne({

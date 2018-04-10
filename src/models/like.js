@@ -8,13 +8,14 @@ const baseOptions = {
 
 export const likeSchema = mongoose.model('Like', new mongoose.Schema({
     owner: {
-        type: {type: Number, ref: 'User'}
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
     },
     post: {
-        type: {type: Number, ref: 'Post'}
+        type: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}
     }
 }, baseOptions));
 
+// TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment like count
 likeSchema.pre('save', function(next) {
     if (!this.isModified('_id')) return next();
@@ -28,6 +29,7 @@ likeSchema.pre('save', function(next) {
     next();
 });
 
+// TODO: Might not work because is upon mongoose model instead of schema
 // Before remove, increment like count
 likeSchema.pre('remove', function(next) {
     postSchema.findOne({
