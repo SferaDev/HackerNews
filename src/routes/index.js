@@ -8,10 +8,8 @@ const routes = [
     {
         route: '/',
         render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
+        implementation: function (req, res, result) {
+            getAllPosts(function (posts) {
                 result({posts: posts.filter(post => post.__type === "Url")});
             });
         }
@@ -19,10 +17,8 @@ const routes = [
     {
         route: '/news/',
         render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
+        implementation: function (req, res, result) {
+            getAllPosts(function (posts) {
                 result({posts: posts.filter(post => post.__type === "Url")});
             });
         }
@@ -30,13 +26,10 @@ const routes = [
     {
         route: '/newest/',
         render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
+        implementation: function (req, res, result) {
+            getAllPosts(function (posts) {
                 result({
-                    posts: posts.sort(function compare(a, b)
-                    {
+                    posts: posts.sort(function compare(a, b) {
                         if (a.createdAt < b.createdAt)
                             return 1;
                         else if (a.createdAt > b.createdAt)
@@ -52,8 +45,7 @@ const routes = [
         route: '/submit/',
         render: 'submit',
         title: 'Submit',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -61,8 +53,7 @@ const routes = [
         route: '/guidelines/',
         render: 'guidelines',
         title: 'Guidelines',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -70,8 +61,7 @@ const routes = [
         route: '/faq/',
         render: 'faq',
         title: 'FAQ',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -79,8 +69,7 @@ const routes = [
         route: '/lists/',
         render: 'lists',
         title: 'Lists',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -88,8 +77,7 @@ const routes = [
         route: '/welcome/',
         render: 'welcome',
         title: 'Welcome',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -97,8 +85,7 @@ const routes = [
         route: '/login/',
         render: 'login',
         title: 'Login',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     },
@@ -106,33 +93,25 @@ const routes = [
         route: '/register/',
         render: 'login',
         title: 'Login',
-        implementation: function (req, res, result)
-        {
+        implementation: function (req, res, result) {
             result();
         }
     }
 ];
 
-routes.forEach(function (doc)
-{
-    router.get(doc.route, function (req, res)
-    {
-        validateUser(req.cookies['userToken'], function (decoded)
-        {
-            getUser(decoded.userId, function (user)
-            {
-                doc.implementation(req, res, function (properties)
-                {
+routes.forEach(function (doc) {
+    router.get(doc.route, function (req, res) {
+        validateUser(req.cookies['userToken'], function (decoded) {
+            getUser(decoded.userId, function (user) {
+                doc.implementation(req, res, function (properties) {
                     let attributes = {
                         subtitle: doc.title,
                         username: user === null ? undefined : user.username,
                         userScore: user === null ? undefined : user.score
                     };
 
-                    for (let prop in properties)
-                    {
-                        if (properties.hasOwnProperty(prop))
-                        {
+                    for (let prop in properties) {
+                        if (properties.hasOwnProperty(prop)) {
                             attributes[prop] = properties[prop];
                         }
                     }

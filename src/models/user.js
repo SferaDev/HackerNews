@@ -22,14 +22,14 @@ const userSchema = new mongoose.Schema({
 }, baseOptions);
 
 // Before save, hash the stored password to database
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     if (!this.isModified('password')) return next();
     this.password = bcrypt.hashSync(this.password, 10);
     next();
 });
 
 // Compare Password async with a callback(error, isMatch)
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt.compareSync(candidatePassword, this.password);
 };
 

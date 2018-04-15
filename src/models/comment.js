@@ -21,7 +21,7 @@ export const commentSchema = mongoose.model('Comment', new mongoose.Schema({
 
 // TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment comment count
-commentSchema.pre('save', function(next) {
+commentSchema.pre('save', function (next) {
     if (!this.isModified('_id')) return next();
     postSchema.findOne({
         _id: this.post
@@ -35,7 +35,7 @@ commentSchema.pre('save', function(next) {
 
 // TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment comment count
-commentSchema.pre('remove', function(next) {
+commentSchema.pre('remove', function (next) {
     postSchema.findOne({
         _id: this.post
     }, function (err, post) {
