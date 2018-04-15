@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', function(req, res){
-    if(req.session.page_views){
+router.get('/', function (req, res) {
+    if (req.session.page_views) {
         req.session.page_views++;
         res.send("You visited this page " + req.session.page_views + " times");
     } else {

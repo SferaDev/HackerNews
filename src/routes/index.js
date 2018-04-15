@@ -1,151 +1,30 @@
-import {getAllPosts, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {insertAskPost, insertUrlPost} from "../controllers/postController";
 import {getUser, loginUser, registerUser, validateUser} from "../controllers/userController";
+import {routes} from "./indexRoutes";
 
 const express = require('express');
 const router = express.Router();
 
-const routes = [
-    {
-        route: '/',
-        render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
-                result({posts: posts.filter(post => post.__type === "Url")});
-            });
-        }
-    },
-    {
-        route: '/news/',
-        render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
-                result({posts: posts.filter(post => post.__type === "Url")});
-            });
-        }
-    },
-    {
-        route: '/newest/',
-        render: 'news',
-        implementation: function (req, res, result)
-        {
-            getAllPosts(function (posts)
-            {
-                result({
-                    posts: posts.sort(function compare(a, b)
-                    {
-                        if (a.createdAt < b.createdAt)
-                            return 1;
-                        else if (a.createdAt > b.createdAt)
-                            return -1;
-
-                        return 0;
-                    })
-                });
-            });
-        }
-    },
-    {
-        route: '/submit/',
-        render: 'submit',
-        title: 'Submit',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/guidelines/',
-        render: 'guidelines',
-        title: 'Guidelines',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/faq/',
-        render: 'faq',
-        title: 'FAQ',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/lists/',
-        render: 'lists',
-        title: 'Lists',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/welcome/',
-        render: 'welcome',
-        title: 'Welcome',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/login/',
-        render: 'login',
-        title: 'Login',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    },
-    {
-        route: '/register/',
-        render: 'login',
-        title: 'Login',
-        implementation: function (req, res, result)
-        {
-            result();
-        }
-    }
-];
-
-routes.forEach(function (doc)
-{
-    router.get(doc.route, function (req, res)
-    {
-        validateUser(req.cookies['userToken'], function (decoded)
-        {
-            getUser(decoded.userId, function (user)
-            {
-                doc.implementation(req, res, function (properties)
-                {
-                    let attributes = {
-                        subtitle: doc.title,
-                        username: user === null ? undefined : user.username,
-                        userScore: user === null ? undefined : user.score
-                    };
-
-                    for (let prop in properties)
-                    {
-                        if (properties.hasOwnProperty(prop))
-                        {
-                            attributes[prop] = properties[prop];
-                        }
-                    }
-                    res.render(doc.render, attributes);
-                });
+routes.forEach(function (doc) {
+    router.get(doc.route, function (req, res) {
+        validateUser(req.cookies['userToken'], function (decoded) {
+            getUser(decoded.userId, function (user) {
+                let mainAttributes = {
+                    subtitle: doc.title,
+                    username: user === null ? undefined : user.username,
+                    userScore: user === null ? undefined : user.score
+                };
+                if (doc.action !== undefined) {
+                    doc.action(req, res, function (attributes) {
+                        if (attributes !== undefined)
+                            Object.assign(mainAttributes, attributes);
+                        if (doc.render !== undefined)
+                            res.render(doc.render, mainAttributes);
+                    });
+                } else res.render(doc.render, mainAttributes);
             });
         });
     });
-});
-
-router.get('/logout/', function (req, res) {
-    res.clearCookie('userToken');
-    res.redirect('/news');
 });
 
 

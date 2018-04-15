@@ -1,4 +1,4 @@
-import {urlSchema, askSchema, postSchema} from "../models/post";
+import {askSchema, postSchema, urlSchema} from "../models/post";
 
 export function insertUrlPost(userId, title, url) {
     new urlSchema({

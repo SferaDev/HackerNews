@@ -17,7 +17,7 @@ export const likeSchema = mongoose.model('Like', new mongoose.Schema({
 
 // TODO: Might not work because is upon mongoose model instead of schema
 // Before save, increment like count
-likeSchema.pre('save', function(next) {
+likeSchema.pre('save', function (next) {
     if (!this.isModified('_id')) return next();
     postSchema.findOne({
         _id: this.post
@@ -31,7 +31,7 @@ likeSchema.pre('save', function(next) {
 
 // TODO: Might not work because is upon mongoose model instead of schema
 // Before remove, increment like count
-likeSchema.pre('remove', function(next) {
+likeSchema.pre('remove', function (next) {
     postSchema.findOne({
         _id: this.post
     }, function (err, post) {
