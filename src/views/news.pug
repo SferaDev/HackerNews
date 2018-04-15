@@ -17,12 +17,33 @@ block content
                                     .votearrow(title="upvote")
                         td.title
                             a.storylink(href="\\#{element.url}") &nbsp#{element.title}&nbsp
-                            span.sitebit.comhead
-                                | (
-                                // TODO: From site
-                                a(href="from?site=tld.me")
-                                    span.sitestr tld.me
-                                | )
+                            if element.__type === 'Url'
+                                span.sitebit.comhead
+                                    | (
+                                    - function extractHostname(url) {
+                                        - var hostname;
+                                        - if (url.indexOf("://") > -1) {
+                                            - hostname = url.split('/')[2];
+                                        - } else {
+                                            - hostname = url.split('/')[0];
+                                        - }
+                                        - hostname = hostname.split(':')[0];
+                                        - hostname = hostname.split('?')[0];
+                                        - return hostname;
+                                    - }
+                                    - function extractRootDomain(url) {
+                                        - var domain = extractHostname(url), splitArr = domain.split('.'), arrLen = splitArr.length;
+                                        - if (arrLen > 2) {
+                                            - domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+                                            - if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+                                                - domain = splitArr[arrLen - 3] + '.' + domain;
+                                            - }
+                                        - }
+                                        - return domain;
+                                    - }
+                                    a(href="from?site=#{extractRootDomain(element.url)}")
+                                        span.sitestr #{extractRootDomain(element.url)}
+                                    | )
                     tr
                         td(colspan="2")
                         td.subtext
@@ -44,7 +65,7 @@ block content
                                     - if (interval > 1) return interval + " minutes ago";
                                     - return Math.floor(seconds) + " seconds ago";
                                 - }
-                                a(href="item?id=#{element.postId}") #{timeSince(element.createdAt)}&nbsp
+                                a(href="item?id=#{element.postId}") #{timeSince(element.createdAt)}
                             span#unv_element.postId
                             |  |&nbsp
                             // TODO: Hide
