@@ -21,12 +21,8 @@ export function insertAskPost(userId, title, text) {
 }
 
 export function getAllPosts(next) {
-    // TODO: Fix why owner doesn't appear at all, seems not even stored
     postSchema.find({}).populate('owner').exec(function (err, elements) {
-        console.log(elements);
-        if (err) {
-            console.error(err);
-            next('[]');
-        } else next(elements);
+        if (err) next('[]');
+        else next(elements);
     })
 }
