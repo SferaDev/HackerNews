@@ -27,7 +27,6 @@ routes.forEach(function (doc) {
     });
 });
 
-
 router.post('/submit/', function (req, res) {
     validateUser(req.cookies['userToken'], function (decoded) {
         if (req.body.url !== '' && req.body.text === '') {
@@ -35,7 +34,7 @@ router.post('/submit/', function (req, res) {
         } else if (req.body.url === '' && req.body.text !== '') {
             insertAskPost(decoded.userId, req.body.title, req.body.text);
         }
-        res.redirect('back');
+        res.redirect('/news');
     });
 });
 
@@ -47,7 +46,7 @@ router.post('/login/', function (req, res) {
             } else {
                 res.cookie('userToken', userToken);
             }
-            res.redirect('back');
+            res.redirect('/news');
         });
     }
 });
@@ -60,7 +59,7 @@ router.post('/register/', function (req, res) {
             } else {
                 res.cookie('userToken', userToken);
             }
-            res.redirect('back');
+            res.redirect('/news');
         });
     }
 });
