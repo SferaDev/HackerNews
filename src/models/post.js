@@ -12,7 +12,9 @@ export const postSchema = mongoose.model('Post', new mongoose.Schema({
         required: true
     },
     owner: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     totalComments: {
         type: Number,
