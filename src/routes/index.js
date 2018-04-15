@@ -16,7 +16,8 @@ routes.forEach(function (doc) {
                 };
                 if (doc.action !== undefined) {
                     doc.action(req, res, function (attributes) {
-                        Object.assign(mainAttributes, attributes);
+                        if (attributes !== undefined)
+                            Object.assign(mainAttributes, attributes);
                         if (doc.render !== undefined)
                             res.render(doc.render, mainAttributes);
                     });
