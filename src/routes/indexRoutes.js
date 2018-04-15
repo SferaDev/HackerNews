@@ -3,11 +3,9 @@ import {getAllPosts} from "../controllers/postController";
 export const routes = [
     {
         route: '/',
-        render: 'news',
         action: function (req, res, result) {
-            getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Url")});
-            });
+            res.redirect('/news');
+            result();
         }
     },
     {
@@ -75,7 +73,7 @@ export const routes = [
         route: '/logout/',
         action: function (req, res, result) {
             res.clearCookie('userToken');
-            res.redirect('/news/');
+            res.redirect('/news');
             result();
         }
     }
