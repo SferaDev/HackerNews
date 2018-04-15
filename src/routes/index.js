@@ -34,7 +34,7 @@ router.post('/submit/', function (req, res) {
         } else if (req.body.url === '' && req.body.text !== '') {
             insertAskPost(decoded.userId, req.body.title, req.body.text);
         }
-        res.redirect('/news');
+        res.redirect('/newest');
     });
 });
 
