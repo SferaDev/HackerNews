@@ -1,8 +1,6 @@
 extends base
 
 block content
-    tr
-        td
-            h1= message
-            h2= error.status
-            pre #{error.stack}
+    h1= message
+    h2= error.status
+    pre #{error.stack}
