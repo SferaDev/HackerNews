@@ -3,7 +3,7 @@ import {getUser, loginUser, registerUser} from "../controllers/userController";
 import {routes} from "./indexRoutes";
 
 const express = require('express');
-const router = express.Router();
+export const router = express.Router();
 
 routes.forEach(function (doc) {
     router.get(doc.route, function (req, res) {
@@ -20,7 +20,7 @@ routes.forEach(function (doc) {
                     if (doc.render !== undefined)
                         res.render(doc.render, mainAttributes);
                 });
-            } else res.render(doc.render, mainAttributes);
+            } else if(doc.render !== undefined) res.render(doc.render, mainAttributes);
         });
     });
 });
@@ -61,5 +61,3 @@ router.post('/register/', function (req, res) {
         });
     }
 });
-
-module.exports = router;
