@@ -1,5 +1,4 @@
 import {likeSchema} from "../models/like";
-import {incrementLike} from "./postController";
 
 export function likePost(userId, postId) {
     likeExists(userId, postId, function (results) {
