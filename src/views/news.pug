@@ -16,40 +16,19 @@ block content
                                 a#up_element.postId(onclick='return vote(event, this, "up")' href="vote?id=#{element.postId}")
                                     .votearrow(title="upvote")
                         td.title
-                            a.storylink(href="\\#{element.url}") &nbsp#{element.title}&nbsp
+                            a.storylink(href=element.url) &nbsp#{element.title}&nbsp
                             if element.__type === 'Url'
                                 span.sitebit.comhead
                                     | (
-                                    - function extractHostname(url) {
-                                        - var hostname;
-                                        - if (url.indexOf("://") > -1) {
-                                            - hostname = url.split('/')[2];
-                                        - } else {
-                                            - hostname = url.split('/')[0];
-                                        - }
-                                        - hostname = hostname.split(':')[0];
-                                        - hostname = hostname.split('?')[0];
-                                        - return hostname;
-                                    - }
-                                    - function extractRootDomain(url) {
-                                        - var domain = extractHostname(url), splitArr = domain.split('.'), arrLen = splitArr.length;
-                                        - if (arrLen > 2) {
-                                            - domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-                                            - if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
-                                                - domain = splitArr[arrLen - 3] + '.' + domain;
-                                            - }
-                                        - }
-                                        - return domain;
-                                    - }
-                                    a(href="from?site=#{extractRootDomain(element.url)}")
-                                        span.sitestr #{extractRootDomain(element.url)}
+                                    a(href="from?site=" + element.tld)
+                                        span.sitestr #{element.tld}
                                     | )
                     tr
                         td(colspan="2")
                         td.subtext
                             span#score_element.postId.score &nbsp#{element.totalLikes} points
                             |  by&nbsp
-                            a.hnuser(href="user?id=#{element.owner}") #{element.owner.username}&nbsp
+                            a.hnuser(href="user?id=" + element.owner.username) #{element.owner.username}&nbsp
                             span.age
                                 - function timeSince(date) {
                                     - let seconds = Math.floor((new Date() - date) / 1000);
@@ -65,14 +44,14 @@ block content
                                     - if (interval >= 1) return interval + " minutes ago";
                                     - return Math.floor(seconds) + " seconds ago";
                                 - }
-                                a(href="item?id=#{element.postId}") #{timeSince(element.createdAt)}
+                                a(href="item?id=" + element._id) #{timeSince(element.createdAt)}
                             span#unv_element.postId
                             |  |&nbsp
                             // TODO: Hide
-                            a(href="hide?id=#{element.postId}" onclick="return hidestory(event, this, #{element.postId})") hide
+                            a(href="hide?id=" + element._id onclick="return hidestory(event, this, #{element.postId})") hide
                             |  |&nbsp
                             // TODO: Detail page
-                            a(href="item?id=#{element.postId}") #{element.totalComments} comments
+                            a(href="item?id=" + element._id) #{element.totalComments} comments
                     tr.spacer(style="height:12px")
                 tr.morespace(style="height:10px")
                 tr
