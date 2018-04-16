@@ -19,6 +19,15 @@ export const routes = [
         }
     },
     {
+        route: '/ask/',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getAllPosts(function (posts) {
+                result({posts: posts.filter(post => post.__type === "Ask")});
+            });
+        }
+    },
+    {
         route: '/newest/',
         render: 'news',
         getAction: function (req, res, result) {
