@@ -1,4 +1,4 @@
-import {getAllPosts, getPostById, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {getAllPosts, getPostById, getPostByTld, insertAskPost, insertUrlPost} from "../controllers/postController";
 import {loginUser, registerUser} from "../controllers/userController";
 
 export const routes = [
@@ -32,6 +32,15 @@ export const routes = [
                         return 0;
                     })
                 });
+            });
+        }
+    },
+    {
+        route: '/from/',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getPostByTld(req.query.site, function (posts) {
+                result({posts: posts});
             });
         }
     },
