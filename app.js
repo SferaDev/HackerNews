@@ -1,20 +1,20 @@
 // Dependencies
+import express from "express";
+import session from "express-session";
+import mongoose from "mongoose";
+import connect_mongo from "connect-mongo";
+import cookieParser from "cookie-parser";
+import createError from "http-errors";
+import logger from "morgan";
+import path from "path";
+
 import {indexRouter} from "./src/routes";
 import {apiRouter} from "./src/routes/api";
 
-const express = require('express');
-const mongoose = require('mongoose');
-const createError = require('http-errors');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const mongoStore = require('connect-mongo')(session);
-const path = require('path');
-const logger = require('morgan');
+const mongoStore = connect_mongo(session);
+const SESSION_SECRET = process.env.SECRET || '%jordi%&%Elena%===Null!';
 
-const PORT = process.env.PORT || 3000;
-const SECRET = process.env.SECRET || '%jordi%&%Elena%===Null!';
-
-const app = express();
+export const app = express();
 
 // Connect to the database
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/HackerNews';
@@ -34,7 +34,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: SECRET,
+    secret: SESSION_SECRET,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
 
@@ -57,5 +57,3 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-module.exports = app;
