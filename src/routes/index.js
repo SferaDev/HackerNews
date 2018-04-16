@@ -7,7 +7,7 @@ const router = express.Router();
 
 routes.forEach(function (doc) {
     router.get(doc.route, function (req, res) {
-        validateUser(req.cookies['userToken'], function (decoded) {
+        validateUser(req.session.userToken, function (decoded) {
             getUser(decoded.userId, function (user) {
                 let mainAttributes = {
                     subtitle: doc.title,
@@ -28,7 +28,7 @@ routes.forEach(function (doc) {
 });
 
 router.post('/submit/', function (req, res) {
-    validateUser(req.cookies['userToken'], function (decoded) {
+    validateUser(req.session.userToken, function (decoded) {
         if (req.body.url !== '' && req.body.text === '') {
             insertUrlPost(decoded.userId, req.body.title, req.body.url);
         } else if (req.body.url === '' && req.body.text !== '') {
@@ -44,7 +44,7 @@ router.post('/login/', function (req, res) {
             if (userToken === null) {
                 // TODO: User doesn't exist
             } else {
-                res.cookie('userToken', userToken);
+                req.session.userToken = userToken;
             }
             res.redirect('/news');
         });
@@ -57,7 +57,7 @@ router.post('/register/', function (req, res) {
             if (userToken === null) {
                 // TODO: User already exist
             } else {
-                res.cookie('userToken', userToken);
+                req.session.userToken = userToken;
             }
             res.redirect('/news');
         });
