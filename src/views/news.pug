@@ -45,9 +45,6 @@ block content
                         a(href="item?id=" + element._id) #{timeSince(element.createdAt)}
                     span#unv_element.postId
                     |  |&nbsp
-                    // TODO: Hide
-                    a(href="hide?id=" + element._id onclick="return hidestory(event, this, #{element.postId})") hide
-                    |  |&nbsp
                     if element.totalComments === 1
                         a(href="item?id=" + element._id) #{element.totalComments} comment
                     else

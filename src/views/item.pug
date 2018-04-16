@@ -40,9 +40,6 @@ block content
                     a(href="item?id=" + _id) #{timeSince(post.createdAt)}
                 span#unv_post._id
                 |  |&nbsp
-                // TODO: Hide
-                a(href="hide?id=" + post._id) hide&nbsp
-                |  |&nbsp
                 a.hnpast(href="https://hn.algolia.com/?query=Tuenti%20Challenge%20at%20FIB-UPC&sort=byDate&dateRange=all&type=story&storyText=false&prefix&page=0") past
                 |  |&nbsp
                 a(href="https://www.google.com/search?q=Tuenti%20Challenge%20at%20FIB-UPC") web&nbsp
