@@ -3,10 +3,10 @@ import {getUser, loginUser, registerUser} from "../controllers/userController";
 import {routes} from "./indexRoutes";
 
 const express = require('express');
-const router = express.Router();
+export const indexRouter = express.Router();
 
 routes.forEach(function (doc) {
-    router.get(doc.route, function (req, res) {
+    indexRouter.get(doc.route, function (req, res) {
         getUser(req.session.userId, function (user) {
             let mainAttributes = {
                 subtitle: doc.title,
@@ -20,12 +20,12 @@ routes.forEach(function (doc) {
                     if (doc.render !== undefined)
                         res.render(doc.render, mainAttributes);
                 });
-            } else res.render(doc.render, mainAttributes);
+            } else if(doc.render !== undefined) res.render(doc.render, mainAttributes);
         });
     });
 });
 
-router.post('/submit/', function (req, res) {
+indexRouter.post('/submit/', function (req, res) {
     if (req.body.url !== '' && req.body.text === '') {
         insertUrlPost(req.session.userId, req.body.title, req.body.url);
     } else if (req.body.url === '' && req.body.text !== '') {
@@ -34,7 +34,7 @@ router.post('/submit/', function (req, res) {
     res.redirect('/newest');
 });
 
-router.post('/login/', function (req, res) {
+indexRouter.post('/login/', function (req, res) {
     if (req.body.username !== '' && req.body.password !== '') {
         loginUser(req.body.username, req.body.password, function (userId) {
             if (userId === null) {
@@ -48,7 +48,7 @@ router.post('/login/', function (req, res) {
     }
 });
 
-router.post('/register/', function (req, res) {
+indexRouter.post('/register/', function (req, res) {
     if (req.body.username !== '' && req.body.password !== '') {
         registerUser(req.body.username, req.body.password, function (userId) {
             if (userId === null) {
@@ -61,5 +61,3 @@ router.post('/register/', function (req, res) {
         });
     }
 });
-
-module.exports = router;

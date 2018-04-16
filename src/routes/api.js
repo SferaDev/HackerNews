@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router();
+export const apiRouter = express.Router();
 
-router.get('/', function (req, res) {
+apiRouter.get('/', function (req, res) {
     if (req.session.page_views) {
         req.session.page_views++;
         res.send("You visited this page " + req.session.page_views + " times");
@@ -10,5 +10,3 @@ router.get('/', function (req, res) {
         res.send("Welcome to this page for the first time!");
     }
 });
-
-module.exports = router;

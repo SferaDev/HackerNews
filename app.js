@@ -1,4 +1,7 @@
 // Dependencies
+import {indexRouter} from "./src/routes";
+import {apiRouter} from "./src/routes/api";
+
 const express = require('express');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
@@ -36,8 +39,8 @@ app.use(session({
 }));
 
 // Routes
-app.use('/', require('./src/routes/index'));
-app.use('/api', require('./src/routes/api'));
+app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // Detect errors and forward to 404
 app.use(function (req, res, next) {
