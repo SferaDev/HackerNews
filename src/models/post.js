@@ -1,3 +1,5 @@
+import {extractRootDomain} from "../utils/urlUtils";
+
 const mongoose = require('mongoose');
 
 const baseOptions = {
@@ -30,6 +32,12 @@ export const urlSchema = postSchema.discriminator('Url', new mongoose.Schema({
     url: {
         type: String,
         required: true
+    },
+    tld: {
+        type: String,
+        default: function() {
+            if (this.url !== undefined) return extractRootDomain(this.url);
+        }
     }
 }));
 

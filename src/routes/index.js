@@ -11,7 +11,7 @@ routes.forEach(function (doc) {
             let mainAttributes = {
                 subtitle: doc.title,
                 username: user === null ? undefined : user.username,
-                userScore: user === null ? undefined : user.score
+                karma: user === null ? undefined : user.karma
             };
             if (doc.action !== undefined) {
                 doc.action(req, res, function (attributes) {
