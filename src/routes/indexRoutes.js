@@ -1,4 +1,11 @@
-import {getAllPosts, getPostById, getPostByTld, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {
+    getAllPosts,
+    getPostById,
+    getPostsByOwner,
+    getPostsByTld,
+    insertAskPost,
+    insertUrlPost
+} from "../controllers/postController";
 import {loginUser, registerUser} from "../controllers/userController";
 
 export const routes = [
@@ -15,6 +22,15 @@ export const routes = [
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
                 result({posts: posts.filter(post => post.__type === "Url")});
+            });
+        }
+    },
+    {
+        route: '/threads/',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getPostsByOwner(req.query.id, function (posts) {
+                result({posts: posts});
             });
         }
     },
@@ -48,7 +64,7 @@ export const routes = [
         route: '/from/',
         render: 'news',
         getAction: function (req, res, result) {
-            getPostByTld(req.query.site, function (posts) {
+            getPostsByTld(req.query.site, function (posts) {
                 result({posts: posts});
             });
         }

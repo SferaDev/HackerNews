@@ -11,6 +11,17 @@ export function getUser(userId, next) {
     })
 }
 
+export function getUserByUsername(username, next) {
+    userModel.findOne({
+        username: username
+    }, function (err, user) {
+        if (err) {
+            console.error(err);
+            next(null);
+        } else next(user);
+    })
+}
+
 export function loginUser(username, password, next) {
     userModel.findOne({
         username: username
