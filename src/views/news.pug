@@ -26,7 +26,7 @@ block content
                 td.subtext
                     span#score_element.postId.score &nbsp#{element.totalLikes} points
                     |  by&nbsp
-                    a.hnuser(href="user?id=" + element.owner.username) #{element.owner.username}&nbsp
+                    a.hnuser(href="user?id=" + element.owner.username) #{element.owner.username}
                     span.age
                         - function timeSince(date) {
                         - let seconds = Math.floor((new Date() - date) / 1000);
@@ -42,6 +42,7 @@ block content
                         - if (interval >= 1) return interval + " minutes ago";
                         - return Math.floor(seconds) + " seconds ago";
                         - }
+                        | &nbsp
                         a(href="item?id=" + element._id) #{timeSince(element.createdAt)}
                     span#unv_element.postId
                     |  |&nbsp
@@ -50,8 +51,3 @@ block content
                     else
                         a(href="item?id=" + element._id) #{element.totalComments} comments
             tr.spacer(style="height:12px")
-        tr.morespace(style="height:10px")
-        tr
-            td(colspan="2")
-            td.title
-                a.morelink(href="news?p=2" rel="nofollow") More

@@ -21,7 +21,7 @@ block content
             td.subtext
                 span#score__id.score #{post.totalLikes} points&nbsp
                 | by&nbsp
-                a.hnuser(href="user?id=" + post.owner.username) #{post.owner.username}&nbsp
+                a.hnuser(href="user?id=" + post.owner.username) #{post.owner.username}
                 span.age
                     - function timeSince(date) {
                     - let seconds = Math.floor((new Date() - date) / 1000);
@@ -37,15 +37,16 @@ block content
                     - if (interval >= 1) return interval + " minutes ago";
                     - return Math.floor(seconds) + " seconds ago";
                     - }
+                    | &nbsp
                     a(href="item?id=" + _id) #{timeSince(post.createdAt)}
                 span#unv_post._id
-                |  |&nbsp
+                | &nbsp|&nbsp
                 a.hnpast(href="https://hn.algolia.com/?query=Tuenti%20Challenge%20at%20FIB-UPC&sort=byDate&dateRange=all&type=story&storyText=false&prefix&page=0") past
-                |  |&nbsp
-                a(href="https://www.google.com/search?q=Tuenti%20Challenge%20at%20FIB-UPC") web&nbsp
-                |  |&nbsp
-                a(href="fave?id=" + post._id) favorite&nbsp
-                |  |&nbsp
+                | &nbsp|&nbsp
+                a(href="https://www.google.com/search?q=Tuenti%20Challenge%20at%20FIB-UPC") web
+                | &nbsp|&nbsp
+                a(href="fave?id=" + post._id) favorite
+                | &nbsp|&nbsp
                 if post.totalComments === 1
                     a(href="item?id=" + post._id) #{post.totalComments} comment
                 else
