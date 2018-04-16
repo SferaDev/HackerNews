@@ -1,9 +1,10 @@
-import {getAllPosts} from "../controllers/postController";
+import {getAllPosts, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {loginUser, registerUser} from "../controllers/userController";
 
 export const routes = [
     {
         route: '/',
-        action: function (req, res, result) {
+        getAction: function (req, res, result) {
             res.redirect('/news');
             result();
         }
@@ -11,7 +12,7 @@ export const routes = [
     {
         route: '/news/',
         render: 'news',
-        action: function (req, res, result) {
+        getAction: function (req, res, result) {
             getAllPosts(function (posts) {
                 result({posts: posts.filter(post => post.__type === "Url")});
             });
@@ -20,7 +21,7 @@ export const routes = [
     {
         route: '/newest/',
         render: 'news',
-        action: function (req, res, result) {
+        getAction: function (req, res, result) {
             getAllPosts(function (posts) {
                 result({
                     posts: posts.sort(function compare(a, b) {
@@ -37,7 +38,15 @@ export const routes = [
     {
         route: '/submit/',
         render: 'submit',
-        title: 'Submit'
+        title: 'Submit',
+        postAction: function (req, res) {
+            if (req.body.url !== '' && req.body.text === '') {
+                insertUrlPost(req.session.userId, req.body.title, req.body.url);
+            } else if (req.body.url === '' && req.body.text !== '') {
+                insertAskPost(req.session.userId, req.body.title, req.body.text);
+            }
+            res.redirect('/newest');
+        }
     },
     {
         route: '/guidelines/',
@@ -62,16 +71,42 @@ export const routes = [
     {
         route: '/login/',
         render: 'login',
-        title: 'Login'
+        title: 'Login',
+        postAction: function (req, res) {
+            if (req.body.username !== '' && req.body.password !== '') {
+                loginUser(req.body.username, req.body.password, function (userId) {
+                    if (userId === null) {
+                        // TODO: User already exist
+                    } else {
+                        req.session.userId = userId;
+                        req.session.username = req.body.username;
+                    }
+                    res.redirect('/news');
+                });
+            }
+        }
     },
     {
         route: '/register/',
         render: 'login',
-        title: 'Login'
+        title: 'Login',
+        postAction: function (req, res) {
+            if (req.body.username !== '' && req.body.password !== '') {
+                registerUser(req.body.username, req.body.password, function (userId) {
+                    if (userId === null) {
+                        // TODO: User already exist
+                    } else {
+                        req.session.userId = userId;
+                        req.session.username = req.body.username;
+                    }
+                    res.redirect('/news');
+                });
+            }
+        }
     },
     {
         route: '/logout/',
-        action: function (req, res, result) {
+        getAction: function (req, res, result) {
             req.session.destroy(function (err) {
                 if (err) console.error(err);
                 res.redirect('/news');
