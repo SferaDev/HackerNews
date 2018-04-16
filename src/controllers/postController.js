@@ -33,3 +33,10 @@ export function getPostById(postId, next) {
         else next(element);
     })
 }
+
+export function getPostByTld(postTld, next) {
+    postSchema.find({tld: postTld}).populate('owner').exec(function (err, elements) {
+        if (err) next('[]');
+        else next(elements);
+    })
+}
