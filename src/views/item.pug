@@ -10,7 +10,7 @@ block content
                     a#up_postId.nosee(onclick='return vote(event, this, "up")' href="vote?id=" + post._id)
                         .votearrow(title="upvote")
             td.title
-                a.storylink(href=post.url rel="nofollow") #{post.title}&nbsp
+                a.storylink(href="//" + post.url rel="nofollow") #{post.title}&nbsp
                 span.sitebit.comhead
                     | (
                     a(href="from?site=" + post.tld)
