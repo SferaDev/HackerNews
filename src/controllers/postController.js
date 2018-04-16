@@ -26,3 +26,10 @@ export function getAllPosts(next) {
         else next(elements);
     })
 }
+
+export function getPostById(postId, next) {
+    postSchema.findOne({_id: postId}).populate('owner').exec(function (err, element) {
+        if (err) next('{}');
+        else next(element);
+    })
+}
