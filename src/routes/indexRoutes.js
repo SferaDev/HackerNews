@@ -72,9 +72,11 @@ export const routes = [
     {
         route: '/logout/',
         action: function (req, res, result) {
-            res.clearCookie('userToken');
-            res.redirect('/news');
-            result();
+            req.session.destroy(function (err) {
+                if (err) console.error(err);
+                res.redirect('/news');
+                result();
+            });
         }
     }
 ];

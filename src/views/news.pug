@@ -12,7 +12,7 @@ block content
                             span.rank #{count}&nbsp
                         td.votelinks(valign="top")
                             center
-                                // TODO: Voting endpoint, token should be embeded to request via POST
+                                // TODO: Voting endpoint
                                 a#up_element.postId(onclick='return vote(event, this, "up")' href="vote?id=#{element.postId}")
                                     .votearrow(title="upvote")
                         td.title
