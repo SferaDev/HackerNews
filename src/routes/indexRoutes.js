@@ -1,4 +1,4 @@
-import {getAllPosts, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {getAllPosts, getPostById, insertAskPost, insertUrlPost} from "../controllers/postController";
 import {loginUser, registerUser} from "../controllers/userController";
 
 export const routes = [
@@ -112,6 +112,15 @@ export const routes = [
                 res.redirect('/news');
                 result();
             });
+        }
+    },
+    {
+        route: '/item/',
+        render: 'item',
+        getAction: function (req, res, result) {
+            getPostById(req.query.id, function (post) {
+                result({post: post})
+            })
         }
     }
 ];
