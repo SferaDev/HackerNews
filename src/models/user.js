@@ -15,9 +15,35 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    score: {
+    karma: {
         type: Number,
         default: 1
+    },
+    about: {
+        type: String
+    },
+    email: {
+        type: String
+    },
+    showdead: {
+        type: Boolean,
+        default: false
+    },
+    noprocrat: {
+        type: Boolean,
+        default: false
+    },
+    maxvisit: {
+        type: Number,
+        default: 20
+    },
+    minaway: {
+        type: Number,
+        default: 180
+    },
+    delay: {
+        type: Number,
+        default: 0
     }
 }, baseOptions);
 
