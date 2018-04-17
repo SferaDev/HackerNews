@@ -14,8 +14,8 @@ block content
                         a#up_element.postId(onclick='return vote(event, this, "up")' href="vote?id=#{element.postId}")
                             .votearrow(title="upvote")
                 td.title
-                    - element.url = (element.url.indexOf('://') === -1) ? '//' + element.url : element.url;
                     if element.__type === 'Url'
+                        - element.url = (element.url.indexOf('://') === -1) ? '//' + element.url : element.url;
                         a.storylink(href=element.url) &nbsp#{element.title}&nbsp
                         span.sitebit.comhead
                             | (
