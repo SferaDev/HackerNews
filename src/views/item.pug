@@ -10,12 +10,15 @@ block content
                     a#up_postId.nosee(onclick='return vote(event, this, "up")' href="vote?id=" + post._id)
                         .votearrow(title="upvote")
             td.title
-                a.storylink(href="//" + post.url rel="nofollow") #{post.title}&nbsp
-                span.sitebit.comhead
-                    | (
-                    a(href="from?site=" + post.tld)
-                        span.sitestr #{post.tld}
-                    | )
+                if post.__type === 'Url'
+                    a.storylink(href="//" + post.url) &nbsp#{post.title}&nbsp
+                    span.sitebit.comhead
+                        | (
+                        a(href="from?site=" + post.tld)
+                            span.sitestr #{post.tld}
+                        | )
+                else
+                    a.storylink(href="item?id=" + post._id) &nbsp#{post.title}&nbsp
         tr
             td(colspan="2")
             td.subtext
