@@ -10,8 +10,9 @@ block content
                     a#up_postId.nosee(onclick='return vote(event, this, "up")' href="vote?id=" + post._id)
                         .votearrow(title="upvote")
             td.title
+                - post.url = (post.url.indexOf('://') === -1) ? '//' + post.url : post.url;
                 if post.__type === 'Url'
-                    a.storylink(href="//" + post.url) &nbsp#{post.title}&nbsp
+                    a.storylink(href=post.url) &nbsp#{post.title}&nbsp
                     span.sitebit.comhead
                         | (
                         a(href="from?site=" + post.tld)
