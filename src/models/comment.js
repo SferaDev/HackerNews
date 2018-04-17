@@ -22,6 +22,10 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
         required: true
+    },
+    points: {
+        type: Number,
+        default: 0
     }
 }, baseOptions);
 
