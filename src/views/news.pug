@@ -49,7 +49,9 @@ block content
                         a(href="item?id=" + element._id) #{timeSince(element.createdAt)}
                     span#unv_element.postId
                     |  |&nbsp
-                    if element.totalComments === 1
+                    if element.totalComments === 0
+                        a(href="item?id=" + element._id) discuss
+                    else if element.totalComments === 1
                         a(href="item?id=" + element._id) #{element.totalComments} comment
                     else
                         a(href="item?id=" + element._id) #{element.totalComments} comments
