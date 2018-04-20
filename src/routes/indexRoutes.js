@@ -7,6 +7,7 @@ import {
     insertUrlPost
 } from "../controllers/postController";
 import {loginUser, registerUser} from "../controllers/userController";
+import {insertComment} from "../controllers/commentController";
 
 export const routes = [
     {
@@ -74,12 +75,26 @@ export const routes = [
         render: 'submit',
         title: 'Submit',
         postAction: function (req, res) {
+            console.log(req.body);
             if (req.body.url !== '' && req.body.text === '') {
-                insertUrlPost(req.session.userId, req.body.title, req.body.url);
+                insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
+                    res.redirect('/newest');
+                });
             } else if (req.body.url === '' && req.body.text !== '') {
-                insertAskPost(req.session.userId, req.body.title, req.body.text);
-            }
-            res.redirect('/newest');
+                insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
+                    res.redirect('/newest');
+                });
+            } else res.redirect('/submit');
+        }
+    },
+    {
+        route: '/comment/',
+        postAction: function (req, res) {
+            if (req.body.postId !== '' && req.body.text === '') {
+                insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
+                    res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
+                });
+            } else res.redirect('/newest');
         }
     },
     {
