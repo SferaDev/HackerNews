@@ -51,7 +51,9 @@ block content
                 | &nbsp|&nbsp
                 a(href="fave?id=" + post._id) favorite
                 | &nbsp|&nbsp
-                if post.totalComments === 1
+                if post.totalComments === 0
+                    a(href="item?id=" + post._id) discuss
+                else if post.totalComments === 1
                     a(href="item?id=" + post._id) #{post.totalComments} comment
                 else
                     a(href="item?id=" + post._id) #{post.totalComments} comments
