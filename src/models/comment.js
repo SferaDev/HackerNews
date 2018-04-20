@@ -22,12 +22,16 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
         required: true
-    },
-    points: {
-        type: Number,
-        default: 0
     }
 }, baseOptions);
+
+commentSchema.virtual('replies').get(function () {
+    this.find({__type: 'Reply', parentComment: this._id}, function (err, elements) {
+        if (err) console.error(err);
+        else return elements;
+    });
+    return null;
+});
 
 // Before save, increment comment count
 commentSchema.pre('save', function (next) {
