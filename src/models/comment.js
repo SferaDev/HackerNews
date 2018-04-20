@@ -3,8 +3,6 @@ import {postSchema} from "./post";
 const mongoose = require('mongoose');
 
 const baseOptions = {
-    discriminatorKey: '__type',
-    collection: 'data',
     timestamps: true
 };
 
@@ -23,11 +21,20 @@ const commentSchema = new mongoose.Schema({
         ref: 'Post',
         required: true
     },
-    points: {
-        type: Number,
-        default: 0
+    parentComment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+        default: ''
     }
 }, baseOptions);
+
+commentSchema.virtual('replies').get(function () {
+    this.find({parentComment: this._id}, function (err, elements) {
+        if (err) console.error(err);
+        else return elements;
+    });
+    return null;
+});
 
 // Before save, increment comment count
 commentSchema.pre('save', function (next) {
@@ -53,13 +60,5 @@ commentSchema.pre('remove', function (next) {
     });
     next();
 });
-
-export const replySchema = commentSchema.discriminator('Reply', new mongoose.Schema({
-    parentComment: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-        required: true
-    }
-}));
 
 export const commentModel = mongoose.model('Comment', commentSchema);
