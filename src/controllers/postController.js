@@ -1,23 +1,25 @@
 import {askSchema, postSchema, urlSchema} from "../models/post";
 import {getUserByUsername} from "./userController";
 
-export function insertUrlPost(userId, title, url) {
+export function insertUrlPost(userId, title, url, done) {
     new urlSchema({
         title: title,
         url: url,
         owner: userId
     }).save(function (error, element) {
         if (error) console.error(error);
+        done(element);
     });
 }
 
-export function insertAskPost(userId, title, text) {
+export function insertAskPost(userId, title, text, done) {
     new askSchema({
         title: title,
         text: text,
         owner: userId
     }).save(function (error, element) {
         if (error) console.error(error);
+        done(element);
     });
 }
 
