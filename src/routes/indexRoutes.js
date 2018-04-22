@@ -118,6 +118,11 @@ export const routes = [
         title: 'Welcome'
     },
     {
+        route: '/user/',
+        render: 'user',
+        title: 'Profile: '
+    },
+    {
         route: '/login/',
         render: 'login',
         title: 'Login',
