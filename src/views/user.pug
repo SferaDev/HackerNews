@@ -17,81 +17,107 @@ block content
                 table(border="0")
                     tr.athing
                         td(valign="top") user:
-                            a.hnuser(href="user?id=" + username)
-                                font(color="#3c963c") #{username}
+                        td
+                            a.hnuser(href="user?id=" + user.username)
+                                font(color="#3c963c") #{user.username}
                     tr
                         td(valign="top") created:
                         td
-                            a(href="front?day=2018-04-09&birth=Swaggaaa") 6 days ago
+                            //TODO: Copied from news.pug  We should move this somewhere else
+                            - function timeSince(date) {
+                            - let seconds = Math.floor((new Date() - date) / 1000);
+                            - let interval = Math.floor(seconds / 31536000);
+                            - if (interval >= 1) return interval + " years ago";
+                            - interval = Math.floor(seconds / 2592000);
+                            - if (interval >= 1) return interval + " months ago";
+                            - interval = Math.floor(seconds / 86400);
+                            - if (interval >= 1) return interval + " days ago";
+                            - interval = Math.floor(seconds / 3600);
+                            - if (interval >= 1) return interval + " hours ago";
+                            - interval = Math.floor(seconds / 60);
+                            - if (interval >= 1) return interval + " minutes ago";
+                            - return Math.floor(seconds) + " seconds ago";
+                            - }
+                            | #{timeSince(user.createdAt)}
                     tr
                         td(valign="top") karma:
                         td
-                            | 1
+                            | #{user.karma}
                     tr
                         td(valign="top") about:
                         td
-                            textarea(cols="60" rows="5" wrap="virtual" name="about")
-                            font(size="-2")
-                                a(href="formatdoc" tabindex="-1")
-                                    font(color="#afafaf") help
+                            if (isOwnProfile)
+                                textarea(cols="60" rows="5" wrap="virtual" name="about")
+                                    | #{user.about}
+                                font(size="-2")
+                                    a(href="formatdoc" tabindex="-1")
+                                        font(color="#afafaf") &nbsp; help
+                            else
+                                | #{user.about}
+
+                    if (isOwnProfile)
+                        tr
+                            td(valign="top") email:
+                            td
+                                input(type="text" name="uemail" value="" + user.email size="60")
+                        tr
+                            td(valign="top") showdead:
+                            td
+                                select(name="showd")
+                                    option yes
+                                    option(selected="" + user.showdead) no
+                        tr
+                            td(valign="top") noprocrast:
+                            td
+                                select(name="nopro")
+                                    option yes
+                                    option(selected="" + user.noprocrat) no
+                        tr
+                            td(valign="top") maxvisit:
+                            td
+                                input(type="text" name="maxv" value="" + user.maxvisit size="16" )
+                        tr
+                            td(valign="top") minaway:
+                            td
+                                input(type="text" name="mina" value="" + user.minaway size="16")
+                        tr
+                            td(valign="top") delay:
+                            td
+                                input(type="text" name="delay" value="" + user.delay size="16")
+                        tr
+                            td
+                            td
+                                a(href="changepw")
+                                    u change password
                     tr
-                        td(valign="top") email:
-                        td
-                            input(type="text" name="uemail" value="" size="60")
-                    tr
-                        td(valign="top") showdead:
-                        td
-                            select(name="showd")
-                                option yes
-                                option(selected="") no
-                    tr
-                        td(valign="top") noprocrast:
-                        td
-                            select(name="nopro")
-                                option yes
-                                option(selected="") no
-                    tr
-                        td(valign="top") maxvisit:
-                        td
-                            input(type="text" name="maxv" value="20" size="16")
-                    tr
-                        td(valign="top") minaway:
-                        td
-                            input(type="text" name="mina" value="180" size="16")
-                    tr
-                        td(valign="top") delay:
-                        td
-                            input(type="text" name="delay" value="0" size="16")
-                    tr
                         td
                         td
-                            a(href="changepw")
-                                u change password
-                    tr
-                        td
-                        td
-                            a(href="submitted?id=Swaggaaa")
+                            a(href="submitted?id=" + user.username)
                                 u submissions
                     tr
                         td
                         td
-                            a(href="threads?id=Swaggaaa")
+                            a(href="threads?id=" + user.username)
                                 u comments
-                    tr
-                        td
-                        td
-                            a(href="hidden")
-                                u hidden
-                    tr
-                        td
-                        td
-                            a(href="favorites?id=Swaggaaa")
-                                u favorite submissions
-                            |  /
-                            a(href="favorites?id=Swaggaaa&comments=t")
-                                u comments
-                            span(style="font-style:italic") (shared)
-                br
-                input(type="submit" value="update")
+
+                    if (isOwnProfile)
+                        tr
+                            td
+                            td
+                                a(href="favorites?id=" + user.username)
+                                    u favorite submissions
+                                |  /
+                                a(href="favorites?id=" + user.username + "&comments=t") &nbsp;
+                                    u comments
+                                span(style="font-style:italic") &nbsp; (shared)
+                    else
+                        tr
+                            td
+                            td
+                                a(href="favorites?id=" + user.username)
+                                    u favorites
+                    if (isOwnProfile)
+                        br
+                        input(type="submit" value="update")
             br
             br
