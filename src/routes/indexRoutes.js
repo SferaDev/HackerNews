@@ -6,7 +6,7 @@ import {
     insertAskPost,
     insertUrlPost
 } from "../controllers/postController";
-import {loginUser, registerUser} from "../controllers/userController";
+import {getUser, getUserByUsername, loginUser, registerUser} from "../controllers/userController";
 import {insertComment} from "../controllers/commentController";
 
 export const routes = [
@@ -116,6 +116,33 @@ export const routes = [
         route: '/welcome/',
         render: 'welcome',
         title: 'Welcome'
+    },
+    {
+        route: '/user/',
+        render: 'user',
+        title: 'Profile: ',
+        getAction: function (req, res, result) {
+            getUser(req.session.userId, function (user) {
+                let isOwnProfile = user.username === req.query.id;
+                let vars = {isOwnProfile: isOwnProfile};
+                if (isOwnProfile) {
+                    delete user.password;
+                    vars.user = user;
+                    result(vars);
+                }
+                else {
+                    getUserByUsername(req.query.id, function (user) {
+                        delete user.password;
+                        vars.user = user;
+                        result(vars);
+                    });
+                }
+
+            })
+        },
+        postAction: function (req, res, result) {
+            // TODO: Get parameters and update own profile
+        }
     },
     {
         route: '/login/',

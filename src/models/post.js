@@ -35,7 +35,7 @@ export const urlSchema = postSchema.discriminator('Url', new mongoose.Schema({
     },
     tld: {
         type: String,
-        default: function() {
+        default: function () {
             if (this.url !== undefined) return extractRootDomain(this.url);
         }
     }
