@@ -116,8 +116,11 @@ block content
                             td
                                 a(href="favorites?id=" + user.username)
                                     u favorites
+
                     if (isOwnProfile)
-                        br
-                        input(type="submit" value="update")
+                        tr
+                            td
+                                br
+                                input(type="submit" value="update")
             br
             br
