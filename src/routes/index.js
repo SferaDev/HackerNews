@@ -10,7 +10,7 @@ routes.forEach(function (doc) {
         indexRouter.get(doc.route, function (req, res) {
             getUser(req.session.userId, function (user) {
                 let mainAttributes = {
-                    subtitle: doc.title,
+                    subtitle: doc.title === "Profile: " ? doc.title + req.query.id : doc.title,
                     username: user === null ? undefined : user.username,
                     karma: user === null ? undefined : user.karma
                 };
