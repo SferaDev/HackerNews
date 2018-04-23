@@ -1,5 +1,5 @@
 # HackerNews
-[![Build Status](https://travis-ci.com/SferaDev/HackerNews.svg?branch=develop)](https://travis-ci.com/SferaDev/HackerNews)
+[![Build Status](https://travis-ci.com/SferaDev/HackerNews.svg?token=dBxVvPaCgpjmxeS8Cwbr&branch=master)](https://travis-ci.com/SferaDev/HackerNews)
 
 ## Deployment
 
