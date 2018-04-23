@@ -10,8 +10,7 @@ block content
                     span.rank #{count}&nbsp
                 td.votelinks(valign="top")
                     center
-                        // TODO: Voting endpoint
-                        a#up_element.postId(onclick='return vote(event, this, "up")' href="vote?id=#{element.postId}")
+                        a#up_element._id(onclick='return vote(event, this, "up")' href="vote?id=" + element._id + "&how=up")
                             .votearrow(title="upvote")
                 td.title
                     if element.__type === 'Url'
