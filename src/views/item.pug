@@ -45,9 +45,8 @@ block content
                     a(href="item?id=" + _id) #{timeSince(post.createdAt)}
                 span#unv_post._id
                 | &nbsp|&nbsp
-                a.hnpast(href="https://hn.algolia.com/?query=Tuenti%20Challenge%20at%20FIB-UPC&sort=byDate&dateRange=all&type=story&storyText=false&prefix&page=0") past
-                | &nbsp|&nbsp
-                a(href="https://www.google.com/search?q=Tuenti%20Challenge%20at%20FIB-UPC") web
+                // TODO
+                a(href="https://www.google.com/search?q=") web
                 | &nbsp|&nbsp
                 a(href="fave?id=" + post._id) favorite
                 | &nbsp|&nbsp
