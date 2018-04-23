@@ -8,6 +8,7 @@ import {
 } from "../controllers/postController";
 import {getUser, getUserByUsername, loginUser, registerUser} from "../controllers/userController";
 import {insertComment} from "../controllers/commentController";
+import {timeSince} from "../../public/javascript/utils";
 
 export const routes = [
     {
@@ -22,7 +23,7 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Url")});
+                result({posts: posts.filter(post => post.__type === "Url"), timeSince: timeSince});
             });
         }
     },
@@ -56,7 +57,7 @@ export const routes = [
                         else if (a.createdAt > b.createdAt)
                             return -1;
                         return 0;
-                    })
+                    }), timeSince: timeSince
                 });
             });
         }
@@ -124,7 +125,7 @@ export const routes = [
         getAction: function (req, res, result) {
             getUser(req.session.userId, function (user) {
                 let isOwnProfile = user.username === req.query.id;
-                let vars = {isOwnProfile: isOwnProfile};
+                let vars = {isOwnProfile: isOwnProfile, timeSince: timeSince};
                 if (isOwnProfile) {
                     delete user.password;
                     vars.user = user;
