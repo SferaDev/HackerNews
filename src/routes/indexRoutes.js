@@ -121,22 +121,17 @@ export const routes = [
         route: '/user/',
         render: 'user',
         title: 'Profile: ',
-        getAction: function (req, res, result)
-        {
-            getUser(req.session.userId, function (user)
-            {
+        getAction: function (req, res, result) {
+            getUser(req.session.userId, function (user) {
                 let isOwnProfile = user.username === req.query.id;
                 let vars = {isOwnProfile: isOwnProfile};
-                if (isOwnProfile)
-                {
+                if (isOwnProfile) {
                     delete user.password;
                     vars.user = user;
                     result(vars);
                 }
-                else
-                {
-                    getUserByUsername(req.query.id, function (user)
-                    {
+                else {
+                    getUserByUsername(req.query.id, function (user) {
                         delete user.password;
                         vars.user = user;
                         result(vars);
@@ -144,6 +139,9 @@ export const routes = [
                 }
 
             })
+        },
+        postAction: function (req, res, result) {
+            // TODO: Get parameters and update own profile
         }
     },
     {
