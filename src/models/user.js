@@ -20,10 +20,12 @@ const userSchema = new mongoose.Schema({
         default: 1
     },
     about: {
-        type: String
+        type: String,
+        default: ''
     },
     email: {
-        type: String
+        type: String,
+        default: ''
     },
     showdead: {
         type: Boolean,
