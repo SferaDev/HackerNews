@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --use-strict ./bin/www --exec babel-node --presets es2015,stage-2",
-    "test": ""
+    "start": "nodemon --use-strict ./bin/www --exec babel-node",
+    "test": "",
+    "postinstall": "gulp apidoc"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -16,6 +17,8 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
+    "gulp": "^3.9.1",
+    "gulp-apidoc": "^0.2.7",
     "http-errors": "~1.6.2",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.13",
