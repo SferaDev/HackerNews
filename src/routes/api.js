@@ -13,6 +13,13 @@ apiRouter.get('/', function (req, res) {
     }
 });
 
+/**
+ * @api {get} /users List all users
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ *
+ * @apiSuccess {JSON} result Array with all users
+ */
 apiRouter.get('/users', function(req, res) {
     userModel.find({}, {
         _id: 0,
