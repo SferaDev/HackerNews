@@ -7,7 +7,9 @@ import {
     insertUrlPost
 } from "../controllers/postController";
 import {getUser, getUserByUsername, loginUser, registerUser} from "../controllers/userController";
-import {insertComment} from "../controllers/commentController";
+import * as commentController from "../controllers/commentController";
+import * as likeController from "../controllers/likeController";
+import {timeSince} from "../../public/javascript/utils";
 
 export const routes = [
     {
@@ -22,7 +24,7 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Url")});
+                result({posts: posts.filter(post => post.__type === "Url"), timeSince: timeSince});
             });
         }
     },
@@ -56,7 +58,7 @@ export const routes = [
                         else if (a.createdAt > b.createdAt)
                             return -1;
                         return 0;
-                    })
+                    }), timeSince: timeSince
                 });
             });
         }
@@ -91,7 +93,7 @@ export const routes = [
         route: '/comment/',
         postAction: function (req, res) {
             if (req.body.postId !== '' && req.body.text === '') {
-                insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
+                commentController.insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
                     res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
                 });
             } else res.redirect('/newest');
@@ -124,7 +126,7 @@ export const routes = [
         getAction: function (req, res, result) {
             getUser(req.session.userId, function (user) {
                 let isOwnProfile = user.username === req.query.id;
-                let vars = {isOwnProfile: isOwnProfile};
+                let vars = {isOwnProfile: isOwnProfile, timeSince: timeSince};
                 if (isOwnProfile) {
                     delete user.password;
                     vars.user = user;
@@ -197,6 +199,19 @@ export const routes = [
             getPostById(req.query.id, function (post) {
                 result({post: post})
             })
+        }
+    },
+    {
+        route: '/vote/',
+        getAction: function (req, res, result) {
+            let callback = function() { res.redirect('/news'); };
+            if (req.query.id !== undefined && req.query.id !== '') {
+                if (req.query.how === 'up')
+                    likeController.likePost(req.session.userId, req.query.id, callback);
+                else if (req.query.how === 'down')
+                    likeController.dislikePost(req.session.userId, req.query.id, callback);
+                else callback();
+            } else callback();
         }
     }
 ];
