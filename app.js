@@ -33,7 +33,9 @@ if (process.env.GITHUB_CLIENT_ID) {
         clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
         callbackURL: process.env.GITHUB_CALLBACK_URL || ''
     }, function (accessToken, refreshToken, profile, next) {
-        userModel.findOrCreate({githubId: profile.id, username: profile.login}, function (err, user) {
+        userModel.findOrCreate({githubId: profile.id}, function (err, user) {
+            user.username = profile.login;
+            user.save();
             return next(err, user);
         });
     }));
