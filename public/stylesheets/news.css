@@ -9,6 +9,12 @@ td {
     font-size: 10pt;
     color: #828282;
 }
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
 
 .admin td {
     font-family: Verdana, Geneva, sans-serif;
