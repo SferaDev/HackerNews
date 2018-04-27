@@ -27,33 +27,6 @@ mongoose.connect(MONGODB_URI, function (error) {
     else console.log('MongoDB connected');
 });
 
-if (process.env.GITHUB_CLIENT_ID) {
-    passport.use(new GithubStrategy({
-        clientID: process.env.GITHUB_CLIENT_ID || '',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-        callbackURL: process.env.GITHUB_CALLBACK_URL || ''
-    }, function (accessToken, refreshToken, profile, next) {
-        userModel.findOne({githubId: profile.id}, function (err, user) {
-            if (err) return next(err);
-            if (!user) {
-                user = new userModel({githubId: profile.id, username: profile.login});
-                user.save();
-            }
-            return next(err, user);
-        });
-    }));
-
-    app.get('/auth/github',
-        passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-    app.get('/auth/github/callback',
-        passport.authenticate('github', { failureRedirect: '/' }),
-        function(req, res) {
-            // Successful authentication, redirect home.
-            res.redirect('/');
-        });
-}
-
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'pug');
@@ -62,13 +35,55 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: SESSION_SECRET,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
 
+if (process.env.GITHUB_CLIENT_ID) {
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    passport.use(new GithubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        callbackURL: process.env.GITHUB_CALLBACK_URL || ''
+    }, function (accessToken, refreshToken, profile, next) {
+        userModel.findOne({githubId: profile.id}, function (err, user) {
+            if (err) return next(err);
+            if (!user) {
+                user = new userModel({
+                    username: profile.login,
+                    githubId: profile.id
+                });
+                console.log(user);
+                user.save();
+            }
+            return next(err, user);
+        });
+    }));
+
+    app.get('/auth',
+        passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+    app.get('/auth/callback',
+        passport.authenticate('github', { failureRedirect: '/' }),
+        function(req, res) {
+            // Auth correct
+            res.redirect('/');
+        });
+
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
+}
+
 // Routes
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/docs', express.static('apidoc'));
