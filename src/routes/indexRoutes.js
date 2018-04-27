@@ -148,15 +148,18 @@ export const routes = [
         }
     },
     {
-        route: '/login/',
-        render: 'login',
-        title: 'Login',
-        getAction: function(req, res, result) {
+        route: '/oauth/',
+        getAction: function (req, res, result) {
             if (process.env.GITHUB_CLIENT_ID) {
                 passport.authenticate('github', {successRedirect: '/', failureRedirect: '/'});
             }
             result();
-        },
+        }
+    },
+    {
+        route: '/login/',
+        render: 'login',
+        title: 'Login',
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
