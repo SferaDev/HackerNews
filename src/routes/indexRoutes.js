@@ -143,7 +143,7 @@ export const routes = [
 
             })
         },
-        postAction: function (req, res, result) {
+        postAction: function (req, res) {
             // TODO: Get parameters and update own profile
         }
     },
@@ -151,10 +151,11 @@ export const routes = [
         route: '/login/',
         render: 'login',
         title: 'Login',
-        getAction: function(req, res) {
+        getAction: function(req, res, result) {
             if (process.env.GITHUB_CLIENT_ID) {
                 passport.authenticate('github', {failureRedirect: '/'});
                 res.redirect('/');
+                result();
             }
         },
         postAction: function (req, res) {
