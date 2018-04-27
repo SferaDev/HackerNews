@@ -148,15 +148,6 @@ export const routes = [
         }
     },
     {
-        route: '/oauth/',
-        getAction: function (req, res, result) {
-            if (process.env.GITHUB_CLIENT_ID) {
-                passport.authenticate('github', {successRedirect: '/', failureRedirect: '/'});
-            }
-            result();
-        }
-    },
-    {
         route: '/login/',
         render: 'login',
         title: 'Login',
