@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const findOrCreate = require('mongoose-findorcreate');
 
 const baseOptions = {
     timestamps: true
@@ -52,6 +53,8 @@ const userSchema = new mongoose.Schema({
         default: 0
     }
 }, baseOptions);
+
+userSchema.plugin(findOrCreate);
 
 // Before save, hash the stored password to database
 userSchema.pre('save', function (next) {
