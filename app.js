@@ -34,7 +34,7 @@ if (process.env.GITHUB_CLIENT_ID) {
         callbackURL: process.env.GITHUB_CALLBACK_URL || ''
     }, function (accessToken, refreshToken, profile, next) {
         userModel.findOrCreate({githubId: profile.id}, function (err, user) {
-            console.log(user);
+            console.log(profile);
             return next(err, user);
         });
     }));
