@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    githubId: {
+        type: String,
+        default: ''
+    },
     karma: {
         type: Number,
         default: 1

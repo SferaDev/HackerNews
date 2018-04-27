@@ -7,9 +7,12 @@ import cookieParser from "cookie-parser";
 import createError from "http-errors";
 import logger from "morgan";
 import path from "path";
+import passport from "passport";
+import {Strategy as GithubStrategy} from "passport-github2";
 
 import {indexRouter} from "./src/routes";
 import {apiRouter} from "./src/routes/api";
+import {userModel} from "./src/models/user";
 
 const mongoStore = connect_mongo(session);
 const SESSION_SECRET = process.env.SECRET || '%jordi%&%Elena%===Null!';
@@ -24,8 +27,17 @@ mongoose.connect(MONGODB_URI, function (error) {
     else console.log('MongoDB connected');
 });
 
-// TODO Jordi: Añadir una condición req.app.get('env') === 'development' que haga login normal como ahora
-// Y si no es development que haga el OAUTH con GitHub
+if (process.env.GITHUB_CLIENT_ID) {
+    passport.use(new GithubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        callbackURL: process.env.GITHUB_CALLBACK_URL || ''
+    }, function (accessToken, refreshToken, profile, next) {
+        userModel.findOrCreate({githubId: profile.id}, function (err, user) {
+            return next(err, user);
+        });
+    }));
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));

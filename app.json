@@ -4,6 +4,15 @@
   "env": {
     "MONGODB_URI": {
       "required": true
+    },
+    "GITHUB_CLIENT_ID": {
+      "required": true
+    },
+    "GITHUB_CLIENT_SECRET": {
+      "required": true
+    },
+    "GITHUB_CALLBACK_URL": {
+      "required": true
     }
   },
   "formation": {
