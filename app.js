@@ -34,6 +34,7 @@ if (process.env.GITHUB_CLIENT_ID) {
         callbackURL: process.env.GITHUB_CALLBACK_URL || ''
     }, function (accessToken, refreshToken, profile, next) {
         userModel.findOrCreate({githubId: profile.id}, function (err, user) {
+            console.log(user);
             return next(err, user);
         });
     }));
@@ -42,7 +43,7 @@ if (process.env.GITHUB_CLIENT_ID) {
         passport.authenticate('github', { scope: [ 'user:email' ] }));
 
     app.get('/auth/github/callback',
-        passport.authenticate('github', { failureRedirect: '/login' }),
+        passport.authenticate('github', { failureRedirect: '/' }),
         function(req, res) {
             // Successful authentication, redirect home.
             res.redirect('/');
