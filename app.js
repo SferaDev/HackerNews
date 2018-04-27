@@ -24,6 +24,9 @@ mongoose.connect(MONGODB_URI, function (error) {
     else console.log('MongoDB connected');
 });
 
+// TODO Jordi: Añadir una condición req.app.get('env') === 'development' que haga login normal como ahora
+// Y si no es development que haga el OAUTH con GitHub
+
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'pug');
