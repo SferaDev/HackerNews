@@ -39,7 +39,9 @@ html
                                             a#me(href="user?id=" + username) #{username}
                                             |                 (#{karma}) |&nbsp
                                             a#logout(href="logout") Logout
-                                        else
+                                        else if process.env.GITHUB_CLIENT_ID
+                                            a#login(href="auth") Login
+                                        else                                            
                                             a#login(href="login") Login
                 tr(style="height:10px")
                 tr

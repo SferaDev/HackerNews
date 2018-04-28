@@ -47,29 +47,23 @@ if (process.env.GITHUB_CLIENT_ID) {
     passport.use(new GithubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID || '',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-        callbackURL: process.env.GITHUB_CALLBACK_URL || ''
+        callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+        scope: ['user:email']
     }, function (accessToken, refreshToken, profile, next) {
-        userModel.findOne({githubId: profile.id}, function (err, user) {
+        userModel.findOneOrCreate({githubId: profile.id, username: profile.username, email: profile.emails[0].value}, function (err, user) {
             if (err) return next(err);
-            if (!user) {
-                user = new userModel({
-                    username: profile.login,
-                    githubId: profile.id
-                });
-                console.log(user);
-                user.save();
-            }
             return next(err, user);
         });
     }));
 
     app.get('/auth',
-        passport.authenticate('github', { scope: [ 'user:email' ] }));
+        passport.authenticate('github'));
 
     app.get('/auth/callback',
         passport.authenticate('github', { failureRedirect: '/' }),
         function(req, res) {
-            // Auth correct
+            req.session.userId = req.session.passport.user._id;
+            req.session.username = req.session.passport.user.username;
             res.redirect('/');
         });
 

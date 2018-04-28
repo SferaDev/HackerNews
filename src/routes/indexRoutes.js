@@ -151,6 +151,10 @@ export const routes = [
         route: '/login/',
         render: 'login',
         title: 'Login',
+        getAction: function (req, res, result) {
+            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
+            result();
+        },
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
@@ -171,17 +175,23 @@ export const routes = [
         route: '/register/',
         render: 'login',
         title: 'Login',
+        getAction: function (req, res, result) {
+            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
+            result();
+        },
         postAction: function (req, res) {
-            if (req.body.username !== '' && req.body.password !== '') {
-                registerUser(req.body.username, req.body.password, function (userId) {
-                    if (userId === null) {
-                        // TODO: User already exist
-                    } else {
-                        req.session.userId = userId;
-                        req.session.username = req.body.username;
-                    }
-                    res.redirect('/news');
-                });
+            if (!process.env.GITHUB_CLIENT_ID) {
+                if (req.body.username !== '' && req.body.password !== '') {
+                    registerUser(req.body.username, req.body.password, function (userId) {
+                        if (userId === null) {
+                            // TODO: User already exist
+                        } else {
+                            req.session.userId = userId;
+                            req.session.username = req.body.username;
+                        }
+                        res.redirect('/news');
+                    });
+                }
             }
         }
     },
