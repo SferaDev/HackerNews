@@ -20,11 +20,13 @@ apiRouter.get('/', function (req, res) {
  *
  * @apiSuccess {JSON} result Array with all users
  */
-apiRouter.get('/users', function(req, res) {
+apiRouter.get('/users', function (req, res) {
     userModel.find({}, function (err, users) {
         if (err) res.status(500).send(err);
         else {
-            users.forEach(user => {if (user.email === '') delete user.email});
+            users.forEach(user => {
+                if (user.email === '') delete user.email
+            });
             res.status(200).send(users);
         }
     });

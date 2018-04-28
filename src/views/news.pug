@@ -11,7 +11,7 @@ block content
                 td.votelinks(valign="top")
                     center
                         a#up_element._id(onclick='return vote(event, this, "up")' href="vote?id=" + element._id + "&how=up")
-                            .votearrow(title="upvote")
+                            .arrow-up(title="upvote")
                 td.title
                     if element.__type === 'Url'
                         - element.url = (element.url.indexOf('://') === -1) ? '//' + element.url : element.url;
@@ -24,7 +24,11 @@ block content
                     else
                         a.storylink(href="item?id=" + element._id) &nbsp#{element.title}&nbsp
             tr
-                td(colspan="2")
+                td(colspan="1")
+                td.votelinks(valign="top")
+                    center
+                        a#up_element._id(onclick='return vote(event, this, "up")' href="vote?id=" + element._id + "&how=down")
+                            .arrow-down(title="upvote")
                 td.subtext
                     span#score_element.postId.score &nbsp#{element.totalLikes} points
                     |  by&nbsp

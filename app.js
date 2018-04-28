@@ -30,6 +30,7 @@ mongoose.connect(MONGODB_URI, function (error) {
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'pug');
+app.locals.pretty = true;
 
 app.use(logger('dev'));
 app.use(express.json());

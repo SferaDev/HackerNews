@@ -1,4 +1,3 @@
-import passport from "passport";
 import {
     getAllPosts,
     getPostById,
@@ -217,7 +216,10 @@ export const routes = [
     {
         route: '/vote/',
         getAction: function (req, res, result) {
-            let callback = function() { res.redirect('/news'); };
+            let callback = function () {
+                res.redirect('/news');
+                result();
+            };
             if (req.query.id !== undefined && req.query.id !== '') {
                 if (req.query.how === 'up')
                     likeController.likePost(req.session.userId, req.query.id, callback);

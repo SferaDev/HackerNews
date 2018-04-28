@@ -1,4 +1,4 @@
-import {postSchema} from "./post";
+import {postModel} from "./post";
 
 const mongoose = require('mongoose');
 
@@ -39,7 +39,7 @@ commentSchema.virtual('replies').get(function () {
 // Before save, increment comment count
 commentSchema.pre('save', function (next) {
     if (!this.isModified('_id')) return next();
-    postSchema.findOne({
+    postModel.findOne({
         _id: this.post
     }, function (err, post) {
         if (err) console.error(err);
@@ -51,7 +51,7 @@ commentSchema.pre('save', function (next) {
 
 // Before save, increment comment count
 commentSchema.pre('remove', function (next) {
-    postSchema.findOne({
+    postModel.findOne({
         _id: this.post
     }, function (err, post) {
         if (err) console.error(err);

@@ -1,4 +1,4 @@
-import {postSchema} from "./post";
+import {postModel} from "./post";
 
 const mongoose = require('mongoose');
 
@@ -8,36 +8,38 @@ const baseOptions = {
 
 const likeSchema = new mongoose.Schema({
     owner: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     post: {
-        type: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
     }
 }, baseOptions);
 
 // Before save, increment like count
 likeSchema.pre('save', function (next) {
-    if (!this.isModified('_id')) return next();
-    postSchema.findOne({
+    if (!this.isNew) return next();
+    postModel.findOne({
         _id: this.post
     }, function (err, post) {
         if (err) console.error(err);
         post.totalLikes += 1;
         post.save();
+        next();
     });
-    next();
 });
 
 // Before remove, increment like count
 likeSchema.pre('remove', function (next) {
-    postSchema.findOne({
+    postModel.findOne({
         _id: this.post
     }, function (err, post) {
         if (err) console.error(err);
         post.totalLikes -= 1;
         post.save();
+        next();
     });
-    next();
 });
 
 export const likeModel = mongoose.model('Like', likeSchema);

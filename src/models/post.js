@@ -8,7 +8,7 @@ const baseOptions = {
     timestamps: true
 };
 
-export const postSchema = mongoose.model('Post', new mongoose.Schema({
+export const postModel = mongoose.model('Post', new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -28,7 +28,7 @@ export const postSchema = mongoose.model('Post', new mongoose.Schema({
     }
 }, baseOptions));
 
-export const urlSchema = postSchema.discriminator('Url', new mongoose.Schema({
+export const urlModel = postModel.discriminator('Url', new mongoose.Schema({
     url: {
         type: String,
         required: true
@@ -41,7 +41,7 @@ export const urlSchema = postSchema.discriminator('Url', new mongoose.Schema({
     }
 }));
 
-export const askSchema = postSchema.discriminator('Ask', new mongoose.Schema({
+export const askModel = postModel.discriminator('Ask', new mongoose.Schema({
     text: {
         type: String,
         required: true
