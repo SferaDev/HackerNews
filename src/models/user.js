@@ -6,14 +6,17 @@ const baseOptions = {
 };
 
 const userSchema = new mongoose.Schema({
-    username: {
+    githubId: {
         type: String,
-        required: true,
         unique: true
     },
-    password: {
+    username: {
         type: String,
+        unique: true,
         required: true
+    },
+    password: {
+        type: String
     },
     karma: {
         type: Number,
@@ -60,6 +63,13 @@ userSchema.pre('save', function (next) {
 userSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt.compareSync(candidatePassword, this.password);
 };
+
+userSchema.statics.findOneOrCreate = function findOneOrCreate(condition, callback) {
+    const self = this
+    self.findOne(condition, (err, result) => {
+        return result ? callback(err, result) : self.create(condition, (err, result) => { return callback(err, result) })
+    })
+}
 
 // Export User model as module
 export const userModel = mongoose.model('User', userSchema);

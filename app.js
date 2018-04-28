@@ -7,9 +7,12 @@ import cookieParser from "cookie-parser";
 import createError from "http-errors";
 import logger from "morgan";
 import path from "path";
+import passport from "passport";
+import {Strategy as GithubStrategy} from "passport-github2";
 
 import {indexRouter} from "./src/routes";
 import {apiRouter} from "./src/routes/api";
+import {userModel} from "./src/models/user";
 
 const mongoStore = connect_mongo(session);
 const SESSION_SECRET = process.env.SECRET || '%jordi%&%Elena%===Null!';
@@ -32,13 +35,49 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: SESSION_SECRET,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
 
+if (process.env.GITHUB_CLIENT_ID) {
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    passport.use(new GithubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+        scope: ['user:email']
+    }, function (accessToken, refreshToken, profile, next) {
+        userModel.findOneOrCreate({githubId: profile.id, username: profile.username, email: profile.emails[0].value}, function (err, user) {
+            if (err) return next(err);
+            return next(err, user);
+        });
+    }));
+
+    app.get('/auth',
+        passport.authenticate('github'));
+
+    app.get('/auth/callback',
+        passport.authenticate('github', { failureRedirect: '/' }),
+        function(req, res) {
+            req.session.userId = req.session.passport.user._id;
+            req.session.username = req.session.passport.user.username;
+            res.redirect('/');
+        });
+
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
+}
+
 // Routes
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 app.use('/docs', express.static('apidoc'));
