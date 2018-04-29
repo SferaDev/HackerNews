@@ -23,9 +23,6 @@ block content
                     if (isOwnProfile)
                         textarea(cols="60" rows="5" wrap="virtual" name="about")
                             | #{user.about}
-                        font(size="-2")
-                            a(href="formatdoc" tabindex="-1")
-                                font(color="#afafaf") &nbsp; help
                     else
                         | #{user.about}
 
