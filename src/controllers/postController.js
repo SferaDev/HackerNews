@@ -2,6 +2,7 @@ import {askModel, postModel, urlModel} from "../models/post";
 import {getUserByUsername} from "./userController";
 
 export function insertUrlPost(userId, title, url, done) {
+    if (userId === undefined) return done();
     new urlModel({
         title: title,
         url: url,
@@ -13,6 +14,7 @@ export function insertUrlPost(userId, title, url, done) {
 }
 
 export function insertAskPost(userId, title, text, done) {
+    if (userId === undefined) return done();
     new askModel({
         title: title,
         text: text,

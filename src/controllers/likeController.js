@@ -1,6 +1,7 @@
 import {likeModel} from "../models/like";
 
 export function likePost(userId, postId, done) {
+    if (userId === undefined) return done();
     likeModel.count({
         owner: userId,
         post: postId
@@ -20,6 +21,7 @@ export function likePost(userId, postId, done) {
 }
 
 export function dislikePost(userId, postId, done) {
+    if (userId === undefined) return done();
     likeModel.findOne({
         owner: userId,
         post: postId
