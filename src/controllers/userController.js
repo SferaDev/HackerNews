@@ -49,3 +49,32 @@ export function registerUser(username, password, next) {
         } else next(user._id);
     });
 }
+
+export function updateUser(userid, about, showd, nopro, maxv, mina, delay, next)
+{
+    let fields = {};
+
+    if (about !== '')
+        fields.about = about;
+    if (showd !== '')
+        fields.showdead = showd;
+    if (nopro !== '')
+        fields.noprocrat = nopro;
+    if (maxv !== '')
+        fields.maxvisit = maxv;
+    if (mina !== '')
+        fields.minaway = mina;
+    if (delay !== '')
+        fields.delay = delay;
+
+    userModel.update({_id: userid},
+        fields,
+        function (err, res)
+        {
+            if (err)
+            {
+                console.error(err);
+            }
+            next(null);
+        });
+}

@@ -6,7 +6,7 @@ import {
     insertAskPost,
     insertUrlPost
 } from "../controllers/postController";
-import {getUser, getUserByUsername, loginUser, registerUser} from "../controllers/userController";
+import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
 import {timeSince} from "../../public/javascript/utils";
@@ -124,7 +124,8 @@ export const routes = [
         render: 'user',
         title: 'Profile: ',
         getAction: function (req, res, result) {
-            getUser(req.session.userId, function (user) {
+            userController.getUser(req.session.userId, function (user)
+            {
                 let isOwnProfile = user.username === req.query.id;
                 let vars = {isOwnProfile: isOwnProfile, timeSince: timeSince};
                 if (isOwnProfile) {
@@ -133,7 +134,8 @@ export const routes = [
                     result(vars);
                 }
                 else {
-                    getUserByUsername(req.query.id, function (user) {
+                    userController.getUserByUsername(req.query.id, function (user)
+                    {
                         delete user.password;
                         vars.user = user;
                         result(vars);
@@ -143,7 +145,12 @@ export const routes = [
             })
         },
         postAction: function (req, res) {
-            // TODO: Get parameters and update own profile
+            userController.updateUser(req.session.userId,
+                req.body.about, req.body.showd, req.body.nopro,
+                req.body.maxv, req.body.mina, req.body.delay, function ()
+                {
+                    res.redirect("/user?id=" + req.session.username);
+                });
         }
     },
     {
@@ -157,7 +164,8 @@ export const routes = [
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
-                    loginUser(req.body.username, req.body.password, function (userId) {
+                    userController.loginUser(req.body.username, req.body.password, function (userId)
+                    {
                         if (userId === null) {
                             // TODO: User already exist
                         } else {
@@ -181,7 +189,8 @@ export const routes = [
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
-                    registerUser(req.body.username, req.body.password, function (userId) {
+                    userController.registerUser(req.body.username, req.body.password, function (userId)
+                    {
                         if (userId === null) {
                             // TODO: User already exist
                         } else {

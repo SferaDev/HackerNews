@@ -3,16 +3,6 @@ extends base
 block content
     script(src='/javascript/utils.js')
 
-    if (isOwnProfile && email === undefined)
-        table(border="0" cellpadding="0" cellspacing="0")
-            tr
-                td(bgcolor="#ffffaa")
-                    table(cellpadding="5" width="100%")
-                        tr
-                            td
-                                | Please put a valid address in the email field, or we won't be able to
-                                | send you a new password if you forget yours.  Your address is only
-                                | visible to you and us.  Crawlers and other users can't see it.
     form.profileform(method="post" action="/user")
         table(border="0")
             tr.athing
@@ -44,7 +34,7 @@ block content
                 tr
                     td(valign="top") email:
                     td
-                        input(type="text" name="uemail" value="" + user.email size="60")
+                        | #{user.email}
                 tr
                     td(valign="top") showdead:
                     td
