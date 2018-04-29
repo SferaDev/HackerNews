@@ -35,7 +35,7 @@ block content
                     a.hnuser(href="user?id=" + element.owner.username) #{element.owner.username}
                     span.age
                         | &nbsp
-                        a(href="item?id=" + element._id) #{timeSince(element.createdAt)}
+                        a(href="item?id=" + element._id) #{element.timeSince}
                     span#unv_element.postId
                     |  |&nbsp
                     if element.totalComments === 0

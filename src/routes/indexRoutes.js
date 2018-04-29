@@ -9,7 +9,6 @@ import {
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
-import {timeSince} from "../../public/javascript/utils";
 
 export const routes = [
     {
@@ -24,7 +23,7 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Url"), timeSince: timeSince});
+                result({posts: posts.filter(post => post.__type === "Url")});
             });
         }
     },
@@ -58,7 +57,7 @@ export const routes = [
                         else if (a.createdAt > b.createdAt)
                             return -1;
                         return 0;
-                    }), timeSince: timeSince
+                    })
                 });
             });
         }
@@ -91,7 +90,7 @@ export const routes = [
                 insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
                     res.redirect('/newest');
                 });
-            } else{
+            } else {
                 res.redirect('/submit?invalid=1');
             }
         }
@@ -131,31 +130,25 @@ export const routes = [
         render: 'user',
         title: 'Profile: ',
         getAction: function (req, res, result) {
-            userController.getUser(req.session.userId, function (user)
-            {
+            userController.getUser(req.session.userId, function (user) {
                 let isOwnProfile = user.username === req.query.id;
-                let vars = {isOwnProfile: isOwnProfile, timeSince: timeSince};
+                let vars = {isOwnProfile: isOwnProfile};
                 if (isOwnProfile) {
                     delete user.password;
                     vars.user = user;
                     result(vars);
-                }
-                else {
-                    userController.getUserByUsername(req.query.id, function (user)
-                    {
+                } else {
+                    userController.getUserByUsername(req.query.id, function (user) {
                         delete user.password;
                         vars.user = user;
                         result(vars);
                     });
                 }
-
             })
         },
         postAction: function (req, res) {
-            userController.updateUser(req.session.userId,
-                req.body.about, req.body.showd, req.body.nopro,
-                req.body.maxv, req.body.mina, req.body.delay, function ()
-                {
+            userController.updateUser(req.session.userId, req.body.about, req.body.showd, req.body.nopro,
+                req.body.maxv, req.body.mina, req.body.delay, function () {
                     res.redirect("/user?id=" + req.session.username);
                 });
         }
@@ -171,8 +164,7 @@ export const routes = [
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
-                    userController.loginUser(req.body.username, req.body.password, function (userId)
-                    {
+                    userController.loginUser(req.body.username, req.body.password, function (userId) {
                         if (userId === null) {
                             // TODO: User already exist
                         } else {
@@ -196,8 +188,7 @@ export const routes = [
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
-                    userController.registerUser(req.body.username, req.body.password, function (userId)
-                    {
+                    userController.registerUser(req.body.username, req.body.password, function (userId) {
                         if (userId === null) {
                             // TODO: User already exist
                         } else {

@@ -1,4 +1,5 @@
 import {extractRootDomain} from "../utils/urlUtils";
+import {timeSince} from "../utils/timeUtils";
 
 const mongoose = require('mongoose');
 
@@ -8,7 +9,7 @@ const baseOptions = {
     timestamps: true
 };
 
-export const postModel = mongoose.model('Post', new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -26,7 +27,13 @@ export const postModel = mongoose.model('Post', new mongoose.Schema({
         type: Number,
         default: 0
     }
-}, baseOptions));
+}, baseOptions);
+
+postSchema.virtual('timeSince').get(function () {
+    return timeSince(this.createdAt);
+});
+
+export const postModel = mongoose.model('Post', postSchema);
 
 export const urlModel = postModel.discriminator('Url', new mongoose.Schema({
     url: {

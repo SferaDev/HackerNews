@@ -1,3 +1,5 @@
+import {timeSince} from "../utils/timeUtils";
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -8,7 +10,7 @@ const baseOptions = {
 const userSchema = new mongoose.Schema({
     githubId: {
         type: String,
-        unique: true, 
+        unique: true,
         required: true
     },
     username: {
@@ -52,6 +54,10 @@ const userSchema = new mongoose.Schema({
         default: 0
     }
 }, baseOptions);
+
+userSchema.virtual('timeSince').get(function () {
+    return timeSince(this.createdAt);
+});
 
 // Before save, hash the stored password to database
 userSchema.pre('save', function (next) {

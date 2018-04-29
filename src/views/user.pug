@@ -1,8 +1,6 @@
 extends base
 
 block content
-    script(src='/javascript/utils.js')
-
     form.profileform(method="post" action="/user")
         table(border="0")
             tr.athing
@@ -13,7 +11,8 @@ block content
             tr
                 td(valign="top") created:
                 td
-                    | #{timeSince(user.createdAt)}
+                    span.age
+                        | #{user.timeSince}
             tr
                 td(valign="top") karma:
                 td
