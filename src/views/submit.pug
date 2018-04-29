@@ -8,49 +8,49 @@ block content
         }
     tr(style='height:10px')
     tr
-      td
-        if (invalid === '1')
-            | Submissions can't have both urls and text, so you need to
-            | pick one. If you keep the url, you can always post your
-            | text as a comment in the thread.
-            br
-            br
-        else if (invalid === '2')
-            | Please try again.
-            br
-            br
-        form(method="post" action="/submit")
-            table(border="0")
-                tr
-                    td Title
-                    td
-                        input(type="text" name="title" value="" size="50" oninput="inputLength(this)" onfocus="inputLength(this)")
-                        span(style="margin-left:10px")
-                tr
-                    td Url
-                    td
-                        input(type="text" name="url" value="" size="50")
-                        span(style="margin-left:10px")
-                tr
-                    td
-                    td
-                        b or
-                tr
-                    td Text
-                    td
-                        textarea(name="text" rows="4" cols="49")
-                        span(style="margin-left:10px")
-                tr
-                    td
-                    td
-                tr
-                    td
-                    td
-                        input(type="submit" value="Submit")
-                tr(style="height:20px")
-                tr
-                    td
-                    td
-                        | Leave url blank to submit a question for discussion. If there
-                        | is no url, the text (if any) will appear at the top of the
-                        | thread.
+        td
+            if (invalid === '1')
+                | Submissions can't have both urls and text, so you need to
+                | pick one. If you keep the url, you can always post your
+                | text as a comment in the thread.
+                br
+                br
+            else if (invalid === '2')
+                | Please try again.
+                br
+                br
+            form(method="post" action="/submit")
+                table(border="0")
+                    tr
+                        td Title
+                        td
+                            input(type="text" name="title" value="" size="50" oninput="inputLength(this)" onfocus="inputLength(this)")
+                            span(style="margin-left:10px")
+                    tr
+                        td Url
+                        td
+                            input(type="text" name="url" value="" size="50")
+                            span(style="margin-left:10px")
+                    tr
+                        td
+                        td
+                            b or
+                    tr
+                        td Text
+                        td
+                            textarea(name="text" rows="4" cols="49")
+                            span(style="margin-left:10px")
+                    tr
+                        td
+                        td
+                    tr
+                        td
+                        td
+                            input(type="submit" value="Submit")
+                    tr(style="height:20px")
+                    tr
+                        td
+                        td
+                            | Leave url blank to submit a question for discussion. If there
+                            | is no url, the text (if any) will appear at the top of the
+                            | thread.

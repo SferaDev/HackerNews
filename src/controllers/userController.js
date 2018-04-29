@@ -40,7 +40,7 @@ export function loginUser(username, password, next) {
 export function registerUser(username, password, next) {
     new userModel({
         username: username,
-        password: password, 
+        password: password,
         githubId: username
     }).save(function (err, user) {
         // TODO: User already exists shouldn't throw an error
@@ -51,8 +51,7 @@ export function registerUser(username, password, next) {
     });
 }
 
-export function updateUser(userid, about, showd, nopro, maxv, mina, delay, next)
-{
+export function updateUser(userid, about, showd, nopro, maxv, mina, delay, next) {
     let fields = {};
 
     if (about !== '')
@@ -70,10 +69,8 @@ export function updateUser(userid, about, showd, nopro, maxv, mina, delay, next)
 
     userModel.update({_id: userid},
         fields,
-        function (err, res)
-        {
-            if (err)
-            {
+        function (err, res) {
+            if (err) {
                 console.error(err);
             }
             next(null);

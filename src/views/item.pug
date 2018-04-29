@@ -46,8 +46,8 @@ block content
         tr
             td(colspan="2")
             td
-                form(method="post" action="comment")
-                    input(type="hidden" name="post" value=_id)
+                form(method="post" action="/comment")
+                    input(type="hidden" name="postId" value=post._id)
                     textarea(name="text" rows="6" cols="60")
                     br
                     br
@@ -55,35 +55,37 @@ block content
     br
     br
     table.comment-tree(border="0")
-        tr#16847762.athing.comtr
-            td
-                table(border="0")
-                    tr
-                        td.ind
-                            img(src="s.gif" height="1" width="0")
-                        td.default
-                            div(style="margin-top:2px; margin-bottom:-10px;")
-                                span.comhead
-                                    span#score_16847762.score 1 point
-                                    |  by
-                                    a.hnuser(href="user?id=sferadev")
-                                        font(color="#3c963c") sferadev
-                                    span.age
-                                        a(href="item?id=16847762") 0 minutes ago
-                                    span#unv_16847762
-                                    span.par
-                                    |  |
-                                    a(href="edit?id=16847762") edit
-                                    |  |
-                                    a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
-                                    a.togg(n="1" href="javascript:void(0)" onclick="return toggle(event, 16847762)")
-                                    span.storyon
-                            br
-                            .comment
-                                span.c00
-                                    | It's really useful
-                                    span
-                                    .reply
-                                        p
-                                            font(size="1")
+
+        each element in comments
+            tr#element._id
+                td
+                    table(border="0")
+                        tr
+                            td.ind
+                                img(src="s.gif" height="1" width="0")
+                            td.default
+                                div(style="margin-top:2px; margin-bottom:-10px;")
+                                    span.comhead
+                                        span#score_16847762.score [score hidden]&nbsp;
+                                        a.hnuser(href="user?id=" + element.owner.username)
+                                            font(color="#3c963c") #{element.owner.username}&nbsp;
+                                        span.age
+                                            a(href="item?id=16847762") #{timeSince(element.createdAt)}
+                                        span#unv_16847762
+                                        span.par
+                                        |  |&nbsp;
+                                        if (element.owner.username === username)
+                                            a(href="edit?id=16847762") edit
+                                            |  |&nbsp;
+                                            a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
+                                            a.togg(n="1" href="javascript:void(0)" onclick="return toggle(event, 16847762)")
+                                            span.storyon
+                                br
+                                .comment
+                                    span.c00
+                                        | #{element.comment}
+                                        span
+                                        .reply
+                                            p
+                                                font(size="1")
     br

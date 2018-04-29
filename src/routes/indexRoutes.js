@@ -32,7 +32,9 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getPostsByOwner(req.query.id, function (posts) {
-                result({posts: posts});
+                result({
+                    posts: posts
+                });
             });
         }
     },
@@ -41,7 +43,9 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Ask")});
+                result({
+                    posts: posts.filter(post => post.__type === "Ask")
+                });
             });
         }
     },
@@ -98,7 +102,7 @@ export const routes = [
     {
         route: '/comment/',
         postAction: function (req, res) {
-            if (req.body.postId !== '' && req.body.text === '') {
+            if (req.body.postId !== '' && req.body.text !== '') {
                 commentController.insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
                     res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
                 });
@@ -216,7 +220,12 @@ export const routes = [
         render: 'item',
         getAction: function (req, res, result) {
             getPostById(req.query.id, function (post) {
-                result({post: post})
+                commentController.getCommentsByPostId(req.query.id, function (comments) {
+                    result({
+                        post: post,
+                        comments: comments
+                    });
+                })
             })
         }
     },
