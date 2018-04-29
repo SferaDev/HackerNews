@@ -76,17 +76,24 @@ export const routes = [
         route: '/submit/',
         render: 'submit',
         title: 'Submit',
+        getAction: function (req, res, result) {
+            result({invalid: req.query.invalid});
+        },
+
         postAction: function (req, res) {
-            console.log(req.body);
-            if (req.body.url !== '' && req.body.text === '') {
+            if (req.body.title === '')
+                res.redirect('/submit?invalid=2');
+            else if (req.body.url !== '' && req.body.text === '') {
                 insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
                     res.redirect('/newest');
                 });
-            } else if (req.body.url === '' && req.body.text !== '') {
+            } else if (req.body.url === '') {
                 insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
                     res.redirect('/newest');
                 });
-            } else res.redirect('/submit');
+            } else{
+                res.redirect('/submit?invalid=1');
+            }
         }
     },
     {
