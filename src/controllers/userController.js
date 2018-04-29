@@ -40,7 +40,8 @@ export function loginUser(username, password, next) {
 export function registerUser(username, password, next) {
     new userModel({
         username: username,
-        password: password
+        password: password, 
+        githubId: username
     }).save(function (err, user) {
         // TODO: User already exists shouldn't throw an error
         if (err) {

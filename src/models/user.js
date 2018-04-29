@@ -8,7 +8,8 @@ const baseOptions = {
 const userSchema = new mongoose.Schema({
     githubId: {
         type: String,
-        unique: true
+        unique: true, 
+        required: true
     },
     username: {
         type: String,
