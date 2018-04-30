@@ -135,7 +135,7 @@ export const routes = [
         title: 'Profile: ',
         getAction: function (req, res, result) {
             userController.getUser(req.session.userId, function (user) {
-                let isOwnProfile = user.username === req.query.id;
+                let isOwnProfile = user !== null && user.username === req.query.id;
                 let vars = {isOwnProfile: isOwnProfile};
                 if (isOwnProfile) {
                     delete user.password;
