@@ -32,7 +32,5 @@ mixin comment(element)
                                         font(size="1")
                                             u
                                                 a(href='reply?id=' + element._id + '&goto=' + post._id) reply
-                        if (element.replies !== null)
-                            each reply in element.replies
-                                - console.log(reply);
-                                +comment(reply)
+                        each reply in element.replies
+                            +comment(reply)

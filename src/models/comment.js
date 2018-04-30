@@ -1,12 +1,9 @@
+import mongoose from "mongoose";
 import {postModel} from "./post";
 import {timeSince} from "../utils/timeUtils";
 
-const mongoose = require('mongoose');
-
 const baseOptions = {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    timestamps: true
 };
 
 const commentSchema = new mongoose.Schema({
@@ -39,6 +36,15 @@ commentSchema.virtual('replies', {
     localField: '_id',
     foreignField: 'parentComment'
 });
+
+let autoPopulate = function (next) {
+    this.populate('replies');
+    this.populate('owner');
+    next();
+};
+
+commentSchema.pre('findOne', autoPopulate);
+commentSchema.pre('find', autoPopulate);
 
 // Before save, increment comment count
 commentSchema.pre('save', function (next) {

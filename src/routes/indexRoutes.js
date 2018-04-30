@@ -1,11 +1,4 @@
-import {
-    getAllPosts,
-    getPostById,
-    getPostsByOwner,
-    getPostsByTld,
-    insertAskPost,
-    insertUrlPost
-} from "../controllers/postController";
+import {getAllPosts, getPostById, getPostsByTld, insertAskPost, insertUrlPost} from "../controllers/postController";
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
@@ -33,8 +26,7 @@ export const routes = [
         route: '/threads',
         render: 'threads',
         getAction: function (req, res, result) {
-            commentController.getCommentsByOwner(req.query.id, function (comments)
-            {
+            commentController.getCommentsByOwner(req.query.id, function (comments) {
                 result({comments: comments});
             });
         }
