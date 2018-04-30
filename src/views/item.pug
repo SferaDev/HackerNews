@@ -2,17 +2,17 @@ extends base
 
 block content
     table.fatitem(border="0")
-        tr#_id.athing
+        tr(id=post._id).athing
             td.title(align="right" valign="top")
                 span.rank
             td.votelinks(valign="top")
                 center
-                    a#up_postId.nosee(onclick='return vote(event, this, "up")' href="vote?id=" + post._id)
-                        .votearrow(title="upvote")
+                    a(id="up_" + post._id onclick='return vote(event, this, "up")' href="vote?id=" + post._id + "&how=up")
+                        .arrow-up(title="upvote")
             td.title
                 if post.__type === 'Url'
                     - post.url = (post.url.indexOf('://') === -1) ? '//' + post.url : post.url;
-                    a.storylink(href=post.url) &nbsp#{post.title}&nbsp
+                    a.storylink(href=post.url) #{post.title}&nbsp
                     span.sitebit.comhead
                         | (
                         a(href="from?site=" + post.tld)
@@ -21,15 +21,19 @@ block content
                 else
                     a.storylink(href="item?id=" + post._id) &nbsp#{post.title}&nbsp
         tr
-            td(colspan="2")
+            td(colspan="1")
+            td.votelinks(valign="top")
+                center
+                    a(id="down_" + post._id onclick='return vote(event, this, "up")' href="vote?id=" + post._id + "&how=down")
+                        .arrow-down(title="upvote")
             td.subtext
-                span#score__id.score #{post.totalLikes} points&nbsp
+                span(id="score_" + post._id).score #{post.totalLikes} points&nbsp
                 | by&nbsp
                 a.hnuser(href="user?id=" + post.owner.username) #{post.owner.username}
                 span.age
                     | &nbsp
-                    a(href="item?id=" + _id) #{post.timeSince}
-                span#unv_post._id
+                    a(href="item?id=" + post._id) #{post.timeSince}
+                span(id="unv_" + post._id)
                 | &nbsp|&nbsp
                 a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
                 | &nbsp|&nbsp
@@ -54,9 +58,8 @@ block content
     br
     br
     table.comment-tree(border="0")
-
         each element in comments
-            tr#element._id
+            tr(id=element._id)
                 td
                     table(border="0")
                         tr
