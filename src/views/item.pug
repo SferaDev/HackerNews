@@ -25,7 +25,7 @@ block content
             td.votelinks(valign="top")
                 center
                     a(id="down_" + post._id onclick='return vote(event, this, "up")' href="vote?id=" + post._id + "&how=down")
-                        .arrow-down(title="upvote")
+                        .arrow-down(title="downvote")
             td.subtext
                 span(id="score_" + post._id).score #{post.totalLikes} points&nbsp
                 | by&nbsp
