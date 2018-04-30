@@ -6,14 +6,11 @@ export function insertComment(userId, postId, text, parentComment, done) {
         owner: userId,
         post: postId
     };
-
-    if (parentComment !== '')
-        fields.parentComment = parentComment;
-    new commentModel(fields)
-        .save(function (err, user) {
-            if (err) console.error(err);
-            done();
-        });
+    if (parentComment !== '') fields.parentComment = parentComment;
+    new commentModel(fields).save(function (err, user) {
+        if (err) console.error(err);
+        done();
+    });
 }
 
 export function removeComment(commentId, done) {
@@ -23,17 +20,15 @@ export function removeComment(commentId, done) {
     });
 }
 
-export function getCommentsByPostId(postId, done) {
-    commentModel.find({post: postId}).populate('owner').exec(function (err, elements) {
+export function getCommentsByPost(postId, done) {
+    commentModel.find({post: postId, parentComment: undefined}).populate('owner').populate('replies').exec(function (err, elements) {
         if (err) done('{}');
         else done(elements);
     });
 }
 
-export function getCommentById(commentId, done)
-{
-    commentModel.findOne({_id: commentId}).populate('owner').exec(function (err, comment)
-    {
+export function getCommentById(commentId, done) {
+    commentModel.findOne({_id: commentId}).populate('owner').exec(function (err, comment) {
         if (err) console.error(err);
         else done(comment);
     });

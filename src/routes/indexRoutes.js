@@ -243,7 +243,7 @@ export const routes = [
         render: 'item',
         getAction: function (req, res, result) {
             getPostById(req.query.id, function (post) {
-                commentController.getCommentsByPostId(req.query.id, function (comments) {
+                commentController.getCommentsByPost(req.query.id, function (comments) {
                     result({
                         post: post,
                         comments: comments

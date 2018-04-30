@@ -1,107 +1,72 @@
 extends base
+include comment
 
 block content
-    table.fatitem(border="0")
-        tr(id=post._id).athing
-            td.title(align="right" valign="top")
-                span.rank
-            td.votelinks(valign="top")
-                center
-                    a(id="up_" + post._id href="vote?id=" + post._id + "&back=item?id=" + post._id + "&how=up")
-                        .arrow-up(title="upvote")
-            td.title
-                if post.__type === 'Url'
-                    - post.url = (post.url.indexOf('://') === -1) ? '//' + post.url : post.url;
-                    a.storylink(href=post.url) #{post.title}&nbsp
-                    span.sitebit.comhead
-                        | (
-                        a(href="from?site=" + post.tld)
-                            span.sitestr #{post.tld}
-                        | )
-                else
-                    a.storylink(href="item?id=" + post._id) &nbsp#{post.title}&nbsp
-        tr
-            td(colspan="1")
-            td.votelinks(valign="top")
-                center
-                    a(id="down_" + post._id href="vote?id=" + post._id + "&back=item?id=" + post._id + "&how=down")
-                        .arrow-down(title="downvote")
-            td.subtext
-                span(id="score_" + post._id).score #{post.totalLikes} points&nbsp
-                | by&nbsp
-                a.hnuser(href="user?id=" + post.owner.username)
-                    font(color="#3c963c") #[strong #{post.owner.username}]
-                span.age
-                    | &nbsp
-                    a(href="item?id=" + post._id) #{post.timeSince}
-                span(id="unv_" + post._id)
-                | &nbsp|&nbsp
-                a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
-                | &nbsp|&nbsp
-                a(href="fave?id=" + post._id) favorite
-                | &nbsp|&nbsp
-                if post.totalComments === 0
-                    a(href="item?id=" + post._id) discuss
-                else if post.totalComments === 1
-                    a(href="item?id=" + post._id) #{post.totalComments} comment
-                else
-                    a(href="item?id=" + post._id) #{post.totalComments} comments
-        if (post.__type === 'Ask')
-            tr(style='height:2px')
-                tr
-                    td(colspan='2')
-                    td
-                        | #{post.text}
-        tr(style="height:10px")
-        tr
-            td(colspan="2")
-            td
-                form(method="post" action="/comment")
-                    input(type="hidden" name="postId" value=post._id)
-                    textarea(name="text" rows="6" cols="60")
-                    br
-                    br
-                    input(type="submit" value="Add comment")
-    br
-    br
-    table.comment-tree(border="0")
-        mixin showComments(comms)
-            each element in comms
-                tr(id=element._id)
-                    td
-                        if (element.replies === null)
-                            +showComments(element)
-
-                        table(border="0")
-                            tr
-                                td.ind
-                                    img(src="s.gif" height="1" width="0")
-                                td.default
-                                    div(style="margin-top:2px; margin-bottom:-10px;")
-                                        span.comhead
-                                            span#score_16847762.score [score hidden]&nbsp
-                                            a.hnuser(href="user?id=" + element.owner.username)
-                                                font(color="#3c963c") #{element.owner.username}
-                                            span.age
-                                                a(href="item?id=16847762") #{element.timeSince}
-                                            span#unv_16847762
-                                            span.par
-                                            |  |&nbsp
-                                            if (element.owner.username === username)
-                                                a(href="edit?id=16847762") edit&nbsp
-                                                | |&nbsp
-                                                a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
-                                                a.togg(n="1" href="javascript:void(0)" onclick="return toggle(event, 16847762)")
-                                                span.storyon
-                                    br
-                                    .comment
-                                        span.c00
-                                            | #{element.comment}
-                                            span
-                                            .reply
-                                                p
-                                                    font(size="1")
-                                                        u
-                                                            a(href='reply?id=' + element._id + '&goto=' + post._id) reply
-        +showComments(comments)
-    br
+    if (post !== null)
+        table.fatitem(border="0")
+            tr(id=post._id).athing
+                td.title(align="right" valign="top")
+                    span.rank
+                td.votelinks(valign="top")
+                    center
+                        a(id="up_" + post._id href="vote?id=" + post._id + "&back=item?id=" + post._id + "&how=up")
+                            .arrow-up(title="upvote")
+                td.title
+                    if post.__type === 'Url'
+                        - post.url = (post.url.indexOf('://') === -1) ? '//' + post.url : post.url;
+                        a.storylink(href=post.url) #{post.title}&nbsp
+                        span.sitebit.comhead
+                            | (
+                            a(href="from?site=" + post.tld)
+                                span.sitestr #{post.tld}
+                            | )
+                    else
+                        a.storylink(href="item?id=" + post._id) &nbsp#{post.title}&nbsp
+            tr
+                td(colspan="1")
+                td.votelinks(valign="top")
+                    center
+                        a(id="down_" + post._id href="vote?id=" + post._id + "&back=item?id=" + post._id + "&how=down")
+                            .arrow-down(title="downvote")
+                td.subtext
+                    span(id="score_" + post._id).score #{post.totalLikes} points&nbsp
+                    | by&nbsp
+                    a.hnuser(href="user?id=" + post.owner.username)
+                        font(color="#3c963c") #[strong #{post.owner.username}]
+                    span.age
+                        | &nbsp
+                        a(href="item?id=" + post._id) #{post.timeSince}
+                    span(id="unv_" + post._id)
+                    | &nbsp|&nbsp
+                    a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
+                    | &nbsp|&nbsp
+                    a(href="fave?id=" + post._id) favorite
+                    | &nbsp|&nbsp
+                    if post.totalComments === 0
+                        a(href="item?id=" + post._id) discuss
+                    else if post.totalComments === 1
+                        a(href="item?id=" + post._id) #{post.totalComments} comment
+                    else
+                        a(href="item?id=" + post._id) #{post.totalComments} comments
+            if (post.__type === 'Ask')
+                tr(style='height:2px')
+                    tr
+                        td(colspan='2')
+                        td
+                            | #{post.text}
+            tr(style="height:10px")
+            tr
+                td(colspan="2")
+                td
+                    form(method="post" action="/comment")
+                        input(type="hidden" name="postId" value=post._id)
+                        textarea(name="text" rows="6" cols="60")
+                        br
+                        br
+                        input(type="submit" value="Add comment")
+        br
+        br
+        table.comment-tree(border="0")
+            each element in comments
+                +comment(element)
+        br

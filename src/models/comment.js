@@ -4,7 +4,9 @@ import {timeSince} from "../utils/timeUtils";
 const mongoose = require('mongoose');
 
 const baseOptions = {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 };
 
 const commentSchema = new mongoose.Schema({
@@ -28,20 +30,14 @@ const commentSchema = new mongoose.Schema({
     }
 }, baseOptions);
 
-commentSchema.virtual('timeSince').get(function ()
-{
+commentSchema.virtual('timeSince').get(function () {
     return timeSince(this.createdAt);
 });
 
-
-export const commentModel = mongoose.model('Comment', commentSchema);
-
-commentSchema.virtual('replies').get(function () {
-    this.find({parentComment: this._id}, function (err, elements) {
-        if (err) console.error(err);
-        else return elements;
-    });
-    return null;
+commentSchema.virtual('replies', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'parentComment'
 });
 
 // Before save, increment comment count
@@ -68,3 +64,5 @@ commentSchema.pre('remove', function (next) {
     });
     next();
 });
+
+export const commentModel = mongoose.model('Comment', commentSchema);
