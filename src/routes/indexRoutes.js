@@ -99,6 +99,23 @@ export const routes = [
         }
     },
     {
+        route: '/newcomments',
+        render: 'threads',
+        getAction: function (req, res, result) {
+            commentController.getAllComments(function (comments) {
+                result({
+                    comments: comments.sort(function compare(a, b) {
+                        if (a.createdAt < b.createdAt)
+                            return 1;
+                        else if (a.createdAt > b.createdAt)
+                            return -1;
+                        return 0;
+                    })
+                });
+            });
+        }
+    },
+    {
         route: '/newest',
         render: 'news',
         getAction: function (req, res, result) {
@@ -208,7 +225,15 @@ export const routes = [
         render: 'threads',
         getAction: function (req, res, result) {
             commentController.getCommentsByOwner(req.query.id, function (comments) {
-                result({comments: comments});
+                result({
+                    comments: comments.sort(function compare(a, b) {
+                        if (a.createdAt < b.createdAt)
+                            return 1;
+                        else if (a.createdAt > b.createdAt)
+                            return -1;
+                        return 0;
+                    })
+                });
             });
         }
     },

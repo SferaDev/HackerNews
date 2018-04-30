@@ -5,18 +5,17 @@ block content
         each comment in comments
             tr
                 td(colspan="1")
-                td.ind
-                    img(src="s.gif" height="1" width="0")
                 td.default
                     div(style="margin-top:2px; margin-bottom:-10px;")
                         span.comhead
                             a.hnuser(href="user?id=" + comment.owner.username)
-                                font(color="#3c963c") #{comment.owner.username}&nbsp;
+                                font(color="#3c963c") #[strong #{comment.owner.username}]&nbsp;
                                 | #{comment.timeSince}
                             span#unv_16847762
                             span.ogpost
-                                |  |&nbsp;
-                                a(href="item?id=" + comment.post._id) on: #{comment.post.title}
+                                |  | on:&nbsp
+                                a(href="item?id=" + comment.post._id) #{comment.post.title}
+                            br
                             br
                             | #{comment.comment}
                             br

@@ -46,3 +46,10 @@ export function getCommentsByOwner(username, done) {
         });
     });
 }
+
+export function getAllComments(done) {
+    commentModel.find({}).populate('post').exec(function (err, elements) {
+        if (err) done([]);
+        else done(elements);
+    });
+}
