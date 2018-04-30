@@ -8,29 +8,26 @@ mixin comment(element)
                     td.default
                         div(style="margin-top:2px; margin-bottom:-10px;")
                             span.comhead
-                                span#score_16847762.score [score hidden]&nbsp
                                 a.hnuser(href="user?id=" + element.owner.username)
-                                    font(color="#3c963c") #{element.owner.username}
+                                    font(color="#3c963c") #[strong #{element.owner.username}]
+                                | &nbsp
                                 span.age
                                     a(href="item?id=16847762") #{element.timeSince}
                                 span#unv_16847762
                                 span.par
                                 |  |&nbsp
+                                span.reply
+                                    a(href='reply?id=' + element._id + '&goto=' + post._id) reply
+                                |  |&nbsp
                                 if (element.owner.username === username)
-                                    a(href="edit?id=16847762") edit&nbsp
-                                    | |&nbsp
+                                    a(href="edit?id=16847762") edit
+                                    |  |&nbsp
                                     a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
-                                    a.togg(n="1" href="javascript:void(0)" onclick="return toggle(event, 16847762)")
-                                    span.storyon
                         br
                         .comment
                             span.c00
                                 | #{element.comment}
-                                span
-                                .reply
-                                    p
-                                        font(size="1")
-                                            u
-                                                a(href='reply?id=' + element._id + '&goto=' + post._id) reply
+                        br
                         each reply in element.replies
-                            +comment(reply)
+                            table.comment-tree(style="margin-left: 20px" border="0")
+                                +comment(reply)

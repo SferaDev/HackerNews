@@ -26,7 +26,7 @@ export function getCommentsByPost(postId, done) {
         post: postId,
         parentComment: undefined
     }).exec(function (err, elements) {
-        if (err) done('{}');
+        if (err) done([]);
         else done(elements);
     });
 }
@@ -41,7 +41,7 @@ export function getCommentById(commentId, done) {
 export function getCommentsByOwner(username, done) {
     getUserByUsername(username, function (owner) {
         commentModel.find({owner: owner}).populate('post').exec(function (err, elements) {
-            if (err) done('{}');
+            if (err) done([]);
             else done(elements);
         });
     });
