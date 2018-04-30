@@ -19,7 +19,7 @@ export const routes = [
         }
     },
     {
-        route: '/news/',
+        route: '/news',
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
@@ -28,7 +28,7 @@ export const routes = [
         }
     },
     {
-        route: '/threads/',
+        route: '/threads',
         render: 'news',
         getAction: function (req, res, result) {
             getPostsByOwner(req.query.id, function (posts) {
@@ -39,7 +39,7 @@ export const routes = [
         }
     },
     {
-        route: '/ask/',
+        route: '/ask',
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
@@ -50,7 +50,7 @@ export const routes = [
         }
     },
     {
-        route: '/newest/',
+        route: '/newest',
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
@@ -67,7 +67,7 @@ export const routes = [
         }
     },
     {
-        route: '/from/',
+        route: '/from',
         render: 'news',
         getAction: function (req, res, result) {
             getPostsByTld(req.query.site, function (posts) {
@@ -76,7 +76,7 @@ export const routes = [
         }
     },
     {
-        route: '/submit/',
+        route: '/submit',
         render: 'submit',
         title: 'Submit',
         getAction: function (req, res, result) {
@@ -100,7 +100,7 @@ export const routes = [
         }
     },
     {
-        route: '/comment/',
+        route: '/comment',
         postAction: function (req, res) {
             if (req.body.postId !== '' && req.body.text !== '') {
                 commentController.insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
@@ -110,27 +110,27 @@ export const routes = [
         }
     },
     {
-        route: '/guidelines/',
+        route: '/guidelines',
         render: 'guidelines',
         title: 'Guidelines'
     },
     {
-        route: '/faq/',
+        route: '/faq',
         render: 'faq',
         title: 'FAQ'
     },
     {
-        route: '/lists/',
+        route: '/lists',
         render: 'lists',
         title: 'Lists'
     },
     {
-        route: '/welcome/',
+        route: '/welcome',
         render: 'welcome',
         title: 'Welcome'
     },
     {
-        route: '/user/',
+        route: '/user',
         render: 'user',
         title: 'Profile: ',
         getAction: function (req, res, result) {
@@ -158,7 +158,7 @@ export const routes = [
         }
     },
     {
-        route: '/login/',
+        route: '/login',
         render: 'login',
         title: 'Login',
         getAction: function (req, res, result) {
@@ -182,7 +182,7 @@ export const routes = [
         }
     },
     {
-        route: '/register/',
+        route: '/register',
         render: 'login',
         title: 'Login',
         getAction: function (req, res, result) {
@@ -206,7 +206,7 @@ export const routes = [
         }
     },
     {
-        route: '/logout/',
+        route: '/logout',
         getAction: function (req, res, result) {
             req.session.destroy(function (err) {
                 if (err) console.error(err);
@@ -216,7 +216,7 @@ export const routes = [
         }
     },
     {
-        route: '/item/',
+        route: '/item',
         render: 'item',
         getAction: function (req, res, result) {
             getPostById(req.query.id, function (post) {
@@ -230,10 +230,11 @@ export const routes = [
         }
     },
     {
-        route: '/vote/',
+        route: '/vote',
         getAction: function (req, res, result) {
             let callback = function () {
-                res.redirect('/news');
+                if (req.query.back === undefined) res.redirect('/news');
+                else res.redirect(req.query.back);
                 result();
             };
             if (req.query.id !== undefined && req.query.id !== '') {
