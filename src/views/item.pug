@@ -29,7 +29,8 @@ block content
             td.subtext
                 span(id="score_" + post._id).score #{post.totalLikes} points&nbsp
                 | by&nbsp
-                a.hnuser(href="user?id=" + post.owner.username) #{post.owner.username}
+                a.hnuser(href="user?id=" + post.owner.username)
+                    font(color="#3c963c") #[strong #{post.owner.username}]
                 span.age
                     | &nbsp
                     a(href="item?id=" + post._id) #{post.timeSince}
