@@ -26,21 +26,21 @@ export function insertAskPost(userId, title, text, done) {
 }
 
 export function getAllPosts(next) {
-    postModel.find({}).populate('owner').exec(function (err, elements) {
+    postModel.find({}).exec(function (err, elements) {
         if (err) next([]);
         else next(elements);
     })
 }
 
 export function getPostById(postId, next) {
-    postModel.findOne({_id: postId}).populate('owner').exec(function (err, element) {
+    postModel.findOne({_id: postId}).exec(function (err, element) {
         if (err) next({});
         else next(element);
     })
 }
 
 export function getPostsByTld(postTld, next) {
-    postModel.find({tld: postTld}).populate('owner').exec(function (err, elements) {
+    postModel.find({tld: postTld}).exec(function (err, elements) {
         if (err) next([]);
         else next(elements);
     })
@@ -49,7 +49,7 @@ export function getPostsByTld(postTld, next) {
 export function getPostsByOwner(username, next) {
     getUserByUsername(username, function (user) {
         if (user !== null) {
-            postModel.find({owner: user._id}).populate('owner').exec(function (err, elements) {
+            postModel.find({owner: user._id}).exec(function (err, elements) {
                 if (err) next('[]');
                 else next(elements);
             })

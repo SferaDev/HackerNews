@@ -25,14 +25,14 @@ export function getCommentsByPost(postId, done) {
     commentModel.find({
         post: postId,
         parentComment: undefined
-    }).populate('owner').populate('replies').exec(function (err, elements) {
+    }).exec(function (err, elements) {
         if (err) done('{}');
         else done(elements);
     });
 }
 
 export function getCommentById(commentId, done) {
-    commentModel.findOne({_id: commentId}).populate('owner').exec(function (err, comment) {
+    commentModel.findOne({_id: commentId}).exec(function (err, comment) {
         if (err) console.error(err);
         else done(comment);
     });
@@ -40,7 +40,7 @@ export function getCommentById(commentId, done) {
 
 export function getCommentsByOwner(username, done) {
     getUserByUsername(username, function (owner) {
-        commentModel.find({owner: owner}).populate('owner').populate('post').exec(function (err, elements) {
+        commentModel.find({owner: owner}).populate('post').exec(function (err, elements) {
             if (err) done('{}');
             else done(elements);
         });

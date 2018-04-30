@@ -36,7 +36,7 @@ likeSchema.post('remove', function (doc) {
 function incrementLikeAndKarma(doc, incr) {
     postModel.findOne({
         _id: doc.post
-    }).populate('owner').exec(function (err, post) {
+    }).exec(function (err, post) {
         if (err || post === null) return console.error(err);
         post.totalLikes += incr;
         post.save();

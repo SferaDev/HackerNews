@@ -33,6 +33,14 @@ postSchema.virtual('timeSince').get(function () {
     return timeSince(this.createdAt);
 });
 
+let autoPopulate = function (next) {
+    this.populate('owner');
+    next();
+};
+
+postSchema.pre('findOne', autoPopulate);
+postSchema.pre('find', autoPopulate);
+
 export const postModel = mongoose.model('Post', postSchema);
 
 export const urlModel = postModel.discriminator('Url', new mongoose.Schema({
