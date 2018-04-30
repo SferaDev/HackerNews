@@ -1,4 +1,11 @@
-import {getAllPosts, getPostById, getPostsByTld, insertAskPost, insertUrlPost} from "../controllers/postController";
+import {
+    getAllPosts,
+    getPostById,
+    getPostsByOwner,
+    getPostsByTld,
+    insertAskPost,
+    insertUrlPost
+} from "../controllers/postController";
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
@@ -12,26 +19,6 @@ export const routes = [
         }
     },
     {
-        route: '/news',
-        render: 'news',
-        getAction: function (req, res, result) {
-            getAllPosts(function (posts) {
-                result({
-                    posts: posts.filter(post => post.__type === "Url")
-                });
-            });
-        }
-    },
-    {
-        route: '/threads',
-        render: 'threads',
-        getAction: function (req, res, result) {
-            commentController.getCommentsByOwner(req.query.id, function (comments) {
-                result({comments: comments});
-            });
-        }
-    },
-    {
         route: '/ask',
         render: 'news',
         getAction: function (req, res, result) {
@@ -39,6 +26,75 @@ export const routes = [
                 result({
                     posts: posts.filter(post => post.__type === "Ask")
                 });
+            });
+        }
+    },
+    {
+        route: '/comment',
+        postAction: function (req, res) {
+            if (req.body.postId !== '' && req.body.text !== '') {
+                commentController.insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
+                    res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
+                });
+            } else res.redirect('/newest');
+        }
+    },
+    {
+        route: '/from',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getPostsByTld(req.query.site, function (posts) {
+                result({
+                    posts: posts
+                });
+            });
+        }
+    },
+    {
+        route: '/item',
+        render: 'item',
+        getAction: function (req, res, result) {
+            getPostById(req.query.id, function (post) {
+                commentController.getCommentsByPost(req.query.id, function (comments) {
+                    result({
+                        post: post,
+                        comments: comments
+                    });
+                })
+            })
+        }
+    },
+    {
+        route: '/login',
+        render: 'login',
+        title: 'Login',
+        getAction: function (req, res, result) {
+            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
+            result();
+        },
+        postAction: function (req, res) {
+            if (!process.env.GITHUB_CLIENT_ID) {
+                if (req.body.username !== '' && req.body.password !== '') {
+                    userController.loginUser(req.body.username, req.body.password, function (userId) {
+                        if (userId === null) {
+                            // TODO: User already exist
+                        } else {
+                            req.session.userId = userId;
+                            req.session.username = req.body.username;
+                        }
+                        res.redirect('/news');
+                    });
+                }
+            }
+        }
+    },
+    {
+        route: '/logout',
+        getAction: function (req, res, result) {
+            req.session.destroy(function (err) {
+                if (err) console.error(err);
+                res.redirect('/news');
+                result();
             });
         }
     },
@@ -60,50 +116,38 @@ export const routes = [
         }
     },
     {
-        route: '/from',
+        route: '/news',
         render: 'news',
         getAction: function (req, res, result) {
-            getPostsByTld(req.query.site, function (posts) {
+            getAllPosts(function (posts) {
                 result({
-                    posts: posts
+                    posts: posts.filter(post => post.__type === "Url")
                 });
             });
         }
     },
     {
-        route: '/submit',
-        render: 'submit',
-        title: 'Submit',
+        route: '/register',
+        render: 'login',
+        title: 'Login',
         getAction: function (req, res, result) {
-            result({
-                invalid: req.query.invalid
-            });
+            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
+            result();
         },
-
         postAction: function (req, res) {
-            if (req.body.title === '')
-                res.redirect('/submit?invalid=2');
-            else if (req.body.url !== '' && req.body.text === '') {
-                insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
-                    res.redirect('/newest');
-                });
-            } else if (req.body.url === '') {
-                insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
-                    res.redirect('/newest');
-                });
-            } else {
-                res.redirect('/submit?invalid=1');
+            if (!process.env.GITHUB_CLIENT_ID) {
+                if (req.body.username !== '' && req.body.password !== '') {
+                    userController.registerUser(req.body.username, req.body.password, function (userId) {
+                        if (userId === null) {
+                            // TODO: User already exist
+                        } else {
+                            req.session.userId = userId;
+                            req.session.username = req.body.username;
+                        }
+                        res.redirect('/news');
+                    });
+                }
             }
-        }
-    },
-    {
-        route: '/comment',
-        postAction: function (req, res) {
-            if (req.body.postId !== '' && req.body.text !== '') {
-                commentController.insertComment(req.session.userId, req.body.postId, req.body.text, req.body.parentComment, function () {
-                    res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
-                });
-            } else res.redirect('/newest');
         }
     },
     {
@@ -124,24 +168,49 @@ export const routes = [
         }
     },
     {
-        route: '/guidelines',
-        render: 'guidelines',
-        title: 'Guidelines'
+        route: '/submit',
+        render: 'submit',
+        title: 'Submit',
+        getAction: function (req, res, result) {
+            result({
+                invalid: req.query.invalid
+            });
+        },
+        postAction: function (req, res) {
+            if (req.body.title === '')
+                res.redirect('/submit?invalid=2');
+            else if (req.body.url !== '' && req.body.text === '') {
+                insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
+                    res.redirect('/newest');
+                });
+            } else if (req.body.url === '') {
+                insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
+                    res.redirect('/newest');
+                });
+            } else {
+                res.redirect('/submit?invalid=1');
+            }
+        }
     },
     {
-        route: '/faq',
-        render: 'faq',
-        title: 'FAQ'
+        route: '/submitted',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getPostsByOwner(req.query.id, function (posts) {
+                result({
+                    posts: posts
+                });
+            })
+        }
     },
     {
-        route: '/lists',
-        render: 'lists',
-        title: 'Lists'
-    },
-    {
-        route: '/welcome',
-        render: 'welcome',
-        title: 'Welcome'
+        route: '/threads',
+        render: 'threads',
+        getAction: function (req, res, result) {
+            commentController.getCommentsByOwner(req.query.id, function (comments) {
+                result({comments: comments});
+            });
+        }
     },
     {
         route: '/user',
@@ -172,78 +241,6 @@ export const routes = [
         }
     },
     {
-        route: '/login',
-        render: 'login',
-        title: 'Login',
-        getAction: function (req, res, result) {
-            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
-            result();
-        },
-        postAction: function (req, res) {
-            if (!process.env.GITHUB_CLIENT_ID) {
-                if (req.body.username !== '' && req.body.password !== '') {
-                    userController.loginUser(req.body.username, req.body.password, function (userId) {
-                        if (userId === null) {
-                            // TODO: User already exist
-                        } else {
-                            req.session.userId = userId;
-                            req.session.username = req.body.username;
-                        }
-                        res.redirect('/news');
-                    });
-                }
-            }
-        }
-    },
-    {
-        route: '/register',
-        render: 'login',
-        title: 'Login',
-        getAction: function (req, res, result) {
-            if (process.env.GITHUB_CLIENT_ID) res.redirect('/');
-            result();
-        },
-        postAction: function (req, res) {
-            if (!process.env.GITHUB_CLIENT_ID) {
-                if (req.body.username !== '' && req.body.password !== '') {
-                    userController.registerUser(req.body.username, req.body.password, function (userId) {
-                        if (userId === null) {
-                            // TODO: User already exist
-                        } else {
-                            req.session.userId = userId;
-                            req.session.username = req.body.username;
-                        }
-                        res.redirect('/news');
-                    });
-                }
-            }
-        }
-    },
-    {
-        route: '/logout',
-        getAction: function (req, res, result) {
-            req.session.destroy(function (err) {
-                if (err) console.error(err);
-                res.redirect('/news');
-                result();
-            });
-        }
-    },
-    {
-        route: '/item',
-        render: 'item',
-        getAction: function (req, res, result) {
-            getPostById(req.query.id, function (post) {
-                commentController.getCommentsByPost(req.query.id, function (comments) {
-                    result({
-                        post: post,
-                        comments: comments
-                    });
-                })
-            })
-        }
-    },
-    {
         route: '/vote',
         getAction: function (req, res, result) {
             let callback = function () {
@@ -259,5 +256,10 @@ export const routes = [
                 else callback();
             } else callback();
         }
+    },
+    {
+        route: '/welcome',
+        render: 'welcome',
+        title: 'Welcome'
     }
 ];
