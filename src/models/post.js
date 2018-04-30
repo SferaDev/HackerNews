@@ -51,6 +51,5 @@ export const urlModel = postModel.discriminator('Url', new mongoose.Schema({
 export const askModel = postModel.discriminator('Ask', new mongoose.Schema({
     text: {
         type: String,
-        required: true
     }
 }));
