@@ -23,7 +23,9 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getAllPosts(function (posts) {
-                result({posts: posts.filter(post => post.__type === "Url")});
+                result({
+                    posts: posts.filter(post => post.__type === "Url")
+                });
             });
         }
     },
@@ -71,7 +73,9 @@ export const routes = [
         render: 'news',
         getAction: function (req, res, result) {
             getPostsByTld(req.query.site, function (posts) {
-                result({posts: posts});
+                result({
+                    posts: posts
+                });
             });
         }
     },
@@ -80,7 +84,9 @@ export const routes = [
         render: 'submit',
         title: 'Submit',
         getAction: function (req, res, result) {
-            result({invalid: req.query.invalid});
+            result({
+                invalid: req.query.invalid
+            });
         },
 
         postAction: function (req, res) {
