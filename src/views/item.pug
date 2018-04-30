@@ -45,6 +45,12 @@ block content
                     a(href="item?id=" + post._id) #{post.totalComments} comment
                 else
                     a(href="item?id=" + post._id) #{post.totalComments} comments
+        if (post.__type === 'Ask')
+            tr(style='height:2px')
+                tr
+                    td(colspan='2')
+                    td
+                        | #{post.text}
         tr(style="height:10px")
         tr
             td(colspan="2")
