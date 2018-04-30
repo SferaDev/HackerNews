@@ -1,4 +1,5 @@
 import {commentModel} from "../models/comment";
+import {getUserByUsername} from "./userController";
 
 export function insertComment(userId, postId, text, parentComment, done) {
     let fields = {
@@ -31,5 +32,19 @@ export function getCommentById(commentId, done) {
     commentModel.findOne({_id: commentId}).populate('owner').exec(function (err, comment) {
         if (err) console.error(err);
         else done(comment);
+    });
+}
+
+export function getCommentsByOwner(username, done)
+{
+    getUserByUsername(username, function (owner)
+    {
+        commentModel.find({owner: owner})
+            .populate('owner')
+            .populate('post').exec(function (err, elements)
+        {
+            if (err) done('{}');
+            else done(elements);
+        });
     });
 }

@@ -31,12 +31,11 @@ export const routes = [
     },
     {
         route: '/threads',
-        render: 'news',
+        render: 'threads',
         getAction: function (req, res, result) {
-            getPostsByOwner(req.query.id, function (posts) {
-                result({
-                    posts: posts
-                });
+            commentController.getCommentsByOwner(req.query.id, function (comments)
+            {
+                result({comments: comments});
             });
         }
     },
