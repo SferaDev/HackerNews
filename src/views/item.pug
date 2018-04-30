@@ -31,8 +31,7 @@ block content
                     a(href="item?id=" + _id) #{post.timeSince}
                 span#unv_post._id
                 | &nbsp|&nbsp
-                // TODO
-                a(href="https://www.google.com/search?q=") web
+                a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
                 | &nbsp|&nbsp
                 a(href="fave?id=" + post._id) favorite
                 | &nbsp|&nbsp
@@ -66,17 +65,17 @@ block content
                             td.default
                                 div(style="margin-top:2px; margin-bottom:-10px;")
                                     span.comhead
-                                        span#score_16847762.score [score hidden]&nbsp;
+                                        span#score_16847762.score [score hidden]&nbsp
                                         a.hnuser(href="user?id=" + element.owner.username)
-                                            font(color="#3c963c") #{element.owner.username}&nbsp;
+                                            font(color="#3c963c") #{element.owner.username}
                                         span.age
-                                            a(href="item?id=16847762") #{timeSince(element.createdAt)}
+                                            a(href="item?id=16847762") #{element.timeSince}
                                         span#unv_16847762
                                         span.par
-                                        |  |&nbsp;
+                                        |  |&nbsp
                                         if (element.owner.username === username)
-                                            a(href="edit?id=16847762") edit
-                                            |  |&nbsp;
+                                            a(href="edit?id=16847762") edit&nbsp
+                                            | |&nbsp
                                             a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
                                             a.togg(n="1" href="javascript:void(0)" onclick="return toggle(event, 16847762)")
                                             span.storyon
