@@ -226,7 +226,7 @@ export const routes = [
                     result(vars);
                 } else {
                     userController.getUserByUsername(req.query.id, function (user) {
-                        delete user.password;
+                        if (user !== null) delete user.password;
                         vars.user = user;
                         result(vars);
                     });
