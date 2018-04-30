@@ -116,6 +116,23 @@ export const routes = [
         }
     },
     {
+        route: '/reply',
+        render: 'reply',
+        title: 'Add Comment',
+        getAction: function (req, res, result) {
+            if (req.query.id !== undefined && req.query.goto !== undefined) {
+                commentController.getCommentById(req.query.id, function (comment) {
+                    getPostById(req.query.goto, function (post) {
+                        result({
+                            comment: comment,
+                            post: post
+                        });
+                    })
+                })
+            }
+        }
+    },
+    {
         route: '/guidelines',
         render: 'guidelines',
         title: 'Guidelines'

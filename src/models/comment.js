@@ -1,4 +1,5 @@
 import {postModel} from "./post";
+import {timeSince} from "../utils/timeUtils";
 
 const mongoose = require('mongoose');
 
@@ -26,6 +27,14 @@ const commentSchema = new mongoose.Schema({
         ref: 'Comment'
     }
 }, baseOptions);
+
+commentSchema.virtual('timeSince').get(function ()
+{
+    return timeSince(this.createdAt);
+});
+
+
+export const commentModel = mongoose.model('Comment', commentSchema);
 
 commentSchema.virtual('replies').get(function () {
     this.find({parentComment: this._id}, function (err, elements) {
@@ -59,5 +68,3 @@ commentSchema.pre('remove', function (next) {
     });
     next();
 });
-
-export const commentModel = mongoose.model('Comment', commentSchema);

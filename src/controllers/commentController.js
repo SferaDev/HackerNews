@@ -29,3 +29,12 @@ export function getCommentsByPostId(postId, done) {
         else done(elements);
     });
 }
+
+export function getCommentById(commentId, done)
+{
+    commentModel.findOne({_id: commentId}).populate('owner').exec(function (err, comment)
+    {
+        if (err) console.error(err);
+        else done(comment);
+    });
+}

@@ -1,0 +1,33 @@
+extends base
+
+block content
+    table.fatitem(border="0")
+        tr
+            td(colspan="1")
+            td.ind
+                img(src="s.gif" height="1" width="0")
+            td.default
+                div(style="margin-top:2px; margin-bottom:-10px;")
+                    span.comhead
+                        a.hnuser(href="user?id=" + comment.owner.username)
+                            font(color="#3c963c") #{comment.owner.username}&nbsp;
+                            | #{comment.timeSince}
+                        span#unv_16847762
+                        span.ogpost
+                            |  |&nbsp;
+                            a(href="item?id=" + post._id) on: #{post.title}
+                        br
+                        br
+                        | #{comment.comment}
+
+        tr(style="height:10px")
+        tr
+            td(colspan="2")
+            td
+                form(method="post" action="/comment")
+                    input(type="hidden" name="postId" value=post._id)
+                    input(type="hidden" name="parentComment" value=comment._id)
+                    textarea(name="text" rows="6" cols="60")
+                    br
+                    br
+                    input(type="submit" value="Reply")
