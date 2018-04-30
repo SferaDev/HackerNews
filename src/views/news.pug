@@ -10,7 +10,7 @@ block content
                     span.rank #{count}&nbsp
                 td.votelinks(valign="top")
                     center
-                        a(id="#up_" + element._id onclick='return vote(event, this, "up")' href="vote?id=" + element._id + "&how=up")
+                        a(id="#up_" + element._id  href="vote?id=" + element._id + "&back=" + url + "&how=up")
                             .arrow-up(title="upvote")
                 td.title
                     if element.__type === 'Url'
@@ -27,7 +27,7 @@ block content
                 td(colspan="1")
                 td.votelinks(valign="top")
                     center
-                        a(id="down_" + element._id onclick='return vote(event, this, "up")' href="vote?id=" + element._id + "&how=down")
+                        a(id="down_" + element._id  href="vote?id=" + element._id + "&back=" + url + "&how=down")
                             .arrow-down(title="downvote")
                 td.subtext
                     span(id="score_" + element.postId).score &nbsp#{element.totalLikes} points
