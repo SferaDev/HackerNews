@@ -1,0 +1,53 @@
+extends base
+include elements/post
+
+block content
+    script(type="text/javascript").
+        function inputLength(element)
+        {
+            var lines = element.value.length - 80;
+            element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
+        }
+
+    table.itemlist(border="0" cellpadding="0" cellspacing="0")
+        +post(post)
+        tr.spacer(style="height:12px")
+
+    form.itemform(method='post', action='/edit')
+        input(type='hidden', name='id', value='' + post._id)
+        if (comment !== null)
+            input(type='hidden', name='commentId', value='' + comment._id)
+        table(border='0')
+            if (comment === null)
+                tr
+                    td(valign='top') title:
+                    td
+                        input(type='text', name='title', value='' + post.title, size='60', oninput='inputLength(this)', onfocus='inputLength(this)')
+                        span(style='margin-left:10px')
+                tr
+                    td(valign='top') url:
+                    td
+                        if (post.__type === 'Url')
+                            textarea(cols='60', rows='5', wrap='virtual', name='text')
+                                | #{post.url}
+
+                if (post.__type === 'Ask')
+                    tr
+                        td(valign='top') text:
+                        td
+                            textarea(cols='60', rows='5', wrap='virtual', name='text')
+                                | #{post.text}
+                            font(size='-2')
+                                a(href='formatdoc', tabindex='-1')
+                                    font(color='#afafaf') help
+            else
+                tr
+                    td(valign='top') text:
+                    td
+                        textarea(cols='60', rows='5', wrap='virtual', name='comment')
+                            | #{comment.comment}
+                        font(size='-2')
+                            a(href='formatdoc', tabindex='-1')
+                                font(color='#afafaf') help
+        br
+        input(type='submit', value='update')

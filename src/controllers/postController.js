@@ -70,3 +70,20 @@ export function getPostsByOwner(username, next) {
         } else next([]);
     });
 }
+
+export function updatePost(postId, text, done)
+{
+    getPostById(postId, function (post)
+    {
+        if (post.__type === 'Url')
+            post.url = text;
+        else
+            post.text = text;
+
+        post.save(function (err, updated)
+        {
+            if (err) console.error(err);
+            else done();
+        });
+    });
+}

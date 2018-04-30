@@ -1,5 +1,6 @@
 import {commentModel} from "../models/comment";
 import {getUserByUsername} from "./userController";
+import {getPostById} from "./postController";
 
 export function insertComment(userId, postId, text, parentComment, done) {
     let fields = {
@@ -55,5 +56,19 @@ export function getAllComments(done) {
     commentModel.find({deleted: false}).populate('post').exec(function (err, elements) {
         if (err) done([]);
         else done(elements);
+    });
+}
+
+export function updateComment(commentId, text, done)
+{
+    getCommentById(commentId, function (comment)
+    {
+        comment.comment = text;
+
+        comment.save(function (err, updated)
+        {
+            if (err) console.error(err);
+            else done();
+        });
     });
 }
