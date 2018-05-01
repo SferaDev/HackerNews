@@ -45,23 +45,23 @@ let autoPopulate = function (next) {
 postSchema.pre('findOne', autoPopulate);
 postSchema.pre('find', autoPopulate);
 
-export const postModel = mongoose.model('Post', postSchema);
-
-export const urlModel = postModel.discriminator('Url', new mongoose.Schema({
+const urlSchema = new mongoose.Schema({
     url: {
         type: String,
         required: true
-    },
-    tld: {
-        type: String,
-        default: function () {
-            if (this.url !== undefined) return extractRootDomain(this.url);
-        }
     }
-}));
+});
 
-export const askModel = postModel.discriminator('Ask', new mongoose.Schema({
+urlSchema.virtual('tld').get(function () {
+    return extractRootDomain(this.url);
+});
+
+const askSchema = new mongoose.Schema({
     text: {
-        type: String,
+        type: String
     }
-}));
+});
+
+export const postModel = mongoose.model('Post', postSchema);
+export const urlModel = postModel.discriminator('Url', urlSchema);
+export const askModel = postModel.discriminator('Ask', askSchema);
