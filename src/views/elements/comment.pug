@@ -1,10 +1,9 @@
-mixin comment(element)
+mixin comment(element, back)
     tr(id=element._id)
         td
             table(border="0")
                 tr
                     td.ind
-                        img(src="s.gif" height="1" width="0")
                     td.default
                         div(style="margin-top:2px; margin-bottom:-10px;")
                             span.comhead
@@ -12,23 +11,26 @@ mixin comment(element)
                                     font(color="#3c963c") #[strong #{element.owner.username}]
                                 | &nbsp
                                 span.age
-                                    a(href="item?id=16847762") #{element.timeSince}
+                                    a(href="item?id=" + element.post) #{element.timeSince}
                                 span#unv_16847762
                                 span.par
                                 if (username !== undefined)
                                     |  |&nbsp
                                     span.reply
                                         a(href='reply?id=' + element._id + '&goto=' + post._id) reply
-                                if (username === element.owner.username)
+                                if (!element.deleted && username === element.owner.username)
                                     |  |&nbsp
-                                    a(href="edit?id=16847762") edit
+                                    a(href="edit?type=comment&id=" + element._id + "&back=" + back) edit
                                     |  |&nbsp
-                                    a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete
+                                    a(href="delete?type=comment&id=" + element._id + "&back=" + back) delete
                         br
                         .comment
                             span.c00
-                                | #{element.comment}
+                                if (!element.deleted)
+                                    | #{element.comment}
+                                else
+                                    | [deleted]
                         br
                         each reply in element.replies
                             table.comment-tree(style="margin-left: 20px" border="0")
-                                +comment(reply)
+                                +comment(reply, back)

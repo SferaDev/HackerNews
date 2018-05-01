@@ -5,7 +5,7 @@ include elements/post
 block content
     if (post !== null)
         table.fatitem(border="0")
-            + post(post, "item?id=" + post._id)
+            + post(post, "/item?id=" + post._id)
             if (post.__type === 'Ask')
                 tr(style='height:2px')
                     tr
@@ -25,5 +25,5 @@ block content
                             input(type="submit" value="Add comment")
         table.comment-tree(border="0")
             each element in comments
-                + comment(element)
+                + comment(element, "/item?id=" + post._id)
         br

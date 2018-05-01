@@ -1,15 +1,8 @@
-import {
-    getAllPosts,
-    getPostById,
-    getPostsByOwner,
-    getPostsByTld,
-    insertAskPost,
-    insertUrlPost
-} from "../controllers/postController";
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
-import {getFavouritePosts, insertFavourite} from "../controllers/favouriteController";
+import * as favouriteController from "../controllers/favouriteController";
+import * as postController from "../controllers/postController";
 
 export const routes = [
     {
@@ -23,7 +16,7 @@ export const routes = [
         route: '/ask',
         render: 'news',
         getAction: function (req, res, result) {
-            getAllPosts(function (posts) {
+            postController.getAllPosts(function (posts) {
                 result({
                     posts: posts.filter(post => post.__type === "Ask")
                 });
@@ -41,15 +34,31 @@ export const routes = [
         }
     },
     {
-        route: '/fave',
-        render: 'news',
+        route: '/delete',
         getAction: function (req, res, result) {
             let callback = function () {
-                res.redirect(req.query.back !== undefined ? req.query.back : '/news');
+                res.redirect(req.query.back !== undefined ? req.query.back : '/');
                 result();
             };
             if (req.query.id !== undefined && req.query.id !== '') {
-                insertFavourite(req.session.userId, req.query.id, callback);
+                if (req.query.type === 'comment') {
+                    commentController.deleteComment(req.query.id, callback);
+                } else if (req.query.type === 'post') {
+                    // TODO: Delete post
+                    callback();
+                } else callback();
+            } else callback();
+        }
+    },
+    {
+        route: '/fave',
+        getAction: function (req, res, result) {
+            let callback = function () {
+                res.redirect(req.query.back !== undefined ? req.query.back : '/');
+                result();
+            };
+            if (req.query.id !== undefined && req.query.id !== '') {
+                favouriteController.insertFavourite(req.session.userId, req.query.id, callback);
             } else callback();
         }
     },
@@ -57,7 +66,7 @@ export const routes = [
         route: '/favourites',
         render: 'news',
         getAction: function (req, res, result) {
-            getFavouritePosts(req.query.id, function (posts) {
+            favouriteController.getFavouritePosts(req.query.id, function (posts) {
                 result({
                     posts: posts
                 });
@@ -68,7 +77,7 @@ export const routes = [
         route: '/from',
         render: 'news',
         getAction: function (req, res, result) {
-            getPostsByTld(req.query.site, function (posts) {
+            postController.getPostsByTld(req.query.site, function (posts) {
                 result({
                     posts: posts
                 });
@@ -79,7 +88,7 @@ export const routes = [
         route: '/item',
         render: 'item',
         getAction: function (req, res, result) {
-            getPostById(req.query.id, function (post) {
+            postController.getPostById(req.query.id, function (post) {
                 commentController.getCommentsByPost(req.query.id, function (comments) {
                     result({
                         post: post,
@@ -107,7 +116,7 @@ export const routes = [
                             req.session.userId = userId;
                             req.session.username = req.body.username;
                         }
-                        res.redirect('/news');
+                        res.redirect('/');
                     });
                 }
             }
@@ -118,7 +127,7 @@ export const routes = [
         getAction: function (req, res, result) {
             req.session.destroy(function (err) {
                 if (err) console.error(err);
-                res.redirect('/news');
+                res.redirect('/');
                 result();
             });
         }
@@ -144,7 +153,7 @@ export const routes = [
         route: '/newest',
         render: 'news',
         getAction: function (req, res, result) {
-            getAllPosts(function (posts) {
+            postController.getAllPosts(function (posts) {
                 result({
                     posts: posts.sort(function compare(a, b) {
                         if (a.createdAt < b.createdAt)
@@ -161,7 +170,7 @@ export const routes = [
         route: '/news',
         render: 'news',
         getAction: function (req, res, result) {
-            getAllPosts(function (posts) {
+            postController.getAllPosts(function (posts) {
                 result({
                     posts: posts.filter(post => post.__type === "Url")
                 });
@@ -186,7 +195,7 @@ export const routes = [
                             req.session.userId = userId;
                             req.session.username = req.body.username;
                         }
-                        res.redirect('/news');
+                        res.redirect('/');
                     });
                 }
             }
@@ -199,7 +208,7 @@ export const routes = [
         getAction: function (req, res, result) {
             if (req.query.id !== undefined && req.query.goto !== undefined) {
                 commentController.getCommentById(req.query.id, function (comment) {
-                    getPostById(req.query.goto, function (post) {
+                    postController.getPostById(req.query.goto, function (post) {
                         result({
                             comment: comment,
                             post: post
@@ -222,11 +231,11 @@ export const routes = [
             if (req.body.title === '')
                 res.redirect('/submit?invalid=2');
             else if (req.body.url !== '' && req.body.text === '') {
-                insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
+                postController.insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
                     res.redirect('/newest');
                 });
             } else if (req.body.url === '') {
-                insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
+                postController.insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
                     res.redirect('/newest');
                 });
             } else {
@@ -238,7 +247,7 @@ export const routes = [
         route: '/submitted',
         render: 'news',
         getAction: function (req, res, result) {
-            getPostsByOwner(req.query.id, function (posts) {
+            postController.getPostsByOwner(req.query.id, function (posts) {
                 result({
                     posts: posts
                 });
@@ -293,7 +302,7 @@ export const routes = [
         route: '/vote',
         getAction: function (req, res, result) {
             let callback = function () {
-                res.redirect(req.query.back !== undefined ? req.query.back : '/news');
+                res.redirect(req.query.back !== undefined ? req.query.back : '/');
                 result();
             };
             if (req.query.id !== undefined && req.query.id !== '') {

@@ -24,6 +24,10 @@ const commentSchema = new mongoose.Schema({
     parentComment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 }, baseOptions);
 

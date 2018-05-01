@@ -14,9 +14,11 @@ export function insertComment(userId, postId, text, parentComment, done) {
     });
 }
 
-export function removeComment(commentId, done) {
-    commentModel.remove({_id: commentId}, function (err) {
-        if (err) console.error(err);
+export function deleteComment(commentId, done) {
+    commentModel.findOne({_id: commentId}, function (err, comment) {
+        if (err) return console.error(err);
+        comment.deleted = true;
+        comment.save();
         done();
     });
 }
