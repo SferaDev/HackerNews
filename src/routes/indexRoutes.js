@@ -74,7 +74,8 @@ export const routes = [
         },
         postAction: function (req, res) {
             let callback = function () {
-                res.redirect('/');
+                if (req.body.commentId === undefined) res.redirect('/item?id=' + req.body.id);
+                else res.redirect('/item?id=' + req.body.id + '#' + req.body.commentId);
             };
             if (req.body.comment === undefined) {
                 postController.getPostById(req.body.id, function (post) {

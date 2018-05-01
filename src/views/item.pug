@@ -19,7 +19,7 @@ block content
                     td
                         form(method="post" action="/comment")
                             input(type="hidden" name="postId" value=post._id)
-                            textarea(name="text" rows="6" cols="60")
+                            textarea(name="text" rows="6" cols="60" required autofocus)
                             br
                             br
                             input(type="submit" value="Add comment")
