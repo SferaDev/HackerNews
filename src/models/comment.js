@@ -46,29 +46,28 @@ let autoPopulate = function (next) {
 commentSchema.pre('findOne', autoPopulate);
 commentSchema.pre('find', autoPopulate);
 
-// Before save, increment comment count
 commentSchema.pre('save', function (next) {
-    if (!this.isModified('_id')) return next();
-    postModel.findOne({
-        _id: this.post
-    }, function (err, post) {
-        if (err) console.error(err);
-        post.totalComments += 1;
-        post.save();
-    });
+    this.wasNew = this.isNew;
     next();
 });
 
-// Before save, increment comment count
-commentSchema.pre('remove', function (next) {
+commentSchema.post('save', function (doc) {
+    if (!this.wasNew) return;
+    incrementComment(doc, 1);
+});
+
+commentSchema.post('remove', function (doc) {
+    incrementComment(doc, -1);
+});
+
+function incrementComment(doc, incr) {
     postModel.findOne({
-        _id: this.post
+        _id: doc.post
     }, function (err, post) {
         if (err) console.error(err);
-        post.totalComments -= 1;
+        post.totalComments += incr;
         post.save();
     });
-    next();
-});
+}
 
 export const commentModel = mongoose.model('Comment', commentSchema);

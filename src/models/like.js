@@ -17,7 +17,6 @@ const likeSchema = new mongoose.Schema({
     }
 }, baseOptions);
 
-// Before save, increment like count
 likeSchema.pre('save', function (next) {
     this.wasNew = this.isNew;
     next();
@@ -28,7 +27,6 @@ likeSchema.post('save', function (doc) {
     incrementLikeAndKarma(doc, 1);
 });
 
-// Before remove, increment like count
 likeSchema.post('remove', function (doc) {
     incrementLikeAndKarma(doc, -1);
 });
