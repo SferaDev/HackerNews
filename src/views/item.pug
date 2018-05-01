@@ -39,8 +39,9 @@ block content
                     span(id="unv_" + post._id)
                     | &nbsp|&nbsp
                     a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
-                    | &nbsp|&nbsp
-                    a(href="fave?id=" + post._id) favorite
+                    if (username !== undefined)
+                        | &nbsp|&nbsp
+                        a(href="fave?id=" + post._id + "&back=item?id=" + post._id) favorite
                     | &nbsp|&nbsp
                     if post.totalComments === 0
                         a(href="item?id=" + post._id) discuss
@@ -55,17 +56,18 @@ block content
                         td
                             | #{post.text}
             tr(style="height:10px")
-            tr
-                td(colspan="2")
-                td
-                    form(method="post" action="/comment")
-                        input(type="hidden" name="postId" value=post._id)
-                        textarea(name="text" rows="6" cols="60")
-                        br
-                        br
-                        input(type="submit" value="Add comment")
-        br
-        br
+            if (username !== undefined)
+                tr
+                    td(colspan="2")
+                    td
+                        form(method="post" action="/comment")
+                            input(type="hidden" name="postId" value=post._id)
+                            textarea(name="text" rows="6" cols="60")
+                            br
+                            br
+                            input(type="submit" value="Add comment")
+                br
+                br
         table.comment-tree(border="0")
             each element in comments
                 +comment(element)

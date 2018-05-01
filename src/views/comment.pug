@@ -15,11 +15,12 @@ mixin comment(element)
                                     a(href="item?id=16847762") #{element.timeSince}
                                 span#unv_16847762
                                 span.par
-                                |  |&nbsp
-                                span.reply
-                                    a(href='reply?id=' + element._id + '&goto=' + post._id) reply
-                                |  |&nbsp
-                                if (element.owner.username === username)
+                                if (username !== undefined)
+                                    |  |&nbsp
+                                    span.reply
+                                        a(href='reply?id=' + element._id + '&goto=' + post._id) reply
+                                if (username === element.owner.username)
+                                    |  |&nbsp
                                     a(href="edit?id=16847762") edit
                                     |  |&nbsp
                                     a(href="delete-confirm?id=16847762&goto=item%3Fid%3D16791313") delete

@@ -9,6 +9,7 @@ import {
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
+import {getFavouritePosts, insertFavourite} from "../controllers/favouriteController";
 
 export const routes = [
     {
@@ -37,6 +38,30 @@ export const routes = [
                     res.redirect('/item?id=' + req.body.postId); // TODO: Anchor new comment
                 });
             } else res.redirect('/newest');
+        }
+    },
+    {
+        route: '/fave',
+        render: 'news',
+        getAction: function (req, res, result) {
+            let callback = function () {
+                res.redirect(req.query.back !== undefined ? req.query.back : '/news');
+                result();
+            };
+            if (req.query.id !== undefined && req.query.id !== '') {
+                insertFavourite(req.session.userId, req.query.id, callback);
+            } else callback();
+        }
+    },
+    {
+        route: '/favourites',
+        render: 'news',
+        getAction: function (req, res, result) {
+            getFavouritePosts(req.query.id, function (posts) {
+                result({
+                    posts: posts
+                });
+            });
         }
     },
     {
@@ -268,8 +293,7 @@ export const routes = [
         route: '/vote',
         getAction: function (req, res, result) {
             let callback = function () {
-                if (req.query.back === undefined) res.redirect('/news');
-                else res.redirect(req.query.back);
+                res.redirect(req.query.back !== undefined ? req.query.back : '/news');
                 result();
             };
             if (req.query.id !== undefined && req.query.id !== '') {
