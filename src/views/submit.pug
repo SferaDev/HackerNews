@@ -24,12 +24,12 @@ block content
                     tr
                         td Title
                         td
-                            input(type="text" name="title" value="" size="50" oninput="inputLength(this)" onfocus="inputLength(this)")
+                            input(type="text" name="title" size="50" required autofocus oninput="inputLength(this)" onfocus="inputLength(this)")
                             span(style="margin-left:10px")
                     tr
                         td Url
                         td
-                            input(type="text" name="url" value="" size="50")
+                            input(type="url" name="url" size="50")
                             span(style="margin-left:10px")
                     tr
                         td
