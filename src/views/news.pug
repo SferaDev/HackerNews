@@ -1,48 +1,11 @@
 extends base
+include elements/post
 
 block content
     table.itemlist(border="0" cellpadding="0" cellspacing="0")
         - var count = 0
-        each element in posts
+        each post in posts
             - count += 1
-            tr(id=element.postId).athing
-                td.title(align="right" valign="top")
-                    span.rank #{count}&nbsp
-                td.votelinks(valign="top")
-                    center
-                        a(id="#up_" + element._id  href="vote?id=" + element._id + "&back=" + url + "&how=up")
-                            .arrow-up(title="upvote")
-                td.title
-                    if element.__type === 'Url'
-                        - element.url = (element.url.indexOf('://') === -1) ? '//' + element.url : element.url;
-                        a.storylink(href=element.url) &nbsp#{element.title}&nbsp
-                        span.sitebit.comhead
-                            | (
-                            a(href="from?site=" + element.tld)
-                                span.sitestr #{element.tld}
-                            | )
-                    else
-                        a.storylink(href="item?id=" + element._id) &nbsp#{element.title}&nbsp
-            tr
-                td(colspan="1")
-                td.votelinks(valign="top")
-                    center
-                        a(id="down_" + element._id  href="vote?id=" + element._id + "&back=" + url + "&how=down")
-                            .arrow-down(title="downvote")
-                td.subtext
-                    span(id="score_" + element.postId).score &nbsp#{element.totalLikes} points
-                    |  by&nbsp
-                    a.hnuser(href="user?id=" + element.owner.username)
-                        font(color="#3c963c") #[strong #{element.owner.username}]
-                    span.age
-                        | &nbsp
-                        a(href="item?id=" + element._id) #{element.timeSince}
-                    span(id="#unv_" + element.postId)
-                    |  |&nbsp
-                    if element.totalComments === 0
-                        a(href="item?id=" + element._id) discuss
-                    else if element.totalComments === 1
-                        a(href="item?id=" + element._id) #{element.totalComments} comment
-                    else
-                        a(href="item?id=" + element._id) #{element.totalComments} comments
+            - post.count = count
+            + post(post, url)
             tr.spacer(style="height:12px")
