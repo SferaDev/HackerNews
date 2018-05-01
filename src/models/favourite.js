@@ -25,4 +25,13 @@ let autoPopulate = function (next) {
 favouriteSchema.pre('findOne', autoPopulate);
 favouriteSchema.pre('find', autoPopulate);
 
+favouriteSchema.statics.findOneOrCreate = function findOneOrCreate(condition, callback) {
+    const self = this;
+    self.findOne(condition, (err, result) => {
+        return result ? callback(err, result) : self.create(condition, (err, result) => {
+            return callback(err, result)
+        })
+    })
+};
+
 export const favouriteModel = mongoose.model('Favourite', favouriteSchema);

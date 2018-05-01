@@ -12,7 +12,7 @@ mixin post(post, back)
         td.title
             if post.__type === 'Url'
                 - post.url = (post.url.indexOf('://') === -1) ? '//' + post.url : post.url;
-                a.storylink(href=post.url) &nbsp#{post.title}&nbsp
+                a.storylink(href=post.url rel="external") &nbsp#{post.title}&nbsp
                 span.sitebit.comhead
                     | (
                     a(href="from?site=" + post.tld)
@@ -38,7 +38,7 @@ mixin post(post, back)
             a(href="https://www.google.com/search?q=" + encodeURIComponent(post.title.trim())) web
             if (username !== undefined)
                 | &nbsp|&nbsp
-                a(href="fave?id=" + post._id + "&back=item?id=" + post._id) favorite
+                a(href="fave?id=" + post._id + "&back=" + back) favorite
             if (username === post.owner.username)
                 |  |&nbsp
                 a(href="edit?type=post&id=" + post._id + "&back=" + back) edit

@@ -2,10 +2,10 @@ import {getUserByUsername} from "./userController";
 import {favouriteModel} from "../models/favourite";
 
 export function insertFavourite(userId, postId, done) {
-    new favouriteModel({
+    favouriteModel.findOneOrCreate({
         user: userId,
         post: postId
-    }).save(function (error, element) {
+    }, function (error, element) {
         if (error) console.error(error);
         done(element);
     });
