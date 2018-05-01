@@ -3,8 +3,7 @@ include elements/post
 
 block content
     script(type="text/javascript").
-        function inputLength(element)
-        {
+        function inputLength(element) {
             var lines = element.value.length - 80;
             element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
         }

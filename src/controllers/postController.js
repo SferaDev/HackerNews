@@ -71,10 +71,8 @@ export function getPostsByOwner(username, next) {
     });
 }
 
-export function updatePost(postId, text, title, done)
-{
-    getPostById(postId, function (post)
-    {
+export function updatePost(postId, text, title, done) {
+    getPostById(postId, function (post) {
         if (post.__type === 'Url')
             post.url = text;
         else
@@ -82,8 +80,7 @@ export function updatePost(postId, text, title, done)
 
         post.title = title;
 
-        post.save(function (err, updated)
-        {
+        post.save(function (err, updated) {
             if (err) console.error(err);
             else done();
         });
