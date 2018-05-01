@@ -11,7 +11,9 @@ block content
                             a.hnuser(href="user?id=" + comment.owner.username)
                                 font(color="#3c963c") #[strong #{comment.owner.username}]&nbsp;
                                 | #{comment.timeSince}
-                            span#unv_16847762
+                            span.parent
+                                if (comment.parentComment !== undefined)
+                                    a.parent(href="item?id=" + comment.post._id + "#" + comment.parentComment) &nbsp;| parent
                             span.ogpost
                                 |  | on:&nbsp
                                 a(href="item?id=" + comment.post._id) #{comment.post.title}
