@@ -1,5 +1,6 @@
 import {askModel, postModel, urlModel} from "../models/post";
 import {getUserByUsername} from "./userController";
+import {commentModel} from "../models/comment";
 
 export function insertUrlPost(userId, title, url, done) {
     if (userId === undefined) return done();
@@ -7,8 +8,8 @@ export function insertUrlPost(userId, title, url, done) {
         title: title,
         url: url,
         owner: userId
-    }).save(function (error, element) {
-        if (error) console.error(error);
+    }).save(function (err, element) {
+        if (err) console.error(err);
         done(element);
     });
 }
@@ -19,10 +20,20 @@ export function insertAskPost(userId, title, text, done) {
         title: title,
         text: text,
         owner: userId
-    }).save(function (error, element) {
-        if (error) console.error(error);
+    }).save(function (err, element) {
+        if (err) console.error(err);
         done(element);
     });
+}
+
+export function deletePost(postId, done) {
+    postModel.remove({_id: postId}, function (err, doc) {
+        if (err) console.error(err);
+        else commentModel.remove({post: postId}, function (err2, elements) {
+            if (err2) console.error(err2);
+            else done();
+        })
+    })
 }
 
 export function getAllPosts(next) {

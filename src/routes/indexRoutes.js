@@ -44,8 +44,7 @@ export const routes = [
                 if (req.query.type === 'comment') {
                     commentController.deleteComment(req.query.id, callback);
                 } else if (req.query.type === 'post') {
-                    // TODO: Delete post
-                    callback();
+                    postController.deletePost(req.query.id, callback);
                 } else callback();
             } else callback();
         }

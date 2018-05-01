@@ -39,6 +39,11 @@ mixin post(post, back)
             if (username !== undefined)
                 | &nbsp|&nbsp
                 a(href="fave?id=" + post._id + "&back=item?id=" + post._id) favorite
+            if (username === post.owner.username)
+                |  |&nbsp
+                a(href="edit?type=post&id=" + post._id + "&back=" + back) edit
+                |  |&nbsp
+                a(href="delete?type=post&id=" + post._id + "&back=/") delete
             | &nbsp|&nbsp
             if post.totalComments === 0
                 a(href="item?id=" + post._id) discuss
