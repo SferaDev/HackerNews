@@ -71,18 +71,17 @@ export function getPostsByOwner(username, next) {
     });
 }
 
-export function updatePost(postId, text, title, done) {
-    getPostById(postId, function (post) {
-        if (post.__type === 'Url')
-            post.url = text;
-        else
-            post.text = text;
-
-        post.title = title;
-
-        post.save(function (err, updated) {
-            if (err) console.error(err);
-            else done();
-        });
+export function updatePost(postId, title, text, done) {
+    postModel.findOne({_id: postId}, function (err, post) {
+        if (err) console.error(err);
+        else {
+            post.title = title;
+            if (post.__type === 'Url') post.url = text;
+            else post.text = text;
+            post.save(function (err, doc) {
+                if (err) console.error(err);
+                else done();
+            });
+        }
     });
 }

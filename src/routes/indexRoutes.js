@@ -50,6 +50,48 @@ export const routes = [
         }
     },
     {
+        route: '/edit',
+        render: 'edit',
+        title: 'Edit',
+        getAction: function (req, res, result) {
+            if (req.query.type === 'post') {
+                postController.getPostById(req.query.id, function (post) {
+                    result({
+                        post: post,
+                        comment: null
+                    });
+                });
+            } else if (req.query.type === 'comment') {
+                commentController.getCommentById(req.query.id, function (comment) {
+                    postController.getPostById(comment.post, function (post) {
+                        result({
+                            post: post,
+                            comment: comment
+                        });
+                    })
+                })
+            }
+        },
+        postAction: function (req, res) {
+            let callback = function () {
+                res.redirect('/');
+            };
+            if (req.body.comment === undefined) {
+                postController.getPostById(req.body.id, function (post) {
+                    if (post.owner.username === req.session.username) {
+                        postController.updatePost(req.body.id, req.body.title, req.body.text, callback);
+                    } else callback();
+                });
+            } else {
+                commentController.getCommentById(req.body.commentId, function (comment) {
+                    if (comment.owner.username === req.session.username) {
+                        commentController.updateComment(req.body.commentId, req.body.comment, callback)
+                    } else callback();
+                })
+            }
+        }
+    },
+    {
         route: '/fave',
         getAction: function (req, res, result) {
             let callback = function () {
@@ -213,55 +255,6 @@ export const routes = [
                             post: post
                         });
                     })
-                })
-            }
-        }
-    },
-    {
-        route: '/edit',
-        render: 'edit',
-        title: 'Edit',
-        getAction: function (req, res, result) {
-            if (req.query.type === 'post') {
-                postController.getPostById(req.query.id, function (post) {
-                    result({
-                        post: post,
-                        comment: null
-                    });
-                });
-            }
-            else if (req.query.type === 'comment') {
-                commentController.getCommentById(req.query.id, function (comment) {
-                    postController.getPostById(comment.post, function (post) {
-                        result({
-                            post: post,
-                            comment: comment
-                        });
-                    })
-                })
-            }
-        },
-        postAction: function (req, res) {
-            if (req.body.comment === undefined) {
-                postController.getPostById(req.body.id, function (post) {
-                    if (post.owner.username === req.session.username) {
-                        if (req.body.title !== '') {
-                            postController.updatePost(req.body.id, req.body.text, req.body.title, function () {
-                                res.redirect('/newest');
-                            });
-                        }
-                        else
-                            res.redirect('/newest');
-                    }
-                });
-            }
-            else {
-                commentController.getCommentById(req.body.commentId, function (comment) {
-                    if (comment.owner.username === req.session.username) {
-                        commentController.updateComment(req.body.commentId, req.body.comment, function () {
-                            res.redirect('/newest');
-                        })
-                    }
                 })
             }
         }
