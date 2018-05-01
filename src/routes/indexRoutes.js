@@ -42,9 +42,9 @@ export const routes = [
             };
             if (req.query.id !== undefined && req.query.id !== '') {
                 if (req.query.type === 'comment') {
-                    commentController.deleteComment(req.query.id, callback);
+                    commentController.deleteComment(req.session.userId, req.query.id, callback);
                 } else if (req.query.type === 'post') {
-                    postController.deletePost(req.query.id, callback);
+                    postController.deletePost(req.session.userId, req.query.id, callback);
                 } else callback();
             } else callback();
         }

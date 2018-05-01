@@ -14,11 +14,13 @@ export function insertComment(userId, postId, text, parentComment, done) {
     });
 }
 
-export function deleteComment(commentId, done) {
+export function deleteComment(userId, commentId, done) {
     commentModel.findOne({_id: commentId}, function (err, comment) {
         if (err) return console.error(err);
-        comment.deleted = true;
-        comment.save();
+        if (comment.owner._id.toString() === userId.toString()) {
+            comment.deleted = true;
+            comment.save();
+        }
         done();
     });
 }
@@ -42,7 +44,7 @@ export function getCommentById(commentId, done) {
 
 export function getCommentsByOwner(username, done) {
     getUserByUsername(username, function (owner) {
-        commentModel.find({owner: owner}).populate('post').exec(function (err, elements) {
+        commentModel.find({owner: owner, deleted: false}).populate('post').exec(function (err, elements) {
             if (err) done([]);
             else done(elements);
         });
@@ -50,7 +52,7 @@ export function getCommentsByOwner(username, done) {
 }
 
 export function getAllComments(done) {
-    commentModel.find({}).populate('post').exec(function (err, elements) {
+    commentModel.find({deleted: false}).populate('post').exec(function (err, elements) {
         if (err) done([]);
         else done(elements);
     });

@@ -26,13 +26,16 @@ export function insertAskPost(userId, title, text, done) {
     });
 }
 
-export function deletePost(postId, done) {
-    postModel.remove({_id: postId}, function (err, doc) {
+export function deletePost(userId, postId, done) {
+    postModel.findOne({_id: postId}, function (err, doc) {
         if (err) console.error(err);
-        else commentModel.remove({post: postId}, function (err2, elements) {
-            if (err2) console.error(err2);
-            else done();
-        })
+        else if (doc.owner._id.toString() === userId.toString()) {
+            doc.remove();
+            commentModel.remove({post: postId}, function (err2, elements) {
+                if (err2) console.error(err2);
+                else done();
+            })
+        } else done();
     })
 }
 
