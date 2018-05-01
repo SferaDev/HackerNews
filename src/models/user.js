@@ -32,26 +32,6 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         default: ''
-    },
-    showdead: {
-        type: Boolean,
-        default: false
-    },
-    noprocrat: {
-        type: Boolean,
-        default: false
-    },
-    maxvisit: {
-        type: Number,
-        default: 20
-    },
-    minaway: {
-        type: Number,
-        default: 180
-    },
-    delay: {
-        type: Number,
-        default: 0
     }
 }, baseOptions);
 

@@ -259,8 +259,7 @@ export const routes = [
             })
         },
         postAction: function (req, res) {
-            userController.updateUser(req.session.userId, req.body.about, req.body.showd, req.body.nopro,
-                req.body.maxv, req.body.mina, req.body.delay, function () {
+            userController.updateUser(req.session.userId, req.body.about, function () {
                     res.redirect("/user?id=" + req.session.username);
                 });
         }

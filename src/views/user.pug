@@ -32,30 +32,6 @@ block content
                         td(valign="top") email:
                         td
                             | #{user.email}
-                    tr
-                        td(valign="top") showdead:
-                        td
-                            select(name="showd")
-                                option yes
-                                option(selected="" + user.showdead) no
-                    tr
-                        td(valign="top") noprocrast:
-                        td
-                            select(name="nopro")
-                                option yes
-                                option(selected="" + user.noprocrat) no
-                    tr
-                        td(valign="top") maxvisit:
-                        td
-                            input(type="text" name="maxv" value="" + user.maxvisit size="16" )
-                    tr
-                        td(valign="top") minaway:
-                        td
-                            input(type="text" name="mina" value="" + user.minaway size="16")
-                    tr
-                        td(valign="top") delay:
-                        td
-                            input(type="text" name="delay" value="" + user.delay size="16")
                 tr
                     td
                     td
