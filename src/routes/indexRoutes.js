@@ -257,11 +257,13 @@ export const routes = [
                     {
                         if (req.body.title !== '')
                         {
-                            postController.updatePost(req.body.id, req.body.text, function ()
+                            postController.updatePost(req.body.id, req.body.text, req.body.title, function ()
                             {
                                 res.redirect('/newest');
                             });
                         }
+                        else
+                            res.redirect('/newest');
                     }
                 });
             }
