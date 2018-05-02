@@ -13,7 +13,7 @@ routes.forEach(function (doc) {
                     subtitle: doc.title === "Profile: " ? doc.title + req.query.id : doc.title,
                     username: user === null ? undefined : user.username,
                     karma: user === null ? undefined : user.karma,
-                    url: doc.route
+                    url: req.originalUrl
                 };
                 if (doc.getAction !== undefined) {
                     doc.getAction(req, res, function (attributes) {
