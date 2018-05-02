@@ -8,6 +8,7 @@ routes.forEach(function (doc) {
     // Create GET endpoint placeholders
     if (doc.render !== undefined || doc.getAction !== undefined) {
         indexRouter.get(doc.route, function (req, res) {
+            req.session.returnTo = req.originalUrl;
             getUser(req.session.userId, function (user) {
                 let mainAttributes = {
                     subtitle: doc.title === "Profile: " ? doc.title + req.query.id : doc.title,

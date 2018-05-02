@@ -58,15 +58,14 @@ if (process.env.GITHUB_CLIENT_ID) {
         });
     }));
 
-    app.get('/auth',
-        passport.authenticate('github'));
+    app.get('/auth', passport.authenticate('github'));
 
     app.get('/auth/callback',
         passport.authenticate('github', { failureRedirect: '/' }),
         function(req, res) {
             req.session.userId = req.session.passport.user._id;
             req.session.username = req.session.passport.user.username;
-            res.redirect('/');
+            res.redirect(req.session.returnTo !== undefined ? req.session.returnTo : '/');
         });
 
     passport.serializeUser(function(user, done) {
