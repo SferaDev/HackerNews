@@ -5,21 +5,21 @@ block content
         form.profileform(method="post" action="/user")
             table(border="0")
                 tr.athing
-                    td(valign="top") user:
+                    td(valign="top") User:
                     td
                         a.hnuser(href="user?id=" + user.username)
                             font(color="#3c963c") #[strong #{user.username}]
                 tr
-                    td(valign="top") created:
+                    td(valign="top") Created:
                     td
                         span.age
                             | #{user.timeSince}
                 tr
-                    td(valign="top") karma:
+                    td(valign="top") Karma:
                     td
                         | #{user.karma}
                 tr
-                    td(valign="top") about:
+                    td(valign="top") About:
                     td
                         if (isOwnProfile)
                             textarea(cols="60" rows="5" wrap="virtual" name="about")
@@ -29,24 +29,24 @@ block content
 
                 if (isOwnProfile)
                     tr
-                        td(valign="top") email:
+                        td(valign="top") Email:
                         td
                             | #{user.email}
                 tr
                     td
                     td
                         a(href="submitted?id=" + user.username)
-                            u submissions
+                            u Submissions
                 tr
                     td
                     td
                         a(href="threads?id=" + user.username)
-                            u comments
+                            u Comments
                 tr
                     td
                     td
                         a(href="favourites?id=" + user.username)
-                            u favourites
+                            u Favourites
                 if (isOwnProfile)
                     tr
                         td
