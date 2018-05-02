@@ -43,7 +43,7 @@ mixin post(post, back)
                 |  |&nbsp
                 a(href="edit?type=post&id=" + post._id + "&back=" + back) edit
                 |  |&nbsp
-                a(href="delete?type=post&id=" + post._id + "&back=/") delete
+                a(href="delete?type=post&id=" + post._id + "&back=" + back) delete
             | &nbsp|&nbsp
             if post.totalComments === 0
                 a(href="item?id=" + post._id) discuss
