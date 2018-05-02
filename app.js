@@ -1,4 +1,3 @@
-// Dependencies
 import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
@@ -7,6 +6,7 @@ import cookieParser from "cookie-parser";
 import createError from "http-errors";
 import logger from "morgan";
 import path from "path";
+import cors from "cors";
 import passport from "passport";
 import {Strategy as GithubStrategy} from "passport-github2";
 
@@ -40,6 +40,7 @@ app.use(session({
     secret: SESSION_SECRET,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
+app.use(cors());
 
 if (process.env.GITHUB_CLIENT_ID) {
     app.use(passport.initialize());
