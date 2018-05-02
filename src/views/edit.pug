@@ -2,11 +2,6 @@ extends base
 include elements/post
 
 block content
-    script(type="text/javascript").
-        function inputLength(element) {
-            var lines = element.value.length - 80;
-            element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
-        }
     table.itemlist(border="0" cellpadding="0" cellspacing="0")
         + post(post, '/edit?type=' + (comment !== null ? 'comment' : 'post') + "&id=" + (comment !== null ? comment._id : post._id))
         tr.spacer(style="height:12px")
@@ -19,7 +14,7 @@ block content
                 tr
                     td(valign='top') Title:
                     td
-                        input(type='text' name='title' value=post.title required autofocus size='60' oninput='inputLength(this)' onfocus='inputLength(this)')
+                        input(type='text' name='title' value=post.title required autofocus size='60' maxLength='80')
                         span(style='margin-left:10px')
                 if (post.__type === 'Url')
                     tr

@@ -1,11 +1,6 @@
 extends base
 
 block content
-    script(type="text/javascript").
-        function inputLength(element) {
-            var lines = element.value.length - 80;
-            element.nextSibling.innerText = lines > 0 ? lines + ' too long' : '';
-        }
     tr(style='height:10px')
     tr
         td
@@ -24,7 +19,7 @@ block content
                     tr
                         td Title
                         td
-                            input(type="text" name="title" size="50" required autofocus oninput="inputLength(this)" onfocus="inputLength(this)")
+                            input(type="text" name="title" size="50" required autofocus maxLength='80')
                             span(style="margin-left:10px")
                     tr
                         td Url
