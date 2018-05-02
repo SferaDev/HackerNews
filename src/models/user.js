@@ -1,7 +1,7 @@
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import hat from "hat";
 import {timeSince} from "../utils/timeUtils";
-
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const baseOptions = {
     timestamps: true
@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         default: ''
+    },
+    apiKey: {
+        type: String,
+        default: hat()
     }
 }, baseOptions);
 

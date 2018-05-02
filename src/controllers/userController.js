@@ -1,3 +1,4 @@
+import hat from "hat";
 import {userModel} from "../models/user";
 
 export function getUser(userId, next) {
@@ -46,6 +47,19 @@ export function registerUser(username, password, next) {
             next(null);
         } else next(user._id);
     });
+}
+
+export function regenerateAPIKey(userId, next) {
+    userModel.findOne({
+        _id: userId
+    }, function (err, user) {
+        if (err || user == null) console.error(err);
+        else {
+            user.apiKey = hat();
+            user.save();
+            next();
+        }
+    })
 }
 
 export function updateUser(userid, about, next) {

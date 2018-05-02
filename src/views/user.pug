@@ -3,7 +3,7 @@ extends base
 block content
     if (user !== null)
         form.profileform(method="post" action="/user")
-            table(border="0")
+            table(border="0" cellspacing="10")
                 tr.athing
                     td(valign="top") User:
                     td
@@ -18,20 +18,33 @@ block content
                     td(valign="top") Karma:
                     td
                         | #{user.karma}
-                tr
-                    td(valign="top") About:
-                    td
-                        if (isOwnProfile)
-                            textarea(cols="60" rows="5" wrap="virtual" name="about")
-                                | #{user.about}
-                        else
-                            | #{user.about}
-
                 if (isOwnProfile)
                     tr
                         td(valign="top") Email:
                         td
                             | #{user.email}
+                    tr
+                        td(valign="top") API Key:
+                        td
+                            | #{user.apiKey}
+                            | (
+                            a(href="apigen?back=" + url) Regenerate
+                            | )
+                tr
+                    td(valign="top") About:
+                    td
+                        if (isOwnProfile)
+                            textarea(cols="50" rows="5" wrap="virtual" name="about")
+                                | #{user.about}
+                        else
+                            | #{user.about}
+                if (isOwnProfile)
+                    tr
+                        td
+                            br
+                            input(type="submit" value="Update")
+                            br
+                            br
                 tr
                     td
                     td
@@ -47,10 +60,3 @@ block content
                     td
                         a(href="favourites?id=" + user.username)
                             u Favourites
-                if (isOwnProfile)
-                    tr
-                        td
-                            br
-                            input(type="submit" value="Update")
-        br
-        br

@@ -13,6 +13,15 @@ export const routes = [
         }
     },
     {
+        route: '/apigen',
+        getAction: function (req, res, result) {
+            userController.regenerateAPIKey(req.session.userId, function () {
+                res.redirect(req.query.back !== undefined ? req.query.back : '/');
+                result();
+            })
+        }
+    },
+    {
         route: '/ask',
         render: 'news',
         getAction: function (req, res, result) {
