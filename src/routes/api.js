@@ -14,7 +14,7 @@ apiRouter.get('/', function (req, res) {
 });
 
 /**
- * @api {get} /users List all users
+ * @api {get} /api/users List all users
  * @apiVersion 1.0.0
  * @apiGroup Users
  *
