@@ -21,10 +21,10 @@ block content
                     td
                         input(type='text' name='title' value=post.title required autofocus size='60' oninput='inputLength(this)' onfocus='inputLength(this)')
                         span(style='margin-left:10px')
-                tr
-                    td(valign='top') Url:
-                    td
-                        if (post.__type === 'Url')
+                if (post.__type === 'Url')
+                    tr
+                        td(valign='top') Url:
+                        td
                             input(type="url" name="text" value=post.url required size="60")
                 if (post.__type === 'Ask')
                     tr
