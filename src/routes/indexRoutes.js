@@ -235,7 +235,13 @@ export const routes = [
         getAction: function (req, res, result) {
             postController.getAllPosts(function (posts) {
                 result({
-                    posts: posts.filter(post => post.__type === "Url")
+                    posts: posts.filter(post => post.__type === "Url").sort(function compare(a, b) {
+                        if (a.totalLikes < b.totalLikes)
+                            return 1;
+                        else if (a.totalLikes > b.totalLikes)
+                            return -1;
+                        return 0;
+                    })
                 });
             });
         }
