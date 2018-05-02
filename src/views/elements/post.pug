@@ -29,7 +29,10 @@ mixin post(post, back)
             span(id="score_" + post._id).score &nbsp#{post.totalLikes} points
             |  by&nbsp
             a.hnuser(href="user?id=" + post.owner.username)
-                font(color="#3c963c") #[strong #{post.owner.username}]
+                if (post.owner.isAdmin)
+                    font(color="#4A148C") #[strong #{post.owner.username}]
+                else
+                    font(color="#3c963c") #[strong #{post.owner.username}]
             span.age
                 | &nbsp
                 a(href="item?id=" + post._id) #{post.timeSince}
@@ -39,7 +42,7 @@ mixin post(post, back)
             if (username !== undefined)
                 | &nbsp|&nbsp
                 a(href="fave?id=" + post._id + "&back=" + back) favorite
-            if (username === post.owner.username)
+            if (username === post.owner.username || isAdmin)
                 |  |&nbsp
                 a(href="edit?type=post&id=" + post._id + "&back=" + back) edit
                 |  |&nbsp

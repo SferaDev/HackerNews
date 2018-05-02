@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import hat from "hat";
 import {timeSince} from "../utils/timeUtils";
+import * as appConfig from "../../config.json";
 
 const baseOptions = {
     timestamps: true
@@ -41,6 +42,10 @@ const userSchema = new mongoose.Schema({
 
 userSchema.virtual('timeSince').get(function () {
     return timeSince(this.createdAt);
+});
+
+userSchema.virtual('isAdmin').get(function () {
+    return appConfig.admins.some(e => e.username === this.username);
 });
 
 // Before save, hash the stored password to database

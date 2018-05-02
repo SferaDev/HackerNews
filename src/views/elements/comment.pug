@@ -8,7 +8,10 @@ mixin comment(element, back)
                         div(style="margin-top:2px; margin-bottom:-10px;")
                             span.comhead
                                 a.hnuser(href="user?id=" + element.owner.username)
-                                    font(color="#3c963c") #[strong #{element.owner.username}]
+                                    if (element.owner.isAdmin)
+                                        font(color="#4A148C") #[strong #{element.owner.username}]
+                                    else
+                                        font(color="#3c963c") #[strong #{element.owner.username}]
                                 | &nbsp
                                 span.age
                                     a(href="item?id=" + element.post) #{element.timeSince}

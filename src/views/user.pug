@@ -8,7 +8,10 @@ block content
                     td(valign="top") User:
                     td
                         a.hnuser(href="user?id=" + user.username)
-                            font(color="#3c963c") #[strong #{user.username}]
+                            if (user.isAdmin)
+                                font(color="#4A148C") #[strong #{user.username}] (Admin)
+                            else
+                                font(color="#3c963c") #[strong #{user.username}]
                 tr
                     td(valign="top") Created:
                     td
@@ -18,7 +21,7 @@ block content
                     td(valign="top") Karma:
                     td
                         | #{user.karma}
-                if (isOwnProfile)
+                if (isOwnProfile || isAdmin)
                     tr
                         td(valign="top") Email:
                         td

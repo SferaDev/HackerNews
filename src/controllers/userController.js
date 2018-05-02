@@ -31,7 +31,7 @@ export function loginUser(username, password, next) {
             console.error(err);
             next(null);
         } else if (user.comparePassword(password)) {
-            next(user._id);
+            next(user);
         }
     })
 }

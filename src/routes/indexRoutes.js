@@ -51,9 +51,17 @@ export const routes = [
             };
             if (req.query.id !== undefined && req.query.id !== '') {
                 if (req.query.type === 'comment') {
-                    commentController.deleteComment(req.session.userId, req.query.id, callback);
+                    commentController.getCommentById(req.query.id, function (comment) {
+                        if (comment.owner.username === req.session.username || req.session.isAdmin) {
+                            commentController.deleteComment(req.query.id, callback);
+                        } else callback();
+                    });
                 } else if (req.query.type === 'post') {
-                    postController.deletePost(req.session.userId, req.query.id, callback);
+                    postController.getPostById(req.query.id, function (post) {
+                        if (post.owner.username === req.session.username || req.session.isAdmin) {
+                            postController.deletePost(req.query.id, callback);
+                        } else callback();
+                    });
                 } else callback();
             } else callback();
         }
@@ -91,16 +99,16 @@ export const routes = [
             };
             if (req.body.comment === undefined) {
                 postController.getPostById(req.body.id, function (post) {
-                    if (post.owner.username === req.session.username) {
+                    if (post.owner.username === req.session.username || req.session.isAdmin) {
                         postController.updatePost(req.body.id, req.body.title, req.body.text, callback);
                     } else callback();
                 });
             } else {
                 commentController.getCommentById(req.body.commentId, function (comment) {
-                    if (comment.owner.username === req.session.username) {
+                    if (comment.owner.username === req.session.username || req.session.isAdmin) {
                         commentController.updateComment(req.body.commentId, req.body.comment, callback)
                     } else callback();
-                })
+                });
             }
         }
     },
@@ -163,12 +171,13 @@ export const routes = [
         postAction: function (req, res) {
             if (!process.env.GITHUB_CLIENT_ID) {
                 if (req.body.username !== '' && req.body.password !== '') {
-                    userController.loginUser(req.body.username, req.body.password, function (userId) {
-                        if (userId === null) {
+                    userController.loginUser(req.body.username, req.body.password, function (user) {
+                        if (user === null) {
                             // TODO: User already exist
                         } else {
-                            req.session.userId = userId;
-                            req.session.username = req.body.username;
+                            req.session.userId = user._id;
+                            req.session.username = user.username;
+                            req.session.isAdmin = user.isAdmin;
                         }
                         res.redirect('/');
                     });

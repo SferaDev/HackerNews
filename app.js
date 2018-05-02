@@ -65,6 +65,7 @@ if (process.env.GITHUB_CLIENT_ID) {
         function(req, res) {
             req.session.userId = req.session.passport.user._id;
             req.session.username = req.session.passport.user.username;
+            req.session.isAdmin = req.session.passport.user.isAdmin;
             res.redirect(req.session.returnTo !== undefined ? req.session.returnTo : '/');
         });
 

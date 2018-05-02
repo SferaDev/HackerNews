@@ -13,6 +13,7 @@ routes.forEach(function (doc) {
                 let mainAttributes = {
                     subtitle: doc.title === "Profile: " ? doc.title + req.query.id : doc.title,
                     username: user === null ? undefined : user.username,
+                    isAdmin: user === null ? false : user.isAdmin,
                     karma: user === null ? undefined : user.karma,
                     url: req.originalUrl
                 };
