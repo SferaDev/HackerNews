@@ -49,11 +49,15 @@ const urlSchema = new mongoose.Schema({
     url: {
         type: String,
         required: true
+    },
+    tld: {
+        type: String
     }
 });
 
-urlSchema.virtual('tld').get(function () {
-    return extractRootDomain(this.url);
+urlSchema.pre('save', function (next) {
+    this.tld = extractRootDomain(this.url);
+    next();
 });
 
 const askSchema = new mongoose.Schema({
