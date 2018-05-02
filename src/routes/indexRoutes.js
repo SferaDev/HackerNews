@@ -58,7 +58,8 @@ export const routes = [
                 postController.getPostById(req.query.id, function (post) {
                     result({
                         post: post,
-                        comment: null
+                        comment: null,
+                        backUrl: req.query.back
                     });
                 });
             } else if (req.query.type === 'comment') {
@@ -66,7 +67,8 @@ export const routes = [
                     postController.getPostById(comment.post, function (post) {
                         result({
                             post: post,
-                            comment: comment
+                            comment: comment,
+                            backUrl: req.query.back
                         });
                     })
                 })
@@ -74,7 +76,8 @@ export const routes = [
         },
         postAction: function (req, res) {
             let callback = function () {
-                if (req.body.commentId === undefined) res.redirect('/item?id=' + req.body.id);
+                if (req.body.backUrl !== undefined) res.redirect(req.body.backUrl);
+                else if (req.body.commentId === undefined) res.redirect('/item?id=' + req.body.id);
                 else res.redirect('/item?id=' + req.body.id + '#' + req.body.commentId);
             };
             if (req.body.comment === undefined) {

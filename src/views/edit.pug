@@ -2,42 +2,44 @@ extends base
 include elements/post
 
 block content
-    table.itemlist(border="0" cellpadding="0" cellspacing="0")
-        + post(post, '/edit?type=' + (comment !== null ? 'comment' : 'post') + "&id=" + (comment !== null ? comment._id : post._id))
-        tr.spacer(style="height:12px")
-    form.itemform(method='post' action='/edit')
-        input(type='hidden' name='id' value='' + post._id)
-        if (comment !== null)
-            input(type='hidden' name='commentId' value='' + comment._id)
-        table(border='0')
-            if (comment === null)
-                tr
-                    td(valign='top') Title:
-                    td
-                        input(type='text' name='title' value=post.title required autofocus size='60' maxLength='80')
-                        span(style='margin-left:10px')
-                if (post.__type === 'Url')
+    if (post !== null)
+        table.itemlist(border="0" cellpadding="0" cellspacing="0")
+            + post(post, (backUrl !== undefined ? backUrl : '/'))
+            tr.spacer(style="height:12px")
+        form.itemform(method='post' action='/edit')
+            input(type='hidden' name='id' value='' + post._id)
+            input(type='hidden' name='backUrl' value=backUrl)
+            if (comment !== null)
+                input(type='hidden' name='commentId' value='' + comment._id)
+            table(border='0')
+                if (comment === null)
                     tr
-                        td(valign='top') Url:
+                        td(valign='top') Title:
                         td
-                            input(type="url" name="text" value=post.url required size="60")
-                if (post.__type === 'Ask')
+                            input(type='text' name='title' value=post.title required autofocus size='60' maxLength='80')
+                            span(style='margin-left:10px')
+                    if (post.__type === 'Url')
+                        tr
+                            td(valign='top') Url:
+                            td
+                                input(type="url" name="text" value=post.url required size="60")
+                    if (post.__type === 'Ask')
+                        tr
+                            td(valign='top') Text:
+                            td
+                                textarea(cols='60' rows='5' wrap='virtual' name='text' required)
+                                    | #{post.text}
+                                font(size='-2')
+                                    a(href='formatdoc' tabindex='-1')
+                                        font(color='#afafaf') help
+                else
                     tr
                         td(valign='top') Text:
                         td
-                            textarea(cols='60' rows='5' wrap='virtual' name='text' required)
-                                | #{post.text}
+                            textarea(cols='60' rows='5' wrap='virtual' name='comment' required autofocus)
+                                | #{comment.comment}
                             font(size='-2')
                                 a(href='formatdoc' tabindex='-1')
                                     font(color='#afafaf') help
-            else
-                tr
-                    td(valign='top') Text:
-                    td
-                        textarea(cols='60' rows='5' wrap='virtual' name='comment' required autofocus)
-                            | #{comment.comment}
-                        font(size='-2')
-                            a(href='formatdoc' tabindex='-1')
-                                font(color='#afafaf') help
-        br
-        input(type='submit' value='Update')
+            br
+            input(type='submit' value='Update')
