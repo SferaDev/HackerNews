@@ -37,7 +37,7 @@ html
                                         if (username !== undefined)
                                             a#me(href="user?id=" + username) #{username}
                                             |                 (#{karma}) |&nbsp
-                                            a#logout(href="logout") Logout
+                                            a#logout(href="logout?back=" + url) Logout
                                         else if process.env.GITHUB_CLIENT_ID
                                             a#login(href="auth") Login
                                         else

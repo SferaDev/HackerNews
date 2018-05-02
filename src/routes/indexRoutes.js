@@ -181,7 +181,7 @@ export const routes = [
         getAction: function (req, res, result) {
             req.session.destroy(function (err) {
                 if (err) console.error(err);
-                res.redirect('/');
+                res.redirect(req.query.back !== undefined ? req.query.back : '/');
                 result();
             });
         }
