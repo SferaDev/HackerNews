@@ -28,6 +28,10 @@ const commentSchema = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
+    },
+    totalLikes: {
+        type: Number,
+        default: 0
     }
 }, baseOptions);
 

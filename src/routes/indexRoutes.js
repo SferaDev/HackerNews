@@ -376,11 +376,17 @@ export const routes = [
                 result();
             };
             if (req.query.id !== undefined && req.query.id !== '') {
-                if (req.query.how === 'up')
-                    likeController.likePost(req.session.userId, req.query.id, callback);
-                else if (req.query.how === 'down')
-                    likeController.dislikePost(req.session.userId, req.query.id, callback);
-                else callback();
+                if (req.query.how === 'up') {
+                    if (req.query.type === 'post')
+                        likeController.likePost(req.session.userId, req.query.id, callback);
+                    else if (req.query.type === 'comment')
+                        likeController.likeComment(req.session.userId, req.query.id, callback);
+                } else if (req.query.how === 'down') {
+                    if (req.query.type === 'post')
+                        likeController.dislikePost(req.session.userId, req.query.id, callback);
+                    else if (req.query.type === 'comment')
+                        likeController.dislikeComment(req.session.userId, req.query.id, callback);
+                    } else callback();
             } else callback();
         }
     },

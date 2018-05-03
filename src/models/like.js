@@ -1,8 +1,11 @@
 import {postModel} from "./post";
+import {commentModel} from "./comment";
 
 const mongoose = require('mongoose');
 
 const baseOptions = {
+    discriminatorKey: '__type',
+    collection: 'likes',
     timestamps: true
 };
 
@@ -10,28 +13,31 @@ const likeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
+    }
+}, baseOptions);
+
+const postLikeSchema = new mongoose.Schema({
     post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }
-}, baseOptions);
+});
 
-likeSchema.pre('save', function (next) {
+postLikeSchema.pre('save', function (next) {
     this.wasNew = this.isNew;
     next();
 });
 
-likeSchema.post('save', function (doc) {
+postLikeSchema.post('save', function (doc) {
     if (!this.wasNew) return;
-    incrementLikeAndKarma(doc, 1);
+    incrementPostLikeAndKarma(doc, 1);
 });
 
-likeSchema.post('remove', function (doc) {
-    incrementLikeAndKarma(doc, -1);
+postLikeSchema.post('remove', function (doc) {
+    incrementPostLikeAndKarma(doc, -1);
 });
 
-function incrementLikeAndKarma(doc, incr) {
+function incrementPostLikeAndKarma(doc, incr) {
     postModel.findOne({
         _id: doc.post
     }).exec(function (err, post) {
@@ -43,4 +49,37 @@ function incrementLikeAndKarma(doc, incr) {
     });
 }
 
+const commentLikeSchema = new mongoose.Schema({
+    comment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }
+});
+
+commentLikeSchema.pre('save', function (next) {
+    this.wasNew = this.isNew;
+    next();
+});
+
+commentLikeSchema.post('save', function (doc) {
+    if (!this.wasNew) return;
+    incrementCommentLike(doc, 1);
+});
+
+commentLikeSchema.post('remove', function (doc) {
+    incrementCommentLike(doc, -1);
+});
+
+function incrementCommentLike(doc, incr) {
+    commentModel.findOne({
+        _id: doc.comment
+    }).exec(function (err, comment) {
+        if (err || comment === null) return console.error(err);
+        comment.totalLikes += incr;
+        comment.save();
+    });
+}
+
 export const likeModel = mongoose.model('Like', likeSchema);
+export const postLikeModel = likeModel.discriminator('PostLike', postLikeSchema);
+export const commentLikeModel = likeModel.discriminator('CommentLike', commentLikeSchema);

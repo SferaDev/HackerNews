@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const baseOptions = {
     discriminatorKey: '__type',
-    collection: 'data',
+    collection: 'posts',
     timestamps: true
 };
 

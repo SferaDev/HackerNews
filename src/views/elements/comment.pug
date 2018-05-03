@@ -12,15 +12,18 @@ mixin comment(element, back)
                                         font(color="#4A148C") #[strong #{element.owner.username}]
                                     else
                                         font(color="#3c963c") #[strong #{element.owner.username}]
-                                | &nbsp
+                                | &nbsp(#{element.totalLikes} points)&nbsp
                                 span.age
                                     a(href="item?id=" + element.post) #{element.timeSince}
                                 span#unv_16847762
                                 span.par
                                 if (username !== undefined)
                                     |  |&nbsp
-                                    span.reply
-                                        a(href='reply?id=' + element._id + '&goto=' + post._id) reply
+                                    a(href='reply?id=' + element._id + '&goto=' + post._id) reply
+                                    |  |&nbsp
+                                    a(href="vote?id=" + element._id + "&back=" + back + "&how=up&type=comment") upvote
+                                    |  |&nbsp
+                                    a(href="vote?id=" + element._id + "&back=" + back + "&how=down&type=comment") downvote
                                 if (!element.deleted && username === element.owner.username)
                                     |  |&nbsp
                                     a(href="edit?type=comment&id=" + element._id + "&back=" + back) edit

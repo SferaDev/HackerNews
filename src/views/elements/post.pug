@@ -7,7 +7,7 @@ mixin post(post, back)
                 span.rank
         td.votelinks(valign="top")
             center
-                a(id="up_" + post._id href="vote?id=" + post._id + "&back=" + back + "&how=up")
+                a(id="up_" + post._id href="vote?id=" + post._id + "&back=" + back + "&how=up&type=post")
                     .arrow-up(title="upvote")
         td.title
             if post.__type === 'Url'
@@ -23,7 +23,7 @@ mixin post(post, back)
     tr
         td.votelinks(valign="top")
             center
-                a(id="down_" + post._id href="vote?id=" + post._id + "&back=" + back + "&how=down")
+                a(id="down_" + post._id href="vote?id=" + post._id + "&back=" + back + "&how=down&type=post")
                     .arrow-down(title="downvote")
         td.subtext
             span(id="score_" + post._id).score &nbsp#{post.totalLikes} points
