@@ -48,7 +48,8 @@ postSchema.pre('find', autoPopulate);
 const urlSchema = new mongoose.Schema({
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     tld: {
         type: String

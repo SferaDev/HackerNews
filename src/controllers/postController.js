@@ -4,13 +4,19 @@ import {commentModel} from "../models/comment";
 
 export function insertUrlPost(userId, title, url, done) {
     if (userId === undefined) return done();
-    new urlModel({
-        title: title,
-        url: url,
-        owner: userId
-    }).save(function (err, element) {
+    urlModel.findOne({ url: url }, function (err, post) {
+        console.log(post);
         if (err) console.error(err);
-        done(element);
+        else if (post === null) {
+            new urlModel({
+                title: title,
+                url: url,
+                owner: userId
+            }).save(function (err, element) {
+                if (err) console.error(err);
+                else done();
+            });
+        } else done(post);
     });
 }
 

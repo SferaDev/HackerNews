@@ -300,8 +300,9 @@ export const routes = [
             if (req.body.title === '')
                 res.redirect('/submit?invalid=2');
             else if (req.body.url !== '' && req.body.text === '') {
-                postController.insertUrlPost(req.session.userId, req.body.title, req.body.url, function () {
-                    res.redirect('/newest');
+                postController.insertUrlPost(req.session.userId, req.body.title, req.body.url, function (post) {
+                    if (post !== undefined) res.redirect('/item?id=' + post._id);
+                    else res.redirect('/newest');
                 });
             } else if (req.body.url === '') {
                 postController.insertAskPost(req.session.userId, req.body.title, req.body.text, function () {
