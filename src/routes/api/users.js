@@ -34,7 +34,7 @@ usersApiRouter.post('/', function (req, res) {
             }
         }
     }
-    userModel.count({nif: req.body[nif]}, function (err, count) {
+    userModel.count({nif: req.body.nif}, function (err, count) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         if (count > 0) return messageCallback(res, httpCodes.STATUS_CONFLICT, 'User already exists');
         userModel.create(attributes, function (err, user) {
