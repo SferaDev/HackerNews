@@ -16,21 +16,21 @@ apiRouter.use(function (req, res, next) {
     let key = req.query.key || req.headers['key'];
     if (key) {
         userModel.findOne({apiKey: key}, function (err, user) {
-            if (err) return errorCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
-            else if (user == null) return errorCallback(res, httpCodes.STATUS_UNAUTHORIZED, 'Please provide a valid API key');
+            if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+            else if (user == null) return messageCallback(res, httpCodes.STATUS_UNAUTHORIZED, 'Please provide a valid API key');
             req.user = user;
             next();
         });
-    } else return errorCallback(res, httpCodes.STATUS_UNAUTHORIZED, 'Please provide a valid API key');
+    } else return messageCallback(res, httpCodes.STATUS_UNAUTHORIZED, 'Please provide a valid API key');
 });
 
 // API Users endpoint
 apiRouter.use('/users', usersApiRouter);
 
 // Error Callback function
-export const errorCallback = function (res, code, message) {
+export const messageCallback = function (res, code, message) {
     res.status(code).send({
-        success: false,
+        success: code === httpCodes.STATUS_OK || code === httpCodes.STATUS_CREATED,
         message: message
     });
 };

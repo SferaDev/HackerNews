@@ -2,7 +2,7 @@ import express from "express";
 
 import * as httpCodes from "../../utils/httpCodes";
 import {userModel} from '../../models/user';
-import {errorCallback} from "../api";
+import {messageCallback} from "../api";
 
 export const usersApiRouter = express.Router();
 
@@ -17,14 +17,31 @@ usersApiRouter.get('/', function (req, res) {
         email: 1,
         createdAt: 1
     }, function (err, users) {
-        if (err) return errorCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         res.status(httpCodes.STATUS_OK).send(users);
     });
 });
 
 // POST /api/users
 usersApiRouter.post('/', function (req, res) {
-    // TODO: Create new user (if it already exists error out httpCodes.CONFLICT)
+    let attributes = {};
+    for (let key in userModel.schema.paths) {
+        if (userModel.schema.paths.hasOwnProperty(key)) {
+            let value = userModel.schema.paths[key];
+            if (value.isRequired) {
+                if (req.body[key]) attributes[key] = req.body[key];
+                else return res.status(httpCodes.STATUS_BAD_REQUEST).send({message: "Missing parameter " + key});
+            }
+        }
+    }
+    userModel.count({nif: req.body[nif]}, function (err, count) {
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (count > 0) return messageCallback(res, httpCodes.STATUS_CONFLICT, 'User already exists');
+        userModel.create(attributes, function (err, user) {
+            if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+            return messageCallback(res, httpCodes.STATUS_CREATED, 'User created');
+        })
+    })
 });
 
 // GET /api/users/:username
@@ -38,7 +55,7 @@ usersApiRouter.get('/:username', function (req, res) {
         email: 1,
         createdAt: 1
     }, function (err, user) {
-        if (err) return errorCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         else res.status(httpCodes.STATUS_OK).send(user);
     });
 });
@@ -51,7 +68,7 @@ usersApiRouter.put('/:username', function (req, res) {
 // DELETE /api/users/:username
 usersApiRouter.delete('/:username', function (req, res) {
     if (req.user.isAdmin) userModel.delete({username: req.params.username},
-        err => errorCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error'));
+        err => messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error'));
     else if (req.user.username === req.params.username) req.user.delete();
-    else return errorCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
+    else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
 });
