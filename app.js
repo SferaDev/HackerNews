@@ -82,7 +82,6 @@ if (process.env.GITHUB_CLIENT_ID) {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
-app.use('/docs', express.static('apidoc'));
 
 // Detect errors and forward to 404
 app.use(function (req, res, next) {

@@ -9,12 +9,12 @@ const baseOptions = {
 };
 
 const userSchema = new mongoose.Schema({
-    githubId: {
+    username: {
         type: String,
         unique: true,
         required: true
     },
-    username: {
+    githubId: {
         type: String,
         unique: true,
         required: true

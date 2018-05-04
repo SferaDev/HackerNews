@@ -1,0 +1,121 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "News4Hackers"
+host: "news4hackers.herokuapp.com"
+basePath: "/api"
+tags:
+- name: "user"
+  description: "Operations about user"
+schemes:
+- "http"
+paths:
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "List all users"
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "Successful operation"
+  /users/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "User name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The user name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+securityDefinitions:
+  headerApiKey:
+    type: "apiKey"
+    name: "key"
+    in: "header"
+  queryApiKey:
+    type: "apiKey"
+    name: "key"
+    in: "query"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      githubId:
+        type: "string"
+      email:
+        type: "string"
+      karma:
+        type: "integer"
+      about:
+        type: "string"
+    xml:
+      name: "User"
