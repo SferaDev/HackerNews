@@ -15,7 +15,7 @@ apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(yaml.load('./api/api.yam
 apiRouter.use(function (req, res, next) {
     let key = req.query.key || req.headers['key'];
     if (key) {
-        userModel.find({apikey: key}, function (err, user) {
+        userModel.findOne({apiKey: key}, function (err, user) {
             if (err) return errorCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
             else if (user == null) return errorCallback(res, httpCodes.STATUS_UNAUTHORIZED, 'Please provide a valid API key');
             req.user = user;
