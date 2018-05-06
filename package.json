@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon --use-strict ./bin/www --exec babel-node",
     "test": "",
-    "postinstall": "gulp apidoc"
+    "postinstall": ""
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
