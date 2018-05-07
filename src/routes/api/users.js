@@ -2,6 +2,7 @@ import express from "express";
 
 import * as httpCodes from "../../utils/httpCodes";
 import {userModel} from '../../models/user';
+import * as userController from "../../controllers/userController";
 import {messageCallback} from "../api";
 
 export const usersApiRouter = express.Router();
@@ -62,7 +63,18 @@ usersApiRouter.get('/:username', function (req, res) {
 
 // PUT /api/users/:username
 usersApiRouter.put('/:username', function (req, res) {
-    // TODO: Update user (admins can update any user, user can only update own user)
+    if (req.user.isAdmin) {
+        userController.updateUser(req.params.username, req.body.about, function (err, user) {
+            if(err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+            return messageCallback(res, httpCodes.STATUS_OK, 'Ok')
+        });
+    }
+    else if (req.user.username === req.params.username) {
+        userController.updateUser(req.user._id, req.body.about, function (err, user) {
+            if(err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+            return messageCallback(res, httpCodes.STATUS_OK, 'Ok')
+        });
+    }
 });
 
 // DELETE /api/users/:username
