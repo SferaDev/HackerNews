@@ -79,8 +79,18 @@ usersApiRouter.put('/:username', function (req, res) {
 
 // DELETE /api/users/:username
 usersApiRouter.delete('/:username', function (req, res) {
-    if (req.user.isAdmin) userModel.delete({username: req.params.username},
-        err => messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error'));
-    else if (req.user.username === req.params.username) req.user.delete();
+
+    if (req.user.isAdmin) {
+        userController.deleteUser(req.params.username, function (err, user) {
+            if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+            return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+        })
+    }
+    else if (req.user.username === req.params.username) {
+       userController.deleteUser(req.params.username, function (err, user) {
+           if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+           return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+       })
+    }
     else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
 });

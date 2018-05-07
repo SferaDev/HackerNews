@@ -70,3 +70,11 @@ export function updateUser(userid, about, next) {
         next(null);
     });
 }
+
+export function deleteUser(usern, next) {
+    userModel.remove({username: usern}, function (err, res) {
+        if (err) console.error(err);
+        next(null);
+    })
+
+}
