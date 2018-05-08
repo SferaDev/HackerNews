@@ -62,18 +62,18 @@ if (process.env.GITHUB_CLIENT_ID) {
 
     app.get('/auth/callback',
         passport.authenticate('github', { failureRedirect: '/' }),
-        function(req, res) {
+        function (req, res) {
             req.session.userId = req.session.passport.user._id;
             req.session.username = req.session.passport.user.username;
             req.session.isAdmin = req.session.passport.user.isAdmin;
             res.redirect(req.session.returnTo !== undefined ? req.session.returnTo : '/');
         });
 
-    passport.serializeUser(function(user, done) {
+    passport.serializeUser(function (user, done) {
         done(null, user);
     });
 
-    passport.deserializeUser(function(user, done) {
+    passport.deserializeUser(function (user, done) {
         done(null, user);
     });
 }
@@ -84,12 +84,12 @@ app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
 // Middleware to return Not found error
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
     next(createError(404));
 });
 
 // Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
