@@ -1,8 +1,8 @@
 import express from "express";
 
 import * as httpCodes from "../../utils/httpCodes";
-import {userModel} from '../../models/user';
 import * as userController from "../../controllers/userController";
+import {userModel} from '../../models/user';
 import {messageCallback} from "../api";
 
 export const usersApiRouter = express.Router();
@@ -73,12 +73,12 @@ usersApiRouter.put('/:username', function (req, res) {
 
 // DELETE /api/users/:username
 usersApiRouter.delete('/:username', function (req, res) {
-
     if (req.user.isAdmin || req.user.username === req.params.username) {
-       userController.deleteUser(req.params.username, function (err, user) {
-           if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
-           return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
-       })
-    }
-    else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
+        userController.getUserByUsername(req.params.username, function(err, user) {
+            userController.deleteUser(user.username, function (err) {
+                if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+                return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+            });
+        });
+    } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
 });
