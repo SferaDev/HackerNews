@@ -52,7 +52,7 @@ apiRouter.use('/users', usersApiRouter);
 apiRouter.use(function (req, res, next) {
     messageCallback(res, 404, 'Route not found');
     next();
-}
+});
 
 // Error Callback function
 export const messageCallback = function (res, code, message) {
