@@ -67,13 +67,13 @@ export function updateUser(userid, about, next) {
     if (about !== '') fields.about = about;
     userModel.update({_id: userid}, fields, function (err, res) {
         if (err) console.error(err);
-        next(null);
+        next();
     });
 }
 
 export function deleteUser(userid, next) {
     userModel.remove({_id: userid}, function (err, res) {
         if (err) console.error(err);
-        next(null);
+        next();
     });
 }
