@@ -71,10 +71,9 @@ export function updateUser(userid, about, next) {
     });
 }
 
-export function deleteUser(usern, next) {
-    userModel.remove({username: usern}, function (err, res) {
+export function deleteUser(userid, next) {
+    userModel.remove({_id: userid}, function (err, res) {
         if (err) console.error(err);
         next(null);
-    })
-
+    });
 }
