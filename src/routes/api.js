@@ -9,7 +9,7 @@ import * as httpCodes from '../utils/httpCodes';
 export const apiRouter = express.Router();
 
 // Middleware that serves swagger-ui to /api/docs
-apiRouter.use('/', swaggerUi.serve, swaggerUi.setup(yaml.load('./api/api.yaml')));
+apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(yaml.load('./api/api.yaml')));
 
 // Middleware to verify user API key
 apiRouter.use(function (req, res, next) {
@@ -45,10 +45,15 @@ apiRouter.use(function (req, res, next) {
     next();
 });
 
+// Root route to validate token
+apiRouter.get('/', function (req, res) {
+    messageCallback(res, 200, 'Welcome to the News4Hackers API!');
+});
+
 // API Users endpoint
 apiRouter.use('/users', usersApiRouter);
 
-// Middleware to return Not found error
+// Default route to return Not found error
 apiRouter.get('*', function (req, res) {
     messageCallback(res, 404, 'Route not found');
 });
