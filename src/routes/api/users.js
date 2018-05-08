@@ -64,18 +64,20 @@ usersApiRouter.get('/:username', function (req, res) {
 // PUT /api/users/:username
 usersApiRouter.put('/:username', function (req, res) {
     if (req.user.isAdmin || req.user.username === req.params.username) {
-        userController.updateUser(req.user._id, req.body.about, function (err, user) {
-            if(err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
-            return messageCallback(res, httpCodes.STATUS_OK, 'Ok')
+        userController.getUserByUsername(req.params.username, function(err, user) {
+            userController.updateUser(user._id, function (err) {
+                if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+                return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+            });
         });
-    } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
+    } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only edit your own user');
 });
 
 // DELETE /api/users/:username
 usersApiRouter.delete('/:username', function (req, res) {
     if (req.user.isAdmin || req.user.username === req.params.username) {
         userController.getUserByUsername(req.params.username, function(err, user) {
-            userController.deleteUser(user.username, function (err) {
+            userController.deleteUser(user._id, function (err) {
                 if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
                 return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
             });
