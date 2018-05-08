@@ -1,40 +1,43 @@
 openapi: 3.0.0
 info:
-  description: "API Documentation of the webapp News4Hackers"
-  version: "1.0.0"
-  title: "News4Hackers"
+  description: API Documentation of the webapp News4Hackers
+  version: 1.0.0
+  title: News4Hackers
 servers:
-  - url: "https://news4hackers.herokuapp.com/api"
+  - url: 'https://news4hackers.herokuapp.com/api'
 tags:
-- name: "user"
-  description: "Operations about user"
-- name: "post"
-  description: "Operations about posts"
-
+  - name: users
+    description: Operations with users
+  - name: posts
+    description: Operations with posts
 paths:
   /users:
     get:
       tags:
-      - "user"
-      summary: "List all users"
+        - users
+      summary: List all users
       parameters:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
       responses:
-          '200':
-            description: "A JSON file with the list of existing users that exist in the database"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    anyOf:
-                      - $ref: '#/components/schemas/User'
+        '200':
+          description: >-
+            A JSON file with the list of existing users that exist in the
+            database
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
-      - "user"
-      summary: "Create user"
+        - users
+      summary: Create user
       requestBody:
         required: true
         content:
@@ -42,21 +45,22 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-          '200':
-            description: "The user has been created"
-          
-  /users/{username}:
+        '200':
+          description: The user has been created
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  '/users/{username}':
     get:
       tags:
-      - "user"
-      summary: "Get user by user name"
+        - users
+      summary: Get user by user name
       parameters:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
         - name: username
           in: path
-          description: "The name that needs to be fetched"
+          description: The name that needs to be fetched
           required: true
           schema:
             type: string
@@ -68,83 +72,87 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: "Invalid username supplied"
+          description: Invalid username supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: "User not found"
+          description: User not found
     put:
       tags:
-      - "user"
-      summary: "Updates the user identified by a username"
+        - users
+      summary: Updates the user identified by a username
       parameters:
         - name: username
           in: path
-          description: "The username that needs to be updated"
+          description: The username that needs to be updated
           required: true
           schema:
             type: string
       requestBody:
         required: true
-        description: "Updated user"
+        description: Updated user
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
-                
       responses:
         '200':
-          description: "Updated user"
+          description: Updated user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: "Invalid user supplied"
+          description: Invalid user supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: "User not found"
-          
+          description: User not found
     delete:
       tags:
-      - "user"
-      summary: "Deletes the user identified by a username"
+        - users
+      summary: Deletes the user identified by a username
       parameters:
-      - name: username
-        in: path
-        description: "The user name that needs to be deleted"
-        required: true
-        schema:
-          type: string
+        - name: username
+          in: path
+          description: The user name that needs to be deleted
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: "User has been deleted"
+          description: User has been deleted
         '400':
-          description: "Invalid username supplied"
+          description: Invalid username supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: "User not found"
+          description: User not found
   /posts:
-      get:
-        tags:
-        - "post"
-        summary: Returns all the existing posts in the system
-        parameters:
+    get:
+      tags:
+        - posts
+      summary: Returns all the existing posts in the system
+      parameters:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
-        responses:
-          '200':
-            description: List of existing posts that matched the criteria
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    anyOf:
-                      - $ref: '#/components/schemas/UrlPost'
-                      - $ref: '#/components/schemas/AskPost'
-      
+      responses:
+        '200':
+          description: List of existing posts that matched the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/UrlPost'
+                    - $ref: '#/components/schemas/AskPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 security:
   - HeaderAuth: []
   - QueryAuth: []
-
 components:
   securitySchemes:
     HeaderAuth:
@@ -155,7 +163,9 @@ components:
       type: apiKey
       in: query
       name: key
-      
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
   parameters:
     indentParam:
       name: indent
@@ -163,23 +173,20 @@ components:
       schema:
         type: integer
         minimum: 0
-        default: 4
+        default: 0
       description: Indentation of the JSON output
-      
     filterParam:
       name: filter
       in: query
       schema:
         type: string
-      description: Fields separated by commas to be returned by query
-      
+      description: Query field filters separated with commas
     sortParam:
       name: sort
       in: query
       schema:
         type: string
-      description: Field to sort the output with
-      
+      description: Field to sort the response
   schemas:
     User:
       type: object
@@ -194,29 +201,26 @@ components:
           type: string
         email:
           type: string
-  
     Post:
       type: object
       properties:
-        title: 
+        title:
           type: string
-        owner: 
+        owner:
           $ref: '#/components/schemas/User'
-          
     UrlPost:
       allOf:
         - $ref: '#/components/schemas/Post'
         - type: object
           properties:
-            url: 
+            url:
               type: string
-            tld: 
+            tld:
               type: string
-          
     AskPost:
       allOf:
         - $ref: '#/components/schemas/Post'
         - type: object
           properties:
-            text: 
+            text:
               type: string
