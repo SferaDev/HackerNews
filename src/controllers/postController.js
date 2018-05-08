@@ -4,7 +4,7 @@ import {commentModel} from "../models/comment";
 
 export function insertUrlPost(userId, title, url, done) {
     if (userId === undefined) return done();
-    urlModel.findOne({ url: url }, function (err, post) {
+    urlModel.findOne({url: url}, function (err, post) {
         console.log(post);
         if (err) console.error(err);
         else if (post === null) {

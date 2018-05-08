@@ -386,7 +386,7 @@ export const routes = [
                         likeController.dislikePost(req.session.userId, req.query.id, callback);
                     else if (req.query.type === 'comment')
                         likeController.dislikeComment(req.session.userId, req.query.id, callback);
-                    } else callback();
+                } else callback();
             } else callback();
         }
     },

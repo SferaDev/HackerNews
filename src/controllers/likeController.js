@@ -1,4 +1,4 @@
-import {commentLikeModel, likeModel, postLikeModel} from "../models/like";
+import {commentLikeModel, postLikeModel} from "../models/like";
 
 export function likePost(userId, postId, done) {
     if (userId === undefined) return done();
