@@ -62,18 +62,18 @@ if (process.env.GITHUB_CLIENT_ID) {
 
     app.get('/auth/callback',
         passport.authenticate('github', { failureRedirect: '/' }),
-        function(req, res) {
+        function (req, res) {
             req.session.userId = req.session.passport.user._id;
             req.session.username = req.session.passport.user.username;
             req.session.isAdmin = req.session.passport.user.isAdmin;
             res.redirect(req.session.returnTo !== undefined ? req.session.returnTo : '/');
         });
 
-    passport.serializeUser(function(user, done) {
+    passport.serializeUser(function (user, done) {
         done(null, user);
     });
 
-    passport.deserializeUser(function(user, done) {
+    passport.deserializeUser(function (user, done) {
         done(null, user);
     });
 }
@@ -83,7 +83,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
 
-// Detect errors and forward to 404
+// Middleware to return Not found error
 app.use(function (req, res, next) {
     next(createError(404));
 });
