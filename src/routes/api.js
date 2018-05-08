@@ -49,7 +49,7 @@ apiRouter.use(function (req, res, next) {
 apiRouter.use('/users', usersApiRouter);
 
 // Middleware to return Not found error
-apiRouter.get('*', function(req, res){
+apiRouter.get('*', function (req, res){
     messageCallback(res, 404, 'Route not found');
 });
 
