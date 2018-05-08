@@ -1,6 +1,7 @@
 import express from "express";
 
 import * as httpCodes from "../../utils/httpCodes";
+import * as userController from "../../controllers/userController";
 import {userModel} from '../../models/user';
 import {messageCallback} from "../api";
 
@@ -62,13 +63,24 @@ usersApiRouter.get('/:username', function (req, res) {
 
 // PUT /api/users/:username
 usersApiRouter.put('/:username', function (req, res) {
-    // TODO: Update user (admins can update any user, user can only update own user)
+    if (req.user.isAdmin || req.user.username === req.params.username) {
+        userController.getUserByUsername(req.params.username, function(err, user) {
+            userController.updateUser(user._id, function (err) {
+                if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+                return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+            });
+        });
+    } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only edit your own user');
 });
 
 // DELETE /api/users/:username
 usersApiRouter.delete('/:username', function (req, res) {
-    if (req.user.isAdmin) userModel.delete({username: req.params.username},
-        err => messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error'));
-    else if (req.user.username === req.params.username) req.user.delete();
-    else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
+    if (req.user.isAdmin || req.user.username === req.params.username) {
+        userController.getUserByUsername(req.params.username, function(err, user) {
+            userController.deleteUser(user._id, function (err) {
+                if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+                return messageCallback(res, httpCodes.STATUS_OK, 'Ok');
+            });
+        });
+    } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You can only delete your own user');
 });
