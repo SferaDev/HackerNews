@@ -48,6 +48,11 @@ apiRouter.use(function (req, res, next) {
 // API Users endpoint
 apiRouter.use('/users', usersApiRouter);
 
+// Root endpoint
+apiRouter.get('/', function (req, res) {
+    res.redirect('/docs')
+
+
 // Middleware to return Not found error
 apiRouter.get('*', function (req, res) {
     messageCallback(res, 404, 'Route not found');
