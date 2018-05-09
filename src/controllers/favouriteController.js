@@ -7,7 +7,21 @@ export function insertFavourite(userId, postId, done) {
         post: postId
     }, function (error, element) {
         if (error) console.error(error);
-        done(element);
+        done(null);
+    });
+}
+
+export function removeFavourite(userId, postId, done) {
+    if (userId === undefined) return done();
+    favouriteModel.findOne({
+        user: userId,
+        post: postId
+    }, function (err, doc) {
+        if (err) {
+            console.error(err);
+            return done(err);
+        } else if (doc !== null) doc.remove();
+        done(null);
     });
 }
 

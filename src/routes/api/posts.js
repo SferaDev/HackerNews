@@ -3,6 +3,8 @@ import express from "express";
 import {modelCreate, modelDelete, modelGetAll, modelGetOne, modelUpdate} from "./base";
 import {askModel, postModel, urlModel} from '../../models/post';
 import {messageCallback} from "../api";
+import * as likeController from "../../controllers/likeController";
+import * as favouriteController from "../../controllers/favouriteController";
 
 export const postsApiRouter = express.Router();
 
@@ -33,12 +35,34 @@ postsApiRouter.delete('/:element', function (req, res) {
     modelDelete(postModel, req, res);
 });
 
-// GET /api/posts/:element/likes
-postsApiRouter.get('/:element/likes', function (req, res) {
-    // TODO
+// POST /api/posts/:element/like
+postsApiRouter.post('/:element/like', function (req, res) {
+    likeController.likePost(req.user._id, req.params.element, function (err) {
+        if (err) return messageCallback(res, 400, err);
+        messageCallback(res, 200, 'Post like added')
+    });
 });
 
-// POST /api/posts/:element/likes
-postsApiRouter.post('/:element/likes', function (req, res) {
-    // TODO
+// DELETE /api/posts/:element/like
+postsApiRouter.delete('/:element/like', function (req, res) {
+    likeController.dislikePost(req.user._id, req.params.element, function (err) {
+        if (err) return messageCallback(res, 400, err);
+        messageCallback(res, 200, 'Post like removed')
+    });
+});
+
+// POST /api/posts/:element/favourite
+postsApiRouter.post('/:element/favourite', function (req, res) {
+    favouriteController.insertFavourite(req.user._id, req.params.element, function (err) {
+        if (err) return messageCallback(res, 400, err);
+        messageCallback(res, 200, 'Post added to favourites')
+    });
+});
+
+// DELETE /api/posts/:element/favourite
+postsApiRouter.delete('/:element/favourite', function (req, res) {
+    favouriteController.removeFavourite(req.user._id, req.params.element, function (err) {
+        if (err) return messageCallback(res, 400, err);
+        messageCallback(res, 200, 'Post removed from favourites')
+    });
 });

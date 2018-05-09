@@ -34,7 +34,7 @@ export const modelGetOne = function (model, req, res) {
     let findParameters = {};
     findParameters[model.identifier()] = req.params.element;
 
-    model.findOne(findParameters, propertyFinder(model, 'public'), function (err, element) {
+    model.find(findParameters, propertyFinder(model, 'public'), function (err, element) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         else res.status(httpCodes.STATUS_OK).send(element);
     });
