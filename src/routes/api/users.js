@@ -29,3 +29,13 @@ usersApiRouter.put('/:element', function (req, res) {
 usersApiRouter.delete('/:element', function (req, res) {
     modelDelete(userModel, req, res);
 });
+
+// GET /api/users/:element/favourites
+usersApiRouter.get('/:element/favourites', function (req, res) {
+    // TODO
+});
+
+// POST /api/users/:element/favourites
+usersApiRouter.post('/:element/favourites', function (req, res) {
+    // TODO
+});

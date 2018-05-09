@@ -32,3 +32,13 @@ postsApiRouter.put('/:element', function (req, res) {
 postsApiRouter.delete('/:element', function (req, res) {
     modelDelete(postModel, req, res);
 });
+
+// GET /api/posts/:element/likes
+postsApiRouter.get('/:element/likes', function (req, res) {
+    // TODO
+});
+
+// POST /api/posts/:element/likes
+postsApiRouter.post('/:element/likes', function (req, res) {
+    // TODO
+});
