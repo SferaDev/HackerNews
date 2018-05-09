@@ -65,3 +65,15 @@ export const messageCallback = function (res, code, message) {
         message: message
     });
 };
+
+// Schema Property Finder function
+export const propertyFinder(model, attribute) {
+    let attributes = [];
+    for (let key in model.schema.tree) {
+        if (model.schema.tree.hasOwnProperty(key)) {
+            let value = model.schema.tree[key];
+            if (value[attribute] === true) attributes.push(key);
+        }
+    }
+    return attributes;
+}
