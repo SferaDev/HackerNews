@@ -2,6 +2,8 @@ import express from "express";
 import yaml from 'yamljs';
 import swaggerUi from 'swagger-ui-express';
 
+import {commentsApiRouter} from "./api/comments";
+import {postsApiRouter} from "./api/posts";
 import {usersApiRouter} from "./api/users";
 import {userModel} from '../models/user';
 import * as httpCodes from '../utils/httpCodes';
@@ -51,10 +53,27 @@ apiRouter.get('/', function (req, res) {
 });
 
 // API Users endpoint
+apiRouter.use('/comments', commentsApiRouter);
+apiRouter.use('/posts', postsApiRouter);
 apiRouter.use('/users', usersApiRouter);
 
 // Default route to return Not found error
 apiRouter.get('*', function (req, res) {
+    messageCallback(res, 404, 'Route not found');
+});
+
+// Default route to return Not found error
+apiRouter.post('*', function (req, res) {
+    messageCallback(res, 404, 'Route not found');
+});
+
+// Default route to return Not found error
+apiRouter.put('*', function (req, res) {
+    messageCallback(res, 404, 'Route not found');
+});
+
+// Default route to return Not found error
+apiRouter.delete('*', function (req, res) {
     messageCallback(res, 404, 'Route not found');
 });
 

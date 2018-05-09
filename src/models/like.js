@@ -1,12 +1,20 @@
 import {postModel} from "./post";
 import {commentModel} from "./comment";
+import {propertyFinder} from "../utils/magicUtils";
 
 const mongoose = require('mongoose');
 
 const baseOptions = {
     discriminatorKey: '__type',
     collection: 'likes',
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: function (doc, ret) {
+            let publicProperties = propertyFinder(likeModel, 'public');
+            for (let key in ret)
+                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+        }
+    }
 };
 
 const likeSchema = new mongoose.Schema({
@@ -79,6 +87,16 @@ function incrementCommentLike(doc, incr) {
         comment.save();
     });
 }
+
+likeSchema.statics.identifier = () => '_id';
+
+likeSchema.methods.canEdit = function (userId) {
+    return this.owner.toString() === userId.toString();
+};
+
+likeSchema.methods.executeDelete = function () {
+    this.remove();
+};
 
 export const likeModel = mongoose.model('Like', likeSchema);
 export const postLikeModel = likeModel.discriminator('PostLike', postLikeSchema);

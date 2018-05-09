@@ -1,37 +1,52 @@
 import mongoose from "mongoose";
 import {postModel} from "./post";
 import {timeSince} from "../utils/timeUtils";
+import {propertyFinder} from "../utils/magicUtils";
 
 const baseOptions = {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: function (doc, ret) {
+            let publicProperties = propertyFinder(commentModel, 'public');
+            for (let key in ret)
+                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+        }
+    }
 };
 
 const commentSchema = new mongoose.Schema({
     comment: {
         type: String,
-        required: true
+        required: true,
+        editable: true,
+        public: true
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        public: true
     },
     post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
-        required: true
+        required: true,
+        public: true
     },
     parentComment: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
+        ref: 'Comment',
+        public: true
     },
     deleted: {
         type: Boolean,
-        default: false
+        default: false,
+        public: true
     },
     totalLikes: {
         type: Number,
-        default: 0
+        default: 0,
+        public: true
     }
 }, baseOptions);
 
@@ -77,5 +92,16 @@ function incrementComment(doc, incr) {
         post.save();
     });
 }
+
+commentSchema.statics.identifier = () => '_id';
+
+commentSchema.methods.canEdit = function (userId) {
+    return this.owner._id === userId;
+};
+
+commentSchema.methods.executeDelete = function () {
+    this.deleted = true;
+    this.save();
+};
 
 export const commentModel = mongoose.model('Comment', commentSchema);

@@ -3,36 +3,50 @@ import bcrypt from "bcryptjs";
 import hat from "hat";
 import {timeSince} from "../utils/timeUtils";
 import * as appConfig from "../../config.json";
+import {propertyFinder} from "../utils/magicUtils";
 
 const baseOptions = {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: function (doc, ret) {
+            let publicProperties = propertyFinder(userModel, 'public');
+            for (let key in ret)
+                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+        }
+    }
 };
 
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        public: true
     },
     githubId: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        public: true
     },
     password: {
         type: String
     },
     karma: {
         type: Number,
-        default: 1
+        default: 1,
+        public: true
     },
     about: {
         type: String,
-        default: ''
+        default: '',
+        editable: true,
+        public: true
     },
     email: {
         type: String,
-        default: ''
+        default: '',
+        public: true
     },
     apiKey: {
         type: String,
@@ -67,6 +81,17 @@ userSchema.statics.findOneOrCreate = function findOneOrCreate(condition, callbac
             return callback(err, result)
         })
     })
+};
+
+userSchema.statics.identifier = () => 'username';
+
+userSchema.methods.canEdit = function (userId) {
+    console.log(this._id === userId);
+    return this._id.toString() === userId.toString();
+};
+
+userSchema.methods.executeDelete = function () {
+    this.remove();
 };
 
 // Export User model as module

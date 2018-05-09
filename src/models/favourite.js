@@ -1,7 +1,15 @@
 import mongoose from "mongoose";
+import {propertyFinder} from "../utils/magicUtils";
 
 const baseOptions = {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: function (doc, ret) {
+            let publicProperties = propertyFinder(favouriteModel, 'public');
+            for (let key in ret)
+                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+        }
+    }
 };
 
 const favouriteSchema = new mongoose.Schema({
@@ -32,6 +40,16 @@ favouriteSchema.statics.findOneOrCreate = function findOneOrCreate(condition, ca
             return callback(err, result)
         })
     })
+};
+
+favouriteSchema.statics.identifier = () => '_id';
+
+favouriteSchema.methods.canEdit = function (userId) {
+    return this.user.toString() === userId.toString();
+};
+
+favouriteSchema.methods.executeDelete = function () {
+    this.remove();
 };
 
 export const favouriteModel = mongoose.model('Favourite', favouriteSchema);
