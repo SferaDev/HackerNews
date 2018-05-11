@@ -23,8 +23,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        public: true,
-        exportable: true
+        public: true
     },
     githubId: {
         type: String,
