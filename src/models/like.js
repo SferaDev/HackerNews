@@ -1,8 +1,9 @@
+import mongoose from "mongoose";
+import idValidator from "mongoose-id-validator";
+
 import {postModel} from "./post";
 import {commentModel} from "./comment";
 import {propertyFinder} from "../utils/magicUtils";
-
-const mongoose = require('mongoose');
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -97,6 +98,11 @@ likeSchema.methods.canEdit = function (userId) {
 likeSchema.methods.executeDelete = function () {
     this.remove();
 };
+
+// Apply ObjectId reference validation
+likeSchema.plugin(idValidator);
+postLikeSchema.plugin(idValidator);
+commentLikeSchema.plugin(idValidator);
 
 export const likeModel = mongoose.model('Like', likeSchema);
 export const postLikeModel = likeModel.discriminator('PostLike', postLikeSchema);

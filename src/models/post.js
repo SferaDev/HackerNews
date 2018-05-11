@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
+import idValidator from "mongoose-id-validator";
+
 import {extractRootDomain} from "../utils/urlUtils";
 import {timeSince} from "../utils/timeUtils";
 import {commentModel} from "./comment";
 import {propertyFinder} from "../utils/magicUtils";
-
-const mongoose = require('mongoose');
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -116,6 +117,9 @@ postSchema.methods.executeDelete = function () {
         if (err) console.error(err);
     });
 };
+
+// Apply ObjectId reference validation
+postSchema.plugin(idValidator);
 
 export const postModel = mongoose.model('Post', postSchema);
 export const urlModel = postModel.discriminator('Url', urlSchema);

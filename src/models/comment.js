@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import idValidator from "mongoose-id-validator";
+
 import {postModel} from "./post";
 import {timeSince} from "../utils/timeUtils";
 import {propertyFinder} from "../utils/magicUtils";
@@ -106,5 +108,8 @@ commentSchema.methods.executeDelete = function () {
     this.deleted = true;
     this.save();
 };
+
+// Apply ObjectId reference validation
+commentSchema.plugin(idValidator);
 
 export const commentModel = mongoose.model('Comment', commentSchema);

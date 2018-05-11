@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import hat from "hat";
+import idValidator from "mongoose-id-validator";
+
 import {timeSince} from "../utils/timeUtils";
 import * as appConfig from "../../config.json";
 import {propertyFinder} from "../utils/magicUtils";
@@ -83,6 +85,9 @@ userSchema.methods.canEdit = function (userId) {
 userSchema.methods.executeDelete = function () {
     this.remove();
 };
+
+// Apply ObjectId reference validation
+userSchema.plugin(idValidator);
 
 // Export User model as module
 export const userModel = mongoose.model('User', userSchema);
