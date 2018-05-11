@@ -20,7 +20,7 @@ export const modelCreate = function (model, req, res) {
         else return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Missing parameter ' + requiredProperties[i]);
     }
 
-    let editableProperties = propertyFinder(model, 'editable');
+    let editableProperties = [...new Set([...propertyFinder(model, 'editable'), ...propertyFinder(model, 'final')])];
     for (let i = 0; i < editableProperties.length; ++i) {
         if (req.body[editableProperties[i]]) attributes[editableProperties[i]] = req.body[editableProperties[i]];
     }
