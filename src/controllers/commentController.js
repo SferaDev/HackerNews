@@ -14,13 +14,12 @@ export function insertComment(userId, postId, text, parentComment, done) {
     });
 }
 
-export function deleteComment(userId, commentId, done) {
+export function deleteComment(commentId, done) {
     commentModel.findOne({_id: commentId}, function (err, comment) {
         if (err) return console.error(err);
-        if (comment.owner._id.toString() === userId.toString()) {
-            comment.deleted = true;
-            comment.save();
-        }
+        comment.deleted = true;
+        comment.comment = '';
+        comment.save();
         done();
     });
 }
@@ -61,7 +60,6 @@ export function getAllComments(done) {
 export function updateComment(commentId, text, done) {
     getCommentById(commentId, function (comment) {
         comment.comment = text;
-
         comment.save(function (err, updated) {
             if (err) console.error(err);
             else done();
