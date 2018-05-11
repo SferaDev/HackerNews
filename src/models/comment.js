@@ -106,6 +106,7 @@ commentSchema.methods.canEdit = function (userId) {
 
 commentSchema.methods.executeDelete = function () {
     this.deleted = true;
+    this.comment = '';
     this.save();
 };
 
