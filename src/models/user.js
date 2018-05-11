@@ -77,7 +77,6 @@ userSchema.methods.comparePassword = function (candidatePassword) {
 userSchema.statics.identifier = () => 'username';
 
 userSchema.methods.canEdit = function (userId) {
-    console.log(this._id === userId);
     return this._id.toString() === userId.toString();
 };
 

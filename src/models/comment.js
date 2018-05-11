@@ -99,7 +99,7 @@ function incrementComment(doc, incr) {
 commentSchema.statics.identifier = () => '_id';
 
 commentSchema.methods.canEdit = function (userId) {
-    return this.owner._id === userId;
+    return this.owner._id.toString() === userId.toString();
 };
 
 commentSchema.methods.executeDelete = function () {
