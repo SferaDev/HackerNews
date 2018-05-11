@@ -5,6 +5,10 @@
 
 [https://news4hackers.herokuapp.com](https://news4hackers.herokuapp.com)
 
+## API Documentation
+
+[https://news4hackers.herokuapp.com/api/docs](https://news4hackers.herokuapp.com/api/docs)
+
 ## Team
 
 - Alonso Gonzalez, Elena
