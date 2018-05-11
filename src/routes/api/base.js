@@ -36,7 +36,8 @@ export const modelGetOne = function (model, req, res) {
 
     model.find(findParameters, propertyFinder(model, 'public'), function (err, element) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
-        else res.status(httpCodes.STATUS_OK).send(element);
+        if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
+        res.status(httpCodes.STATUS_OK).send(element);
     });
 };
 
@@ -46,6 +47,7 @@ export const modelUpdate = function (model, req, res) {
 
     model.findOne(findParameters, function (err, element) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             let editableProperties = propertyFinder(model, 'editable');
             for (let i = 0; i < editableProperties.length; ++i) {
@@ -63,6 +65,7 @@ export const modelDelete = function (model, req, res) {
 
     model.findOne(findParameters, function (err, element) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             element.executeDelete();
             return messageCallback(res, httpCodes.STATUS_OK, 'Element deleted');
