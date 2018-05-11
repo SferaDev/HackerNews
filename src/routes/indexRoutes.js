@@ -1,7 +1,6 @@
 import * as userController from "../controllers/userController";
 import * as commentController from "../controllers/commentController";
 import * as likeController from "../controllers/likeController";
-import * as favouriteController from "../controllers/favouriteController";
 import * as postController from "../controllers/postController";
 
 export const routes = [
@@ -110,29 +109,6 @@ export const routes = [
                     } else callback();
                 });
             }
-        }
-    },
-    {
-        route: '/fave',
-        getAction: function (req, res, result) {
-            let callback = function () {
-                res.redirect(req.query.back !== undefined ? req.query.back : '/');
-                result();
-            };
-            if (req.query.id !== undefined && req.query.id !== '') {
-                favouriteController.insertFavourite(req.session.userId, req.query.id, callback);
-            } else callback();
-        }
-    },
-    {
-        route: '/favourites',
-        render: 'news',
-        getAction: function (req, res, result) {
-            favouriteController.getFavouritePosts(req.query.id, function (posts) {
-                result({
-                    posts: posts
-                });
-            });
         }
     },
     {

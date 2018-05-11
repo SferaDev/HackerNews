@@ -35,7 +35,7 @@ commentsApiRouter.delete('/:element', function (req, res) {
 // POST /api/posts/:element/like
 commentsApiRouter.post('/:element/like', function (req, res) {
     likeController.likeComment(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 400, err);
+        if (err) return messageCallback(res, 500, err);
         messageCallback(res, 200, 'Comment like added')
     });
 });
@@ -43,7 +43,7 @@ commentsApiRouter.post('/:element/like', function (req, res) {
 // DELETE /api/posts/:element/like
 commentsApiRouter.delete('/:element/like', function (req, res) {
     likeController.dislikeComment(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 400, err);
+        if (err) return messageCallback(res, 500, err);
         messageCallback(res, 200, 'Comment like removed')
     });
 });
