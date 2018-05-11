@@ -32,22 +32,19 @@ export function dislikePost(userId, postId, done) {
 }
 
 export function likeComment(userId, postId, done) {
-    if (userId === undefined) return done('Invalid user');
+    if (userId === undefined) return done(400);
     commentLikeModel.count({
         owner: userId,
         comment: postId
     }, function (err, count) {
-        if (count > 0) done('You already like this comment');
+        if (count > 0) done(409);
         else {
             // Find like, if it not exists create new one
             commentLikeModel.create({
                 owner: userId,
                 comment: postId
             }, function (err, doc) {
-                if (err) {
-                    console.error(err);
-                    return done(err);
-                }
+                if (err) return done(err);
                 done(null);
             });
         }
@@ -55,15 +52,14 @@ export function likeComment(userId, postId, done) {
 }
 
 export function dislikeComment(userId, postId, done) {
-    if (userId === undefined) return done('Invalid user');
+    if (userId === undefined) return done(400);
     commentLikeModel.findOne({
         owner: userId,
         comment: postId
     }, function (err, doc) {
-        if (err) {
-            console.error(err);
-            return done(err);
-        } else if (doc !== null) doc.remove();
+        if (err) return done(err);
+        if (doc === null) return done(404);
+        doc.remove();
         done(null);
     });
 }

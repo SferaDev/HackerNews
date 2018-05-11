@@ -34,16 +34,32 @@ commentsApiRouter.delete('/:element', function (req, res) {
 
 // POST /api/posts/:element/like
 commentsApiRouter.post('/:element/like', function (req, res) {
-    likeController.likeComment(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 500, err);
-        messageCallback(res, 200, 'Comment like added')
+    commentModel.findOne({_id: req.params.element}, function (err, element)
+    {
+        if (err) return messageCallback(res, 500, 'Server error');
+        if (element === null) return messageCallback(res, 404, 'Comment not found');
+        likeController.likeComment(req.user._id, req.params.element, function (err)
+        {
+            if (err === 400) return messageCallback(res, 400, 'Bad request');
+            if (err === 409) return messageCallback(res, 409, 'You already like this comment');
+            if (err) return messageCallback(res, 500, 'Server error');
+            messageCallback(res, 200, 'Comment like added')
+        });
     });
 });
 
 // DELETE /api/posts/:element/like
 commentsApiRouter.delete('/:element/like', function (req, res) {
-    likeController.dislikeComment(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 500, err);
-        messageCallback(res, 200, 'Comment like removed')
+    commentModel.findOne({_id: req.params.element}, function (err, element)
+    {
+        if (err) return messageCallback(res, 500, 'Server error');
+        if (element === null) return messageCallback(res, 404, 'Comment not found');
+        likeController.dislikeComment(req.user._id, req.params.element, function (err)
+        {
+            if (err === 400) return messageCallback(res, 400, 'Bad request');
+            if (err === 404) return messageCallback(res, 404, 'You do not like this comment');
+            if (err) return messageCallback(res, 500, 'Server error');
+            messageCallback(res, 200, 'Comment like removed')
+        });
     });
 });
