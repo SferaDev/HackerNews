@@ -15,7 +15,7 @@ const baseOptions = {
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(postModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'comments' &&
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'comments' && key !== '__type' &&
                     !publicProperties.includes(key)) delete ret[key];
         }
     }
@@ -50,10 +50,12 @@ const postSchema = new mongoose.Schema({
         public: true
     },
     text: {
-        type: String
+        type: String,
+        public: true
     },
     url: {
-        type: String
+        type: String,
+        public: true
     },
     tld: {
         type: String,

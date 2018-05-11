@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import * as httpCodes from "../../utils/httpCodes";
 import {messageCallback} from "../api";
 import {propertyFinder} from "../../utils/magicUtils";
@@ -30,7 +32,7 @@ export const modelCreate = function (model, req, res) {
         if (count > 0) return messageCallback(res, httpCodes.STATUS_CONFLICT, 'Element already exists');
         model.create(attributes, function (err2, element) {
             if (err2) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err2);
-            return messageCallback(res, httpCodes.STATUS_CREATED, 'Element created');
+            return messageCallback(res, httpCodes.STATUS_CREATED, 'Element created (invalid attributes discarded)');
         })
     });
 };
@@ -54,12 +56,13 @@ export const modelUpdate = function (model, req, res) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
+            if (element.__type !== undefined) model = mongoose.model(element.__type);
             let editableProperties = propertyFinder(model, 'editable');
             for (let i = 0; i < editableProperties.length; ++i) {
                 if (req.body[editableProperties[i]]) element[editableProperties[i]] = req.body[editableProperties[i]];
             }
             element.save();
-            return messageCallback(res, httpCodes.STATUS_OK, 'Element updated');
+            return messageCallback(res, httpCodes.STATUS_OK, 'Element updated (invalid attributes discarded)');
         } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You are not allowed to update element');
     });
 };
