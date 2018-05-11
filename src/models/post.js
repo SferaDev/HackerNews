@@ -53,17 +53,6 @@ const postSchema = new mongoose.Schema({
         type: String,
         public: true
     },
-    url: {
-        type: String,
-        public: true,
-        validate: {
-            validator: function(v) {
-                let urlRegexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-                return urlRegexp.test(v);
-            },
-            message: 'Invalid url'
-        },
-    },
     tld: {
         type: String,
         public: true
@@ -97,7 +86,15 @@ const urlSchema = new mongoose.Schema({
         type: String,
         required: true,
         editable: true,
-        public: true
+        public: true,
+        validate: {
+            validator: function (v)
+            {
+                let urlRegexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+                return urlRegexp.test(v);
+            },
+            message: 'Invalid url'
+        },
     }
 });
 

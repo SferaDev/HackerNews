@@ -10,6 +10,8 @@ tags:
     description: Operations with users
   - name: posts
     description: Operations with posts
+  - name: comments
+    description: Operations with comments
 paths:
   /users:
     get:
@@ -43,13 +45,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/User-Creation'
       responses:
         '200':
           description: The user has been created
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  '/users/{username}':
+
+  /users/{username}:
     get:
       tags:
         - users
@@ -94,7 +97,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              type: object
+              properties:
+                about:
+                  type: string
       responses:
         '200':
           description: Updated user
@@ -150,6 +156,315 @@ paths:
                     - $ref: '#/components/schemas/AskPost'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+
+    post:
+      tags:
+        - posts
+      summary: Create post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/UrlPost-Creation'
+                - $ref: '#/components/schemas/AskPost-Creation'
+      responses:
+        '200':
+          description: The post has been created
+        '400':
+          description: Missing a post type
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /posts/{postId}:
+    get:
+      tags:
+        - posts
+      summary: Get post by post id
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+        - name: postId
+          in: path
+          description: The post that needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The post identified by postId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostGet-Workaround'
+        '400':
+          description: Invalid username supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+    put:
+      tags:
+        - posts
+      summary: Updates the post identified by a id
+      parameters:
+        - name: postId
+          in: path
+          description: The post that needs to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Updated post
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUpdate-Workaround'
+      responses:
+        '200':
+          description: Updated post
+          content:
+            application/json:
+              schema:
+                oneOf: #https://github.com/swagger-api/swagger-ui/issues/3803
+                  - $ref: '#/components/schemas/AskPost'
+                  - $ref: '#/components/schemas/UrlPost'
+        '400':
+          description: Invalid post supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Post not found
+
+    delete:
+      tags:
+        - posts
+      summary: Deletes the post identified by the post id
+      parameters:
+        - name: postId
+          in: path
+          description: The post name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post has been deleted
+        '400':
+          description: Invalid postId supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Post not found
+
+  /posts/{postId}/like:
+    post:
+      tags:
+        - posts
+      summary: Like a post
+      parameters:
+        - name: postId
+          in: path
+          description: The post that needs to be liked
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The post has been liked
+        '400':
+          description: You already liked this post
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    delete:
+      tags:
+        - posts
+      summary: Removes the like previously set on post id
+      parameters:
+        - name: postId
+          in: path
+          description: The post whose like needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Like has been deleted
+        '400':
+          description: Invalid postId supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Post not found
+
+  /comments:
+    get:
+      tags:
+        - comments
+      summary: List all comments
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: >-
+            A JSON file with the list of existing comments that exist in the
+            database
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/Comment'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - comments
+      summary: Create comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment-Creation'
+      responses:
+        '200':
+          description: The comment has been created
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /comments/{commentId}:
+    get:
+      tags:
+        - comments
+      summary: Get comment by comment id
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+        - name: commentId
+          in: path
+          description: The comment that needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The comment identified by commentId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid comment id supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Comment not found
+    put:
+      tags:
+        - comments
+      summary: Updates a comment identified by a id
+      parameters:
+        - name: commentId
+          in: path
+          description: The comment that needs to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Updated comment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+      responses:
+        '200':
+          description: Updated comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment-Update'
+        '400':
+          description: Invalid comment supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Comment not found
+
+    delete:
+      tags:
+        - comments
+      summary: Deletes the comment identified by the comment id
+      parameters:
+        - name: commentId
+          in: path
+          description: The comment to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment has been deleted
+        '400':
+          description: Invalid comment id supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Comment not found
+
+  /comments/{commentId}/like:
+    post:
+      tags:
+        - comments
+      summary: Like a comment
+      parameters:
+        - name: commentId
+          in: path
+          description: The comment that needs to be liked
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The comment has been liked
+        '400':
+          description: You already liked this comment
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    delete:
+      tags:
+        - comments
+      summary: Removes the like previously set on comment id
+      parameters:
+        - name: commentId
+          in: path
+          description: The comment whose like needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Like has been deleted
+        '400':
+          description: Invalid commentId supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Comment not found
+
 security:
   - HeaderAuth: []
   - QueryAuth: []
@@ -158,11 +473,11 @@ components:
     HeaderAuth:
       type: apiKey
       in: header
-      name: key
+      name: X-API-Key
     QueryAuth:
       type: apiKey
       in: query
-      name: key
+      name: api_key
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
@@ -191,36 +506,187 @@ components:
     User:
       type: object
       properties:
-        githubId:
-          type: string
-        username:
-          type: string
         karma:
           type: integer
         about:
           type: string
         email:
           type: string
+        _id:
+          type: string
+        username:
+          type: string
+        githubId:
+          type: string
+
+    User-Creation:
+      type: object
+      required:
+        - username
+        - githubId
+      properties:
+        about:
+          type: string
+        username:
+          type: string
+        githubId:
+          type: string
+
+    Owner:
+      type: object
+      properties:
+        _id:
+          type: string
+        username:
+          type: string
+
     Post:
+      type: object
+      properties:
+        totalComments:
+          type: integer
+        totalLikes:
+          type: integer
+        deleted:
+          type: boolean
+        _id:
+          type: string
+        title:
+          type: string
+
+    UrlPost:
+      allOf:
+        - $ref: '#/components/schemas/Post'
+      type: object
+      properties:
+        url:
+          type: string
+        owner:
+          $ref: '#/components/schemas/Owner'
+        tld:
+          type: string
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    UrlPost-Creation:
       type: object
       properties:
         title:
           type: string
         owner:
-          $ref: '#/components/schemas/User'
-    UrlPost:
-      allOf:
-        - $ref: '#/components/schemas/Post'
-        - type: object
-          properties:
-            url:
-              type: string
-            tld:
-              type: string
+          type: string
+        type:
+          type: string
+          default: "url"
+        url:
+          type: string
+
+    UrlPost-Update:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+
+
     AskPost:
       allOf:
         - $ref: '#/components/schemas/Post'
-        - type: object
-          properties:
-            text:
-              type: string
+      type: object
+      properties:
+        text:
+          type: string
+        owner:
+          $ref: '#/components/schemas/Owner'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    AskPost-Creation:
+      type: object
+      properties:
+        title:
+          type: string
+        owner:
+          $ref: string
+        type:
+          type: string
+          default: "ask"
+        text:
+          type: string
+
+    AskPost-Update:
+      type: object
+      properties:
+        title:
+          type: string
+        text:
+          type: string
+
+    PostGet-Workaround:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/UrlPost'
+        - $ref: '#/components/schemas/AskPost'
+
+    PostUpdate-Workaround:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/AskPost-Update'
+      - $ref: '#/components/schemas/UrlPost-Update'
+
+    Comment:
+      type: object
+      required:
+        - deleted
+        - totalLikes
+        - _id
+        - comment
+        - owner
+        - post
+        - replies
+      properties:
+        deleted:
+          type: boolean
+        totalLikes:
+          type: integer
+        _id:
+          type: string
+        comment:
+          type: string
+        owner:
+          $ref: '#/components/schemas/Owner'
+        post:
+          type: string
+        parentComment:
+          type: string
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    Comment-Creation:
+      type: object
+      required:
+        - comment
+        - post
+        - owner
+      properties:
+        comment:
+          type: string
+        post:
+          type: string
+        owner:
+          type: string
+        parentComment:
+          type: string
+
+    Comment-Update:
+      type: object
+      properties:
+        comment:
+          type: string
