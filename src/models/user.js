@@ -4,7 +4,6 @@ import hat from "hat";
 import {timeSince} from "../utils/timeUtils";
 import * as appConfig from "../../config.json";
 import {propertyFinder} from "../utils/magicUtils";
-import {favouriteModel} from "./favourite";
 
 const baseOptions = {
     timestamps: true,
