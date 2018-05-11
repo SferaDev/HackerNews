@@ -36,16 +36,28 @@ postsApiRouter.delete('/:element', function (req, res) {
 
 // POST /api/posts/:element/like
 postsApiRouter.post('/:element/like', function (req, res) {
-    likeController.likePost(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 400, err);
-        messageCallback(res, 200, 'Post like added')
+    postModel.findOne({_id: req.params.element}, function (err, element) {
+        if (err) return messageCallback(res, 500, 'Server error');
+        if (element === null) return messageCallback(res, 404, 'Post not found');
+        likeController.likePost(req.user._id, req.params.element, function (err) {
+            if (err === 400) return messageCallback(res, 400, 'Bad request');
+            if (err === 409) return messageCallback(res, 409, 'You already like this post');
+            if (err) return messageCallback(res, 500, 'Server error');
+            messageCallback(res, 200, 'Post like added')
+        });
     });
 });
 
 // DELETE /api/posts/:element/like
 postsApiRouter.delete('/:element/like', function (req, res) {
-    likeController.dislikePost(req.user._id, req.params.element, function (err) {
-        if (err) return messageCallback(res, 400, err);
-        messageCallback(res, 200, 'Post like removed')
+    postModel.findOne({_id: req.params.element}, function (err, element) {
+        if (err) return messageCallback(res, 500, 'Server error');
+        if (element === null) return messageCallback(res, 404, 'Post not found');
+        likeController.dislikePost(req.user._id, req.params.element, function (err) {
+            if (err === 400) return messageCallback(res, 400, 'Bad request');
+            if (err === 404) return messageCallback(res, 404, 'You do not like this post');
+            if (err) return messageCallback(res, 500, 'Server error');
+            messageCallback(res, 200, 'Post like removed')
+        });
     });
 });
