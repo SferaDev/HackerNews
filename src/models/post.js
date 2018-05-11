@@ -77,7 +77,7 @@ postSchema.virtual('comments', {
 let autoPopulate = function (next) {
     this.populate({
         path: 'comments',
-        match: { parentComment: undefined }
+        match: {parentComment: undefined}
     });
     this.populate('owner', '_id username');
     next();

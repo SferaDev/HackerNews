@@ -10,14 +10,19 @@ export const modelGetAll = function (model, req, res) {
 };
 
 export const modelCreate = function (model, req, res) {
+    let attributes = {};
     let findParameters = {};
     findParameters[model.identifier()] = req.body[model.identifier().replace('_', '')];
 
-    let attributes = {};
     let requiredProperties = propertyFinder(model, 'required');
     for (let i = 0; i < requiredProperties.length; ++i) {
         if (req.body[requiredProperties[i]]) attributes[requiredProperties[i]] = req.body[requiredProperties[i]];
         else return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Missing parameter ' + requiredProperties[i]);
+    }
+
+    let editableProperties = propertyFinder(model, 'editable');
+    for (let i = 0; i < editableProperties.length; ++i) {
+        if (req.body[editableProperties[i]]) attributes[editableProperties[i]] = req.body[editableProperties[i]];
     }
 
     model.count(findParameters, function (err, count) {
