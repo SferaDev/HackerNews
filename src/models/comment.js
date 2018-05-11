@@ -6,10 +6,12 @@ import {propertyFinder} from "../utils/magicUtils";
 const baseOptions = {
     timestamps: true,
     toJSON: {
+        virtuals: true,
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(commentModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'replies' &&
+                    !publicProperties.includes(key)) delete ret[key];
         }
     }
 };
@@ -62,7 +64,7 @@ commentSchema.virtual('replies', {
 
 let autoPopulate = function (next) {
     this.populate('replies');
-    this.populate('owner');
+    this.populate('owner', '_id username');
     next();
 };
 

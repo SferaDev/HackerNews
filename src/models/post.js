@@ -10,10 +10,12 @@ const baseOptions = {
     collection: 'posts',
     timestamps: true,
     toJSON: {
+        virtuals: true,
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(postModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'comments' &&
+                    !publicProperties.includes(key)) delete ret[key];
         }
     }
 };
@@ -66,8 +68,18 @@ postSchema.virtual('timeSince').get(function () {
     return timeSince(this.createdAt);
 });
 
+postSchema.virtual('comments', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'post'
+});
+
 let autoPopulate = function (next) {
-    this.populate('owner');
+    this.populate({
+        path: 'comments',
+        match: { parentComment: undefined }
+    });
+    this.populate('owner', '_id username');
     next();
 };
 

@@ -12,7 +12,7 @@ const baseOptions = {
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(likeModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+                if (ret.hasOwnProperty(key) && !publicProperties.includes(key)) delete ret[key];
         }
     }
 };
