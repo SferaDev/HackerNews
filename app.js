@@ -8,8 +8,8 @@ import logger from "morgan";
 import path from "path";
 import cors from "cors";
 import passport from "passport";
+import bodyParser from "body-parser";
 import {Strategy as GithubStrategy} from "passport-github2";
-
 import {indexRouter} from "./src/routes";
 import {apiRouter} from "./src/routes/api";
 import {userModel} from "./src/models/user";
@@ -34,13 +34,14 @@ app.locals.pretty = true;
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 app.use(session({
     secret: SESSION_SECRET,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
-app.use(cors());
 
 if (process.env.GITHUB_CLIENT_ID) {
     app.use(passport.initialize());
