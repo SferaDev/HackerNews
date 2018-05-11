@@ -15,7 +15,7 @@ apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(yaml.load('./api/api.yam
 
 // Middleware to verify user API key
 apiRouter.use(function (req, res, next) {
-    let key = req.query.api_key || req.headers['x-api-key'];
+    let key = req.query.key || req.headers['x-api-key'];
     if (key) {
         userModel.findOne({apiKey: key}, function (err, user) {
             if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
