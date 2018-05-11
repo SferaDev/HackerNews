@@ -4,14 +4,17 @@ import hat from "hat";
 import {timeSince} from "../utils/timeUtils";
 import * as appConfig from "../../config.json";
 import {propertyFinder} from "../utils/magicUtils";
+import {favouriteModel} from "./favourite";
 
 const baseOptions = {
     timestamps: true,
     toJSON: {
+        virtuals: true,
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(userModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'favourites' &&
+                    !publicProperties.includes(key)) delete ret[key];
         }
     }
 };
@@ -21,7 +24,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        public: true
+        public: true,
+        exportable: true
     },
     githubId: {
         type: String,
@@ -61,6 +65,20 @@ userSchema.virtual('timeSince').get(function () {
 userSchema.virtual('isAdmin').get(function () {
     return appConfig.admins.some(e => e.username === this.username);
 });
+
+userSchema.virtual('favourites', {
+    ref: 'Favourite',
+    localField: '_id',
+    foreignField: 'user'
+});
+
+let autoPopulate = function (next) {
+    this.populate('favourites', 'post');
+    next();
+};
+
+userSchema.pre('findOne', autoPopulate);
+userSchema.pre('find', autoPopulate);
 
 // Before save, hash the stored password to database
 userSchema.pre('save', function (next) {

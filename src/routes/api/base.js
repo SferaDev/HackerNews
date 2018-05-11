@@ -5,6 +5,7 @@ import {propertyFinder} from "../../utils/magicUtils";
 export const modelGetAll = function (model, req, res) {
     model.find({}, propertyFinder(model, 'public'), function (err, elements) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        console.log(elements);
         res.status(httpCodes.STATUS_OK).send(elements);
     });
 };

@@ -7,7 +7,7 @@ const baseOptions = {
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(favouriteModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && !publicProperties.includes(key)) delete ret[key];
+                if (ret.hasOwnProperty(key) && !publicProperties.includes(key)) delete ret[key];
         }
     }
 };
@@ -26,7 +26,7 @@ const favouriteSchema = new mongoose.Schema({
 }, baseOptions);
 
 let autoPopulate = function (next) {
-    this.populate('post');
+    this.populate('post', '_id title');
     next();
 };
 
