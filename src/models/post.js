@@ -49,14 +49,10 @@ const postSchema = new mongoose.Schema({
         public: true
     },
     text: {
-        type: String,
-        editable: true,
-        public: true
+        type: String
     },
     url: {
-        type: String,
-        editable: true,
-        public: true
+        type: String
     },
     tld: {
         type: String,
@@ -100,7 +96,13 @@ urlSchema.pre('save', function (next) {
     next();
 });
 
-const askSchema = new mongoose.Schema({});
+const askSchema = new mongoose.Schema({
+    text: {
+        type: String,
+        editable: true,
+        public: true
+    }
+});
 
 postSchema.statics.identifier = () => '_id';
 
