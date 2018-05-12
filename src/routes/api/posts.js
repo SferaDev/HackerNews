@@ -12,11 +12,21 @@ postsApiRouter.get('/', function (req, res) {
     modelGetAll(postModel, req, res);
 });
 
+// GET /api/posts/url
+postsApiRouter.get('/url', function (req, res) {
+    modelGetAll(urlModel, req, res);
+});
+
+// GET /api/posts/ask
+postsApiRouter.get('/ask', function (req, res) {
+    modelGetAll(askModel, req, res);
+});
+
 // POST /api/posts
 postsApiRouter.post('/', function (req, res) {
-    if (req.body.type === 'url') modelCreate(urlModel, req, res);
-    else if (req.body.type === 'ask') modelCreate(askModel, req, res);
-    else messageCallback(res, 400, 'Please provide a post type')
+    if (req.body.type.toLowerCase() === 'url') modelCreate(urlModel, req, res);
+    else if (req.body.type.toLowerCase() === 'ask') modelCreate(askModel, req, res);
+    else messageCallback(res, 400, 'Please provide a post type (url or ask)')
 });
 
 // GET /api/posts/:element
