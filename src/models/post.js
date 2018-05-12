@@ -88,6 +88,7 @@ postSchema.pre('find', autoPopulate);
 const urlSchema = new mongoose.Schema({
     url: {
         type: String,
+        unique: true,
         required: true,
         editable: true,
         public: true,
@@ -97,7 +98,7 @@ const urlSchema = new mongoose.Schema({
                 return urlRegexp.test(v);
             },
             message: 'Invalid url'
-        },
+        }
     }
 });
 

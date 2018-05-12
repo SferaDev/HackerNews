@@ -4,8 +4,8 @@ import * as httpCodes from "../../utils/httpCodes";
 import {messageCallback} from "../api";
 import {propertyFinder} from "../../utils/magicUtils";
 
-export const modelGetAll = function (model, req, res) {
-    model.find({}, propertyFinder(model, 'public'), function (err, elements) {
+export const modelGetAll = function (model, query, req, res) {
+    model.find(query, propertyFinder(model, 'public'), function (err, elements) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         res.status(httpCodes.STATUS_OK).send(elements);
     });

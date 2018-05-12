@@ -9,7 +9,7 @@ export const commentsApiRouter = express.Router();
 
 // GET /api/comments
 commentsApiRouter.get('/', function (req, res) {
-    modelGetAll(commentModel, req, res);
+    modelGetAll(commentModel, {}, req, res);
 });
 
 // POST /api/comments

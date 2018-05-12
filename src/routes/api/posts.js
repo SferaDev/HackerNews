@@ -9,17 +9,31 @@ export const postsApiRouter = express.Router();
 
 // GET /api/posts
 postsApiRouter.get('/', function (req, res) {
-    modelGetAll(postModel, req, res);
+    modelGetAll(postModel, {}, req, res);
+});
+
+// GET /api/posts/newest
+postsApiRouter.get('/newest', function (req, res) {
+    let url = '/api/posts?sort=date&order=asc';
+    for (let query in req.query) if (req.query.hasOwnProperty(query)) url += '&' + query + '=' + req.query[query];
+    res.redirect(url);
+});
+
+// GET /api/posts/popular
+postsApiRouter.get('/popular', function (req, res) {
+    let url = '/api/posts?sort=totalLikes&order=desc';
+    for (let query in req.query) if (req.query.hasOwnProperty(query)) url += '&' + query + '=' + req.query[query];
+    res.redirect(url);
 });
 
 // GET /api/posts/url
 postsApiRouter.get('/url', function (req, res) {
-    modelGetAll(urlModel, req, res);
+    modelGetAll(urlModel, {}, req, res);
 });
 
 // GET /api/posts/ask
 postsApiRouter.get('/ask', function (req, res) {
-    modelGetAll(askModel, req, res);
+    modelGetAll(askModel, {}, req, res);
 });
 
 // POST /api/posts
@@ -27,6 +41,16 @@ postsApiRouter.post('/', function (req, res) {
     if (req.body.type.toLowerCase() === 'url') modelCreate(urlModel, req, res);
     else if (req.body.type.toLowerCase() === 'ask') modelCreate(askModel, req, res);
     else messageCallback(res, 400, 'Please provide a post type (url or ask)')
+});
+
+// POST /api/posts/url
+postsApiRouter.post('/url', function (req, res) {
+    modelCreate(urlModel, req, res);
+});
+
+// POST /api/posts/ask
+postsApiRouter.post('/ask', function (req, res) {
+    modelCreate(askModel, req, res);
 });
 
 // GET /api/posts/:element

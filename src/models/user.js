@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String
     },
+    date: {
+        type: Date,
+        default: Date.now,
+        public: true
+    },
     karma: {
         type: Number,
         default: 1,

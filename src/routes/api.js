@@ -36,8 +36,8 @@ apiRouter.use(function (req, res, next) {
             let indent = !isNaN(parseInt(req.query.indent)) && parseInt(req.query.indent) >= 0 ? parseInt(req.query.indent) : 0;
             if (Array.isArray(obj) && req.query.sort) {
                 obj.sort(function (a, b) {
-                    if (a[req.query.sort] > b[req.query.sort]) return 1;
-                    else if (a[req.query.sort] < b[req.query.sort]) return -1;
+                    if (a[req.query.sort] > b[req.query.sort]) return req.query.order === 'desc' ? -1 : 1;
+                    else if (a[req.query.sort] < b[req.query.sort]) return req.query.order === 'desc' ? 1 : -1;
                     return 0;
                 });
             }
