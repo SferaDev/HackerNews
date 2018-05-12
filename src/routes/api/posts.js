@@ -4,6 +4,7 @@ import {modelCreate, modelDelete, modelGetAll, modelGetOne, modelUpdate} from ".
 import {askModel, postModel, urlModel} from '../../models/post';
 import {messageCallback} from "../api";
 import * as likeController from "../../controllers/likeController";
+import * as httpCodes from "../../utils/httpCodes";
 
 export const postsApiRouter = express.Router();
 
@@ -40,7 +41,7 @@ postsApiRouter.get('/ask', function (req, res) {
 postsApiRouter.post('/', function (req, res) {
     if (req.body.type.toLowerCase() === 'url') modelCreate(urlModel, req, res);
     else if (req.body.type.toLowerCase() === 'ask') modelCreate(askModel, req, res);
-    else messageCallback(res, 400, 'Please provide a post type (url or ask)')
+    else messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Please provide a post type (url or ask)')
 });
 
 // POST /api/posts/url
@@ -71,12 +72,17 @@ postsApiRouter.delete('/:element', function (req, res) {
 // POST /api/posts/:element/like
 postsApiRouter.post('/:element/like', function (req, res) {
     postModel.findOne({_id: req.params.element}, function (err, element) {
-        if (err) return messageCallback(res, 500, 'Server error');
-        if (element === null) return messageCallback(res, 404, 'Post not found');
+        if (err)
+            return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (element === null)
+            return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Post not found');
         likeController.likePost(req.user._id, req.params.element, function (err) {
-            if (err === 400) return messageCallback(res, 400, 'Bad request');
-            if (err === 409) return messageCallback(res, 409, 'You already like this post');
-            if (err) return messageCallback(res, 500, 'Server error');
+            if (err === httpCodes.STATUS_BAD_REQUEST)
+                return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Bad request');
+            if (err === httpCodes.STATUS_CONFLICT)
+                return messageCallback(res, httpCodes.STATUS_CONFLICT, 'You already like this post');
+            if (err)
+                return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
             messageCallback(res, 200, 'Post like added')
         });
     });
@@ -85,12 +91,17 @@ postsApiRouter.post('/:element/like', function (req, res) {
 // DELETE /api/posts/:element/like
 postsApiRouter.delete('/:element/like', function (req, res) {
     postModel.findOne({_id: req.params.element}, function (err, element) {
-        if (err) return messageCallback(res, 500, 'Server error');
-        if (element === null) return messageCallback(res, 404, 'Post not found');
+        if (err)
+            return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (element === null)
+            return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Post not found');
         likeController.dislikePost(req.user._id, req.params.element, function (err) {
-            if (err === 400) return messageCallback(res, 400, 'Bad request');
-            if (err === 404) return messageCallback(res, 404, 'You do not like this post');
-            if (err) return messageCallback(res, 500, 'Server error');
+            if (err === httpCodes.STATUS_BAD_REQUEST)
+                return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Bad request');
+            if (err === httpCodes.STATUS_NOT_FOUND)
+                return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'You do not like this post');
+            if (err)
+                return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
             messageCallback(res, 200, 'Post like removed')
         });
     });

@@ -6,7 +6,7 @@ import {propertyFinder} from "../../utils/magicUtils";
 
 export const modelGetAll = function (model, query, req, res) {
     model.find(query, propertyFinder(model, 'public'), function (err, elements) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
         res.status(httpCodes.STATUS_OK).send(elements);
     });
 };
@@ -31,7 +31,7 @@ export const modelCreate = function (model, req, res) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
         if (count > 0) return messageCallback(res, httpCodes.STATUS_CONFLICT, 'Element already exists');
         model.create(attributes, function (err2, element) {
-            if (err2) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err2);
+            if (err2) return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, err2);
             return messageCallback(res, httpCodes.STATUS_CREATED, 'Element created (invalid attributes discarded)');
         })
     });
@@ -42,7 +42,7 @@ export const modelGetOne = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, propertyFinder(model, 'public'), function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         res.status(httpCodes.STATUS_OK).send(element);
     });
@@ -53,7 +53,7 @@ export const modelUpdate = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             if (element.__type !== undefined) model = mongoose.model(element.__type);
@@ -72,7 +72,7 @@ export const modelDelete = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             element.executeDelete(function (success) {
