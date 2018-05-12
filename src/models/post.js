@@ -53,6 +53,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         public: true
     },
+    url: {
+        type: String,
+        public: true
+    },
     tld: {
         type: String,
         public: true
@@ -88,8 +92,7 @@ const urlSchema = new mongoose.Schema({
         editable: true,
         public: true,
         validate: {
-            validator: function (v)
-            {
+            validator: function (v) {
                 let urlRegexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
                 return urlRegexp.test(v);
             },

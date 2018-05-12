@@ -18,7 +18,7 @@ export function deleteComment(commentId, done) {
     commentModel.findOne({_id: commentId}, function (err, comment) {
         if (err) return console.error(err);
         comment.deleted = true;
-        comment.comment = '';
+        comment.comment = '<deleted>';
         comment.save();
         done();
     });

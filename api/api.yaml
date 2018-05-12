@@ -51,8 +51,7 @@ paths:
           description: The user has been created
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
-  /users/{username}:
+  '/users/{username}':
     get:
       tags:
         - users
@@ -156,7 +155,6 @@ paths:
                     - $ref: '#/components/schemas/AskPost'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
     post:
       tags:
         - posts
@@ -176,8 +174,7 @@ paths:
           description: Missing a post type
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
-  /posts/{postId}:
+  '/posts/{postId}':
     get:
       tags:
         - posts
@@ -229,7 +226,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf: #https://github.com/swagger-api/swagger-ui/issues/3803
+                oneOf:
                   - $ref: '#/components/schemas/AskPost'
                   - $ref: '#/components/schemas/UrlPost'
         '400':
@@ -238,7 +235,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Post not found
-
     delete:
       tags:
         - posts
@@ -259,8 +255,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Post not found
-
-  /posts/{postId}/like:
+  '/posts/{postId}/like':
     post:
       tags:
         - posts
@@ -279,7 +274,6 @@ paths:
           description: You already liked this post
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
     delete:
       tags:
         - posts
@@ -300,7 +294,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Post not found
-
   /comments:
     get:
       tags:
@@ -339,8 +332,7 @@ paths:
           description: The comment has been created
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
-  /comments/{commentId}:
+  '/comments/{commentId}':
     get:
       tags:
         - comments
@@ -402,7 +394,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Comment not found
-
     delete:
       tags:
         - comments
@@ -423,8 +414,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Comment not found
-
-  /comments/{commentId}/like:
+  '/comments/{commentId}/like':
     post:
       tags:
         - comments
@@ -443,7 +433,6 @@ paths:
           description: You already liked this comment
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
     delete:
       tags:
         - comments
@@ -464,7 +453,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Comment not found
-
 security:
   - HeaderAuth: []
   - QueryAuth: []
@@ -518,7 +506,6 @@ components:
           type: string
         githubId:
           type: string
-
     User-Creation:
       type: object
       required:
@@ -531,7 +518,6 @@ components:
           type: string
         githubId:
           type: string
-
     Owner:
       type: object
       properties:
@@ -539,7 +525,6 @@ components:
           type: string
         username:
           type: string
-
     Post:
       type: object
       properties:
@@ -553,7 +538,6 @@ components:
           type: string
         title:
           type: string
-
     UrlPost:
       allOf:
         - $ref: '#/components/schemas/Post'
@@ -569,7 +553,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Comment'
-
     UrlPost-Creation:
       type: object
       properties:
@@ -579,10 +562,9 @@ components:
           type: string
         type:
           type: string
-          default: "url"
+          default: url
         url:
           type: string
-
     UrlPost-Update:
       type: object
       properties:
@@ -590,8 +572,6 @@ components:
           type: string
         url:
           type: string
-
-
     AskPost:
       allOf:
         - $ref: '#/components/schemas/Post'
@@ -605,7 +585,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Comment'
-
     AskPost-Creation:
       type: object
       properties:
@@ -615,10 +594,9 @@ components:
           $ref: string
         type:
           type: string
-          default: "ask"
+          default: ask
         text:
           type: string
-
     AskPost-Update:
       type: object
       properties:
@@ -626,19 +604,16 @@ components:
           type: string
         text:
           type: string
-
     PostGet-Workaround:
       type: object
       oneOf:
         - $ref: '#/components/schemas/UrlPost'
         - $ref: '#/components/schemas/AskPost'
-
     PostUpdate-Workaround:
       type: object
       oneOf:
-      - $ref: '#/components/schemas/AskPost-Update'
-      - $ref: '#/components/schemas/UrlPost-Update'
-
+        - $ref: '#/components/schemas/AskPost-Update'
+        - $ref: '#/components/schemas/UrlPost-Update'
     Comment:
       type: object
       required:
@@ -668,7 +643,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Comment'
-
     Comment-Creation:
       type: object
       required:
@@ -684,7 +658,6 @@ components:
           type: string
         parentComment:
           type: string
-
     Comment-Update:
       type: object
       properties:
