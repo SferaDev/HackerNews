@@ -1,34 +1,35 @@
 {
-  "name": "hackernews",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "start": "nodemon --use-strict ./bin/www --exec babel-node",
-    "test": "",
-    "postinstall": ""
-  },
-  "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "bcryptjs": "^2.4.3",
-    "connect-mongo": "^2.0.1",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.8.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.0",
-    "express-session": "^1.15.6",
-    "hat": "0.0.3",
-    "http-errors": "~1.6.2",
-    "jsonwebtoken": "^8.2.1",
-    "mongoose": "^5.0.13",
-    "mongoose-id-validator": "^0.4.3",
-    "morgan": "~1.9.0",
-    "nodemon": "^1.17.3",
-    "passport": "^0.4.0",
-    "passport-github2": "^0.1.11",
-    "pug": "2.0.0-beta11",
-    "swagger-ui-express": "^3.0.8",
-    "yamljs": "^0.3.0"
-  }
+    "name": "hackernews",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "start": "nodemon --use-strict ./bin/www --exec babel-node",
+        "test": "",
+        "postinstall": ""
+    },
+    "dependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-stage-2": "^6.24.1",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "latest",
+        "connect-mongo": "^2.0.1",
+        "cookie-parser": "~1.4.3",
+        "cors": "^2.8.4",
+        "debug": "~2.6.9",
+        "express": "~4.16.0",
+        "express-session": "^1.15.6",
+        "hat": "0.0.3",
+        "http-errors": "~1.6.2",
+        "jsonwebtoken": "^8.2.1",
+        "mongoose": "^5.0.13",
+        "mongoose-id-validator": "^0.4.3",
+        "morgan": "~1.9.0",
+        "nodemon": "^1.17.3",
+        "passport": "^0.4.0",
+        "passport-github2": "^0.1.11",
+        "pug": "2.0.0-beta11",
+        "swagger-ui-express": "^3.0.8",
+        "yamljs": "^0.3.0"
+    }
 }

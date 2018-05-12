@@ -11,7 +11,7 @@ import passport from "passport";
 import bodyParser from "body-parser";
 import {Strategy as GithubStrategy} from "passport-github2";
 import {indexRouter} from "./src/routes";
-import {apiRouter} from "./src/routes/api";
+import {apiRouter, messageCallback} from "./src/routes/api";
 import {userModel} from "./src/models/user";
 
 const mongoStore = connect_mongo(session);
@@ -97,5 +97,6 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    if (req.accepts('json')) messageCallback(res, err.status || 500, res.locals.message);
+    else res.render('error');
 });
