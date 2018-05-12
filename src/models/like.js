@@ -4,6 +4,7 @@ import idValidator from "mongoose-id-validator";
 import {postModel} from "./post";
 import {commentModel} from "./comment";
 import {propertyFinder} from "../utils/magicUtils";
+import {userModel} from "./user";
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -47,14 +48,15 @@ postLikeSchema.post('remove', function (doc) {
 });
 
 function incrementPostLikeAndKarma(doc, incr) {
-    postModel.findOne({
-        _id: doc.post
-    }).exec(function (err, post) {
+    postModel.findOne({_id: doc.post}).exec(function (err, post) {
         if (err || post === null) return console.error(err);
         post.totalLikes += incr;
         post.save();
-        post.owner.karma += incr;
-        post.owner.save();
+        userModel.findOne({_id: post.owner._id}).exec(function (err, owner) {
+            if (err || owner === null) return console.error(err);
+            owner.karma += incr;
+            owner.save();
+        });
     });
 }
 
