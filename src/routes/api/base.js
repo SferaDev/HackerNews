@@ -75,8 +75,10 @@ export const modelDelete = function (model, req, res) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
-            element.executeDelete();
-            return messageCallback(res, httpCodes.STATUS_OK, 'Element deleted');
+            element.executeDelete(function (success) {
+                if (!success) return messageCallback(res, httpCodes.STATUS_CONFLICT, 'Element is already deleted');
+                return messageCallback(res, httpCodes.STATUS_OK, 'Element deleted');
+            });
         } else return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'You are not allowed to update element');
     });
 };

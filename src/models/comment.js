@@ -104,10 +104,12 @@ commentSchema.methods.canEdit = function (userId) {
     return this.owner._id.toString() === userId.toString();
 };
 
-commentSchema.methods.executeDelete = function () {
+commentSchema.methods.executeDelete = function (next) {
+    if (this.deleted) return next(false);
     this.deleted = true;
     this.comment = '<deleted>';
     this.save();
+    next(true);
 };
 
 // Apply ObjectId reference validation

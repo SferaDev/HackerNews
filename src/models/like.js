@@ -97,8 +97,9 @@ likeSchema.methods.canEdit = function (userId) {
     return this.owner.toString() === userId.toString();
 };
 
-likeSchema.methods.executeDelete = function () {
+likeSchema.methods.executeDelete = function (next) {
     this.remove();
+    next(true);
 };
 
 // Apply ObjectId reference validation

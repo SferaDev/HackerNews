@@ -91,8 +91,9 @@ userSchema.methods.canEdit = function (userId) {
     return this._id.toString() === userId.toString();
 };
 
-userSchema.methods.executeDelete = function () {
+userSchema.methods.executeDelete = function (next) {
     this.remove();
+    next(true);
 };
 
 // Apply ObjectId reference validation

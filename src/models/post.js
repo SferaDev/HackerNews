@@ -44,9 +44,9 @@ const postSchema = new mongoose.Schema({
         default: 0,
         public: true
     },
-    deleted: {
-        type: Boolean,
-        default: false,
+    date: {
+        type: Date,
+        default: Date.now,
         public: true
     },
     text: {
@@ -120,11 +120,12 @@ postSchema.methods.canEdit = function (userId) {
     return this.owner._id.toString() === userId.toString();
 };
 
-postSchema.methods.executeDelete = function () {
+postSchema.methods.executeDelete = function (next) {
     this.remove();
     commentModel.remove({post: this._id}, function (err, elements) {
         if (err) console.error(err);
     });
+    next(true);
 };
 
 // Apply ObjectId reference validation
