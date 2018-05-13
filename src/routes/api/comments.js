@@ -36,8 +36,10 @@ commentsApiRouter.delete('/:element', function (req, res) {
 // POST /api/posts/:element/like
 commentsApiRouter.post('/:element/like', function (req, res) {
     commentModel.findOne({_id: req.params.element}, function (err, element) {
-        if (err)
-            return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) {
+            if (err.name === 'CastError') return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Comment not found');
+            else return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        }
         if (element === null)
             return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Comment not found');
         likeController.likeComment(req.user._id, req.params.element, function (err) {
@@ -55,8 +57,10 @@ commentsApiRouter.post('/:element/like', function (req, res) {
 // DELETE /api/posts/:element/like
 commentsApiRouter.delete('/:element/like', function (req, res) {
     commentModel.findOne({_id: req.params.element}, function (err, element) {
-        if (err)
-            return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, 'Server error');
+        if (err) {
+            if (err.name === 'CastError') return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Comment not found');
+            else return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        }
         if (element === null)
             return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Comment not found');
         likeController.dislikeComment(req.user._id, req.params.element, function (err) {

@@ -49,7 +49,10 @@ export const modelGetOne = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, propertyFinder(model, 'public'), function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        if (err) {
+            if (err.name === 'CastError') return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
+            else return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        }
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         res.status(httpCodes.STATUS_OK).send(element);
     });
@@ -60,7 +63,10 @@ export const modelUpdate = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        if (err) {
+            if (err.name === 'CastError') return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
+            else return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        }
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             if (element.__type !== undefined) model = mongoose.model(element.__type);
@@ -79,7 +85,10 @@ export const modelDelete = function (model, req, res) {
     findParameters[model.identifier()] = req.params.element;
 
     model.findOne(findParameters, function (err, element) {
-        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        if (err) {
+            if (err.name === 'CastError') return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
+            else return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        }
         if (element === null) return messageCallback(res, httpCodes.STATUS_NOT_FOUND, 'Element not found');
         if (req.user.isAdmin || element.canEdit(req.user._id)) {
             element.executeDelete(function (success) {
