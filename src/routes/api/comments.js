@@ -13,12 +13,6 @@ commentsApiRouter.get('/', function (req, res) {
     modelGetAll(commentModel, {}, req, res);
 });
 
-// POST /api/comments
-commentsApiRouter.post('/', function (req, res) {
-    req.body.owner = req.user._id;
-    modelCreate(commentModel, req, res);
-});
-
 // GET /api/comments/:element
 commentsApiRouter.get('/:element', function (req, res) {
     modelGetOne(commentModel, req, res);

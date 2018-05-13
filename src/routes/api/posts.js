@@ -5,6 +5,8 @@ import {askModel, postModel, urlModel} from '../../models/post';
 import {messageCallback} from "../api";
 import * as likeController from "../../controllers/likeController";
 import * as httpCodes from "../../utils/httpCodes";
+import {commentModel} from "../../models/comment";
+import {commentsApiRouter} from "./comments";
 
 export const postsApiRouter = express.Router();
 
@@ -70,6 +72,13 @@ postsApiRouter.put('/:element', function (req, res) {
 // DELETE /api/posts/:element
 postsApiRouter.delete('/:element', function (req, res) {
     modelDelete(postModel, req, res);
+});
+
+// POST /api/posts/:element/comment
+commentsApiRouter.post('/:element/comment', function (req, res) {
+    req.body.owner = req.user._id;
+    req.body.post = req.params.element;
+    modelCreate(commentModel, req, res);
 });
 
 // POST /api/posts/:element/like
