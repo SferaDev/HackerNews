@@ -131,6 +131,40 @@ paths:
           description: Invalid username supplied
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: You are not allowed to delete this user
+        '404':
+          description: User not found
+
+  '/users/{username}/comments':
+    get:
+      tags:
+        - users
+      summary: Get comments from a user by user name
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
+        - name: username
+          in: path
+          description: The name that needs to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The comments made by the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid username supplied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: User not found
   /posts:
@@ -142,6 +176,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
       responses:
         '200':
           description: List of existing posts that matched the criteria
@@ -150,7 +185,7 @@ paths:
               schema:
                 type: array
                 items:
-                  anyOf:
+                    anyOf:
                     - $ref: '#/components/schemas/UrlPost'
                     - $ref: '#/components/schemas/AskPost'
         '401':
@@ -165,8 +200,8 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: '#/components/schemas/UrlPost-Creation'
-                - $ref: '#/components/schemas/AskPost-Creation'
+                - $ref: '#/components/schemas/UrlPost-CreationGeneral'
+                - $ref: '#/components/schemas/AskPost-CreationGeneral'
       responses:
         '200':
           description: The post has been created
@@ -174,6 +209,87 @@ paths:
           description: Missing a post type
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: Post already exists
+
+  '/posts/url':
+    post:
+      tags:
+        - posts
+      summary: Create post of type URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlPost-Creation'
+      responses:
+        '200':
+          description: The post has been created
+        '400':
+          description: Invalid parameter
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: Post already exists
+
+  '/posts/ask':
+    post:
+      tags:
+        - posts
+      summary: Create post of type ask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AskPost-Creation'
+      responses:
+        '200':
+          description: The post has been created
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: Post already exists
+
+  '/posts/newest':
+    get:
+      tags:
+        - posts
+      summary: Returns the latest posts in the system sorted by date
+      responses:
+        '200':
+          description: List of latest posts that matched the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/UrlPost'
+                    - $ref: '#/components/schemas/AskPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  '/posts/popular':
+    get:
+      tags:
+        - posts
+      summary: Returns the most popular posts in the system sorted by karma
+      responses:
+        '200':
+          description: List of popular posts that matched the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/UrlPost'
+                    - $ref: '#/components/schemas/AskPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   '/posts/{postId}':
     get:
       tags:
@@ -183,6 +299,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
         - name: postId
           in: path
           description: The post that needs to be fetched
@@ -303,6 +420,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
       responses:
         '200':
           description: >-
@@ -341,6 +459,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
         - name: commentId
           in: path
           description: The comment that needs to be fetched
@@ -490,6 +609,13 @@ components:
       schema:
         type: string
       description: Field to sort the response
+    orderParam:
+      name: order
+      in: query
+      schema:
+        type: string
+        enum: ["asc", "desc"]
+      description: Ascending or descending order of sort
   schemas:
     User:
       type: object
@@ -499,6 +625,8 @@ components:
         about:
           type: string
         email:
+          type: string
+        date:
           type: string
         _id:
           type: string
@@ -532,8 +660,8 @@ components:
           type: integer
         totalLikes:
           type: integer
-        deleted:
-          type: boolean
+        date:
+          type: string
         _id:
           type: string
         title:
@@ -543,6 +671,9 @@ components:
         - $ref: '#/components/schemas/Post'
       type: object
       properties:
+        __type:
+          type: string
+          enum: ["Url"]
         url:
           type: string
         owner:
@@ -560,9 +691,18 @@ components:
           type: string
         owner:
           type: string
+        url:
+          type: string
+    UrlPost-CreationGeneral:
+      type: object
+      properties:
+        title:
+          type: string
+        owner:
+          type: string
         type:
           type: string
-          default: url
+          default: "url"
         url:
           type: string
     UrlPost-Update:
@@ -577,6 +717,9 @@ components:
         - $ref: '#/components/schemas/Post'
       type: object
       properties:
+        __type:
+          type: string
+          enum: ["Ask"]
         text:
           type: string
         owner:
@@ -591,10 +734,7 @@ components:
         title:
           type: string
         owner:
-          $ref: string
-        type:
           type: string
-          default: ask
         text:
           type: string
     AskPost-Update:
@@ -604,6 +744,20 @@ components:
           type: string
         text:
           type: string
+
+    AskPost-CreationGeneral:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+          default: "ask"
+        owner:
+          type: string
+        text:
+          type: string
+
     PostGet-Workaround:
       type: object
       oneOf:
@@ -619,6 +773,7 @@ components:
       required:
         - deleted
         - totalLikes
+        - date
         - _id
         - comment
         - owner
