@@ -6,6 +6,8 @@ info:
 servers:
   - url: 'https://news4hackers.herokuapp.com/api'
 tags:
+  - name: login
+    description: Login validation
   - name: users
     description: Operations with users
   - name: posts
@@ -13,6 +15,16 @@ tags:
   - name: comments
     description: Operations with comments
 paths:
+  /:
+    get:
+      tags:
+        - login
+      summary: Validate user API key
+      responses:
+        '200':
+          description: Welcome to the News4Hackers API!
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /users:
     get:
       tags:
@@ -38,10 +50,13 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     post:
+      deprecated: true
       tags:
         - users
       summary: Create user
       responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '403':
           description: User creation via API is not allowed
   '/users/{username}':
@@ -131,7 +146,6 @@ paths:
           description: You are not allowed to delete this user
         '404':
           description: User not found
-
   '/users/{username}/comments':
     get:
       tags:
@@ -181,12 +195,13 @@ paths:
               schema:
                 type: array
                 items:
-                    anyOf:
+                  anyOf:
                     - $ref: '#/components/schemas/UrlPost'
                     - $ref: '#/components/schemas/AskPost'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     post:
+      deprecated: true
       tags:
         - posts
       summary: Create post
@@ -207,8 +222,27 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '409':
           description: The existing post
-
-  '/posts/url':
+  /posts/url:
+    get:
+      tags:
+        - posts
+      summary: Returns all the existing posts in the system
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
+      responses:
+        '200':
+          description: List of existing posts that matched the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UrlPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - posts
@@ -228,8 +262,27 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '409':
           description: The existing post
-
-  '/posts/ask':
+  /posts/ask:
+    get:
+      tags:
+        - posts
+      summary: Returns all the existing posts in the system
+      parameters:
+        - $ref: '#/components/parameters/indentParam'
+        - $ref: '#/components/parameters/filterParam'
+        - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
+      responses:
+        '200':
+          description: List of existing posts that matched the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AskPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - posts
@@ -249,8 +302,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '409':
           description: The existing post
-
-  '/posts/newest':
+  /posts/newest:
     get:
       tags:
         - posts
@@ -268,8 +320,7 @@ paths:
                     - $ref: '#/components/schemas/AskPost'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
-  '/posts/popular':
+  /posts/popular:
     get:
       tags:
         - posts
@@ -287,7 +338,6 @@ paths:
                     - $ref: '#/components/schemas/AskPost'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
   '/posts/{postId}':
     get:
       tags:
@@ -385,10 +435,10 @@ paths:
       responses:
         '200':
           description: The post has been liked
-        '409':
-          description: You already liked this post
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: You already liked this post
     delete:
       tags:
         - posts
@@ -409,7 +459,6 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Post not found
-
   '/posts/{postId}/comment':
     post:
       tags:
@@ -429,13 +478,12 @@ paths:
             schema:
               $ref: '#/components/schemas/Comment-Creation'
       responses:
-        '200':
+        '201':
           description: The comment has been created
         '400':
           description: Invalid data
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
   /comments:
     get:
       tags:
@@ -460,7 +508,6 @@ paths:
                     - $ref: '#/components/schemas/Comment'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
   '/comments/{commentId}':
     get:
       tags:
@@ -559,10 +606,10 @@ paths:
       responses:
         '200':
           description: The comment has been liked
-        '409':
-          description: You already liked this comment
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: You already liked this comment
     delete:
       tags:
         - comments
@@ -595,7 +642,7 @@ components:
     QueryAuth:
       type: apiKey
       in: query
-      name: api_key
+      name: key
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
@@ -625,7 +672,9 @@ components:
       in: query
       schema:
         type: string
-        enum: ["asc", "desc"]
+        enum:
+          - asc
+          - desc
       description: Ascending or descending order of sort
   schemas:
     User:
@@ -640,18 +689,6 @@ components:
         date:
           type: string
         _id:
-          type: string
-        username:
-          type: string
-        githubId:
-          type: string
-    User-Creation:
-      type: object
-      required:
-        - username
-        - githubId
-      properties:
-        about:
           type: string
         username:
           type: string
@@ -684,7 +721,8 @@ components:
       properties:
         __type:
           type: string
-          enum: ["Url"]
+          enum:
+            - Url
         url:
           type: string
         owner:
@@ -709,7 +747,7 @@ components:
           type: string
         type:
           type: string
-          default: "url"
+          default: url
         url:
           type: string
     UrlPost-Update:
@@ -726,7 +764,8 @@ components:
       properties:
         __type:
           type: string
-          enum: ["Ask"]
+          enum:
+            - Ask
         text:
           type: string
         owner:
@@ -749,7 +788,6 @@ components:
           type: string
         text:
           type: string
-
     AskPost-CreationGeneral:
       type: object
       properties:
@@ -757,10 +795,9 @@ components:
           type: string
         type:
           type: string
-          default: "ask"
+          default: ask
         text:
           type: string
-
     PostGet-Workaround:
       type: object
       oneOf:
