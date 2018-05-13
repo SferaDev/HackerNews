@@ -111,6 +111,8 @@ paths:
           description: Invalid user supplied
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: You are not allowed to edit this user
         '404':
           description: User not found
     delete:
@@ -206,7 +208,7 @@ paths:
         '200':
           description: The post has been created
         '400':
-          description: Missing a post type
+          description: Invalid data
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
@@ -227,7 +229,7 @@ paths:
         '200':
           description: The post has been created
         '400':
-          description: Invalid parameter
+          description: Invalid data
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
@@ -247,6 +249,8 @@ paths:
       responses:
         '200':
           description: The post has been created
+        '400':
+          description: Invalid data
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
@@ -448,6 +452,8 @@ paths:
       responses:
         '200':
           description: The comment has been created
+        '400':
+          description: Invalid data
         '401':
           $ref: '#/components/responses/UnauthorizedError'
   '/comments/{commentId}':
@@ -784,6 +790,8 @@ components:
           type: boolean
         totalLikes:
           type: integer
+        date:
+          type: string
         _id:
           type: string
         comment:
