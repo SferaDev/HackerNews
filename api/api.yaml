@@ -22,6 +22,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
       responses:
         '200':
           description: >-
@@ -51,6 +52,8 @@ paths:
           description: The user has been created
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: User already exists
   '/users/{username}':
     get:
       tags:
@@ -60,6 +63,7 @@ paths:
         - $ref: '#/components/parameters/indentParam'
         - $ref: '#/components/parameters/filterParam'
         - $ref: '#/components/parameters/sortParam'
+        - $ref: '#/components/parameters/orderParam'
         - name: username
           in: path
           description: The name that needs to be fetched
@@ -212,7 +216,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
-          description: Post already exists
+          description: The existing post
 
   '/posts/url':
     post:
@@ -233,7 +237,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
-          description: Post already exists
+          description: The existing post
 
   '/posts/ask':
     post:
@@ -254,7 +258,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '409':
-          description: Post already exists
+          description: The existing post
 
   '/posts/newest':
     get:
