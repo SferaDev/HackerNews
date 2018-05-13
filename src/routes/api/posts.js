@@ -15,7 +15,7 @@ postsApiRouter.get('/', function (req, res) {
 
 // GET /api/posts/newest
 postsApiRouter.get('/newest', function (req, res) {
-    let url = '/api/posts?sort=date&order=asc';
+    let url = '/api/posts?sort=date&order=desc';
     for (let query in req.query) if (req.query.hasOwnProperty(query)) url += '&' + query + '=' + req.query[query];
     res.redirect(url);
 });
