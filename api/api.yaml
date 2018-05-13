@@ -41,19 +41,9 @@ paths:
       tags:
         - users
       summary: Create user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User-Creation'
       responses:
-        '200':
-          description: The user has been created
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '409':
-          description: User already exists
+        '403':
+          description: User creation via API is not allowed
   '/users/{username}':
     get:
       tags:
@@ -209,7 +199,7 @@ paths:
                 - $ref: '#/components/schemas/UrlPost-CreationGeneral'
                 - $ref: '#/components/schemas/AskPost-CreationGeneral'
       responses:
-        '200':
+        '201':
           description: The post has been created
         '400':
           description: Invalid data
@@ -230,7 +220,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UrlPost-Creation'
       responses:
-        '200':
+        '201':
           description: The post has been created
         '400':
           description: Invalid data
@@ -251,7 +241,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AskPost-Creation'
       responses:
-        '200':
+        '201':
           description: The post has been created
         '400':
           description: Invalid data
@@ -395,7 +385,7 @@ paths:
       responses:
         '200':
           description: The post has been liked
-        '400':
+        '409':
           description: You already liked this post
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -419,6 +409,33 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Post not found
+
+  '/posts/{postId}/comment':
+    post:
+      tags:
+        - posts
+      summary: Create comment
+      parameters:
+        - name: postId
+          in: path
+          description: The post who owns the
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment-Creation'
+      responses:
+        '200':
+          description: The comment has been created
+        '400':
+          description: Invalid data
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   /comments:
     get:
       tags:
@@ -443,23 +460,7 @@ paths:
                     - $ref: '#/components/schemas/Comment'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-    post:
-      tags:
-        - comments
-      summary: Create comment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Comment-Creation'
-      responses:
-        '200':
-          description: The comment has been created
-        '400':
-          description: Invalid data
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+
   '/comments/{commentId}':
     get:
       tags:
@@ -558,7 +559,7 @@ paths:
       responses:
         '200':
           description: The comment has been liked
-        '400':
+        '409':
           description: You already liked this comment
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -699,16 +700,12 @@ components:
       properties:
         title:
           type: string
-        owner:
-          type: string
         url:
           type: string
     UrlPost-CreationGeneral:
       type: object
       properties:
         title:
-          type: string
-        owner:
           type: string
         type:
           type: string
@@ -743,8 +740,6 @@ components:
       properties:
         title:
           type: string
-        owner:
-          type: string
         text:
           type: string
     AskPost-Update:
@@ -763,8 +758,6 @@ components:
         type:
           type: string
           default: "ask"
-        owner:
-          type: string
         text:
           type: string
 
@@ -814,14 +807,8 @@ components:
       type: object
       required:
         - comment
-        - post
-        - owner
       properties:
         comment:
-          type: string
-        post:
-          type: string
-        owner:
           type: string
         parentComment:
           type: string
