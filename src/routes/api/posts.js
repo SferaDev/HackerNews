@@ -75,7 +75,7 @@ postsApiRouter.delete('/:element', function (req, res) {
 });
 
 // POST /api/posts/:element/comment
-commentsApiRouter.post('/:element/comment', function (req, res) {
+postsApiRouter.post('/:element/comment', function (req, res) {
     req.body.owner = req.user._id;
     req.body.post = req.params.element;
     modelCreate(commentModel, req, res);
