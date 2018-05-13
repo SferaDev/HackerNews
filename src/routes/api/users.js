@@ -16,7 +16,7 @@ usersApiRouter.get('/', function (req, res) {
 
 // POST /api/users
 usersApiRouter.post('/', function (req, res) {
-    modelCreate(userModel, req, res);
+    messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'User creation is not allowed via API')
 });
 
 // GET /api/users/:element
