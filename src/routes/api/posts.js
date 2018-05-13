@@ -6,7 +6,6 @@ import {messageCallback} from "../api";
 import * as likeController from "../../controllers/likeController";
 import * as httpCodes from "../../utils/httpCodes";
 import {commentModel} from "../../models/comment";
-import {commentsApiRouter} from "./comments";
 
 export const postsApiRouter = express.Router();
 
