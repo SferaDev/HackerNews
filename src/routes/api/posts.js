@@ -39,6 +39,7 @@ postsApiRouter.get('/ask', function (req, res) {
 
 // POST /api/posts
 postsApiRouter.post('/', function (req, res) {
+    req.body.owner = req.user._id;
     if (req.body.type.toLowerCase() === 'url') modelCreate(urlModel, req, res);
     else if (req.body.type.toLowerCase() === 'ask') modelCreate(askModel, req, res);
     else messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Please provide a post type (url or ask)')
@@ -46,11 +47,13 @@ postsApiRouter.post('/', function (req, res) {
 
 // POST /api/posts/url
 postsApiRouter.post('/url', function (req, res) {
+    req.body.owner = req.user._id;
     modelCreate(urlModel, req, res);
 });
 
 // POST /api/posts/ask
 postsApiRouter.post('/ask', function (req, res) {
+    req.body.owner = req.user._id;
     modelCreate(askModel, req, res);
 });
 

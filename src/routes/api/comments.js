@@ -15,6 +15,7 @@ commentsApiRouter.get('/', function (req, res) {
 
 // POST /api/comments
 commentsApiRouter.post('/', function (req, res) {
+    req.body.owner = req.user._id;
     modelCreate(commentModel, req, res);
 });
 

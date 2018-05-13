@@ -22,33 +22,26 @@ export const modelCreate = function (model, req, res) {
 
     model.count({$or: findParameters}, function (err, count) {
         if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
-        if (count > 0)
-        {
-            model.findOne({$or: findParameters}, function (err, element)
-            {
+        if (count > 0) {
+            model.findOne({$or: findParameters}, function (err, element) {
                 res.status(httpCodes.STATUS_CONFLICT).send(element);
             });
-        }
-        else
-        {
+        } else {
 
             let attributes = {};
 
             let requiredProperties = propertyFinder(model, 'required');
-            for (let i = 0; i < requiredProperties.length; ++i)
-            {
+            for (let i = 0; i < requiredProperties.length; ++i) {
                 if (req.body[requiredProperties[i]]) attributes[requiredProperties[i]] = req.body[requiredProperties[i]];
                 else return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, 'Missing parameter ' + requiredProperties[i]);
             }
 
             let editableProperties = [...new Set([...propertyFinder(model, 'editable'), ...propertyFinder(model, 'final')])];
-            for (let i = 0; i < editableProperties.length; ++i)
-            {
+            for (let i = 0; i < editableProperties.length; ++i) {
                 if (req.body[editableProperties[i]]) attributes[editableProperties[i]] = req.body[editableProperties[i]];
             }
 
-            model.create(attributes, function (err2, element)
-            {
+            model.create(attributes, function (err2, element) {
                 if (err2) return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, err2);
                 return messageCallback(res, httpCodes.STATUS_CREATED, 'Element created (invalid attributes discarded)');
             });

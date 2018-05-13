@@ -34,7 +34,7 @@ app.locals.pretty = true;
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
@@ -53,7 +53,11 @@ if (process.env.GITHUB_CLIENT_ID) {
         callbackURL: process.env.GITHUB_CALLBACK_URL || '',
         scope: ['user:email']
     }, function (accessToken, refreshToken, profile, next) {
-        userModel.findOneOrCreate({githubId: profile.id, username: profile.username, email: profile.emails[0].value}, function (err, user) {
+        userModel.findOneOrCreate({
+            githubId: profile.id,
+            username: profile.username,
+            email: profile.emails[0].value
+        }, function (err, user) {
             if (err) return next(err);
             return next(err, user);
         });
@@ -62,7 +66,7 @@ if (process.env.GITHUB_CLIENT_ID) {
     app.get('/auth', passport.authenticate('github'));
 
     app.get('/auth/callback',
-        passport.authenticate('github', { failureRedirect: '/' }),
+        passport.authenticate('github', {failureRedirect: '/'}),
         function (req, res) {
             req.session.userId = req.session.passport.user._id;
             req.session.username = req.session.passport.user.username;
