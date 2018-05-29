@@ -5,6 +5,7 @@ import {extractRootDomain} from "../utils/urlUtils";
 import {timeSince} from "../utils/timeUtils";
 import {commentModel} from "./comment";
 import {propertyFinder} from "../utils/magicUtils";
+import {postLikeModel} from "./like";
 
 const baseOptions = {
     discriminatorKey: '__type',
@@ -15,7 +16,7 @@ const baseOptions = {
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(postModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'comments' && key !== '__type' &&
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'comments' && key !== 'likes' && key !== '__type' &&
                     !publicProperties.includes(key)) delete ret[key];
         }
     }
@@ -73,11 +74,18 @@ postSchema.virtual('comments', {
     foreignField: 'post'
 });
 
+postSchema.virtual('likes', {
+    ref: 'PostLike',
+    localField: '_id',
+    foreignField: 'post'
+});
+
 let autoPopulate = function (next) {
     this.populate({
         path: 'comments',
         match: {parentComment: undefined}
     });
+    this.populate('likes', 'owner');
     this.populate('owner', '_id username');
     next();
 };

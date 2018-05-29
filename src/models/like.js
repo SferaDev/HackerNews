@@ -22,9 +22,18 @@ const baseOptions = {
 const likeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        public: true
     }
 }, baseOptions);
+
+let autoPopulate = function (next) {
+    this.populate('owner', '_id username');
+    next();
+};
+
+likeSchema.pre('findOne', autoPopulate);
+likeSchema.pre('find', autoPopulate);
 
 const postLikeSchema = new mongoose.Schema({
     post: {
