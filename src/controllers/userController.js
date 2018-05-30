@@ -1,4 +1,6 @@
 import hat from "hat";
+import github from "octonode";
+
 import {userModel} from "../models/user";
 
 export function getUser(userId, next) {
@@ -60,6 +62,27 @@ export function regenerateAPIKey(userId, next) {
             next();
         }
     })
+}
+
+export function loginOauthUser(oauthToken, next) {
+    let client = github.client(oauthToken);
+    client.me().info(function (err1, data) {
+        if (err1 || data === undefined) return next(err1);
+        userModel.findOne({githubId: data.id}, function (err2, user) {
+            if (err2) return next(err2);
+            if (user === null) {
+                userModel.create({
+                    githubId: data.id,
+                    username: data.login,
+                    fullName: data.name,
+                    picture: data.avatar_url
+                }, function (err3, newUser) {
+                    if (err3) return next(err3);
+                    next(null, newUser.apiKey);
+                });
+            } else next(null, user.apiKey);
+        });
+    });
 }
 
 export function updateUser(userid, about, next) {

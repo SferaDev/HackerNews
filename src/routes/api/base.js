@@ -27,9 +27,7 @@ export const modelCreate = function (model, req, res) {
                 res.status(httpCodes.STATUS_CONFLICT).send(element);
             });
         } else {
-
             let attributes = {};
-
             let requiredProperties = propertyFinder(model, 'required');
             for (let i = 0; i < requiredProperties.length; ++i) {
                 if (req.body[requiredProperties[i]]) attributes[requiredProperties[i]] = req.body[requiredProperties[i]];

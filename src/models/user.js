@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         public: true
     },
+    fullName: {
+        type: String,
+        public: true
+    },
     githubId: {
         type: String,
         unique: true,
@@ -58,6 +62,10 @@ const userSchema = new mongoose.Schema({
     apiKey: {
         type: String,
         default: hat()
+    },
+    picture: {
+        type: String,
+        public: true
     }
 }, baseOptions);
 
