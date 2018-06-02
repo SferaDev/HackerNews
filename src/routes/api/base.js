@@ -41,7 +41,7 @@ export const modelCreate = function (model, req, res) {
 
             model.create(attributes, function (err2, element) {
                 if (err2) return messageCallback(res, httpCodes.STATUS_BAD_REQUEST, err2);
-                return messageCallback(res, httpCodes.STATUS_CREATED, 'Element created (invalid attributes discarded)');
+                return messageCallback(res, httpCodes.STATUS_CREATED, element._id);
             });
         }
     });
