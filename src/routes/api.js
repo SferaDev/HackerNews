@@ -8,6 +8,7 @@ import {usersApiRouter} from "./api/users";
 import {userModel} from '../models/user';
 import * as httpCodes from '../utils/httpCodes';
 import * as userController from '../controllers/userController';
+import {modelGetOne} from "./api/base";
 
 export const apiRouter = express.Router();
 
@@ -58,7 +59,8 @@ apiRouter.use(function (req, res, next) {
 
 // Root route to validate token
 apiRouter.get('/', function (req, res) {
-    messageCallback(res, 200, 'Welcome to the News4Hackers API!');
+    req.params.element = req.user.username;
+    modelGetOne(userModel, req, res);
 });
 
 // API Users endpoint
