@@ -1,5 +1,6 @@
-import hat from "hat";
 import github from "octonode";
+import request from "request";
+import hat from "hat";
 
 import {userModel} from "../models/user";
 
@@ -65,10 +66,14 @@ export function regenerateAPIKey(userId, next) {
 }
 
 export function loginOauthUser(oauthCode, next) {
-    github.auth.config({
-        id: process.env.GITHUB_CLIENT_ID,
-        secret: process.env.GITHUB_CLIENT_SECRET
-    }).login(oauthCode, function (err, oauthToken, headers) {
+    request.post({
+        url: 'https://github.com/login/oauth/access_token?client_id=' + process.env.GITHUB_WEBAPP_CLIENT_ID +
+        '&client_secret=' + process.env.GITHUB_WEBAPP_CLIENT_SECRET + '&code=' + oauthCode,
+        headers: { 'Accept': 'application/json' }
+    }, function (err, response, body) {
+        body = JSON.parse(body);
+        let oauthToken = body['access_token'];
+        if (oauthToken === undefined) return next(body['error_description']);
         let client = github.client(oauthToken);
         client.me().info(function (err1, data) {
             if (err1 || data === undefined) return next(err1);

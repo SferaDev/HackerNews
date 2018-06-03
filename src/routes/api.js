@@ -17,8 +17,12 @@ apiRouter.use('/docs', swaggerUi.serve, swaggerUi.setup(yaml.load('./api/api.yam
 
 // Root route to gather apiKey
 apiRouter.post('/', function (req, res) {
-    userController.loginOauthUser(req.body.oauthToken, function (err, apiKey) {
-        if (err || apiKey === undefined) return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'Invalid OAuth Token');
+    console.log(req.body['oauthToken']);
+    userController.loginOauthUser(req.body['oauthToken'], function (err, apiKey) {
+        console.log(err);
+        console.log(apiKey);
+        if (err) return messageCallback(res, httpCodes.STATUS_SERVER_ERROR, err);
+        if (apiKey === undefined) return messageCallback(res, httpCodes.STATUS_FORBIDDEN, 'Invalid OAuth Token');
         res.send({apiKey: apiKey});
     });
 });

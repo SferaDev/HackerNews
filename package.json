@@ -31,6 +31,7 @@
         "passport-github2": "^0.1.11",
         "pug": "2.0.0-beta11",
         "swagger-ui-express": "^3.0.8",
-        "yamljs": "^0.3.0"
+        "yamljs": "^0.3.0",
+        "request": "latest"
     }
 }
