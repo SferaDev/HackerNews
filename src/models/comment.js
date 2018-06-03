@@ -12,7 +12,7 @@ const baseOptions = {
         transform: function (doc, ret) {
             let publicProperties = propertyFinder(commentModel, 'public');
             for (let key in ret)
-                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'replies' &&
+                if (ret.hasOwnProperty(key) && key !== '_id' && key !== 'replies' && key !== 'likes' &&
                     !publicProperties.includes(key)) delete ret[key];
         }
     }
@@ -70,8 +70,15 @@ commentSchema.virtual('replies', {
     foreignField: 'parentComment'
 });
 
+commentSchema.virtual('likes', {
+    ref: 'CommentLike',
+    localField: '_id',
+    foreignField: 'comment'
+});
+
 let autoPopulate = function (next) {
     this.populate('replies');
+    this.populate('likes', 'owner');
     this.populate('owner', '_id username');
     next();
 };
