@@ -60,7 +60,7 @@ export function regenerateAPIKey(userId, next) {
         else {
             user.apiKey = hat();
             user.save();
-            next();
+            next(user.apiKey);
         }
     })
 }
@@ -87,7 +87,9 @@ export function loginOauthUser(oauthCode, next) {
                         picture: data.avatar_url
                     }, function (err3, newUser) {
                         if (err3) return next(err3);
-                        next(null, newUser.apiKey);
+                        regenerateAPIKey(newUser._id, (apiKey) => {
+                            next(null, apiKey);
+                        });
                     });
                 } else next(null, user.apiKey);
             });

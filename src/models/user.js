@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import passwordGenerator from "password-generator";
+import hat from "hat";
 import idValidator from "mongoose-id-validator";
 
 import {timeSince} from "../utils/timeUtils";
@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema({
     },
     apiKey: {
         type: String,
-        default: passwordGenerator(16)
+        default: hat()
     },
     picture: {
         type: String,
